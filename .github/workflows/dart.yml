@@ -15,5 +15,18 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
     - run: flutter test
-    - run: flutter drive --target=test_driver/app.dart
     - run: flutter build apk
+
+  drive_android:
+    runs-on: macOS-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: flutter drive --target=test_driver/app.dart
