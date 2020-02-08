@@ -1,6 +1,6 @@
 
 on: push
-name: Dart CI
+name: Finesse Nation CI/CD
 jobs:
   build:
     name: Build APK
@@ -12,7 +12,8 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        channel: 'stable' # or: 'dev' or 'beta'
+        channel: 'stable'
     - run: flutter pub get
     - run: flutter test
+    - run: flutter drive --target=test_driver/app.dart
     - run: flutter build apk
