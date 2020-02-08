@@ -109,9 +109,13 @@ class _MyHomePageState extends State<MyHomePage> {
               // horizontal).
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'images/rahbert.png',
-                  scale: _scale,
+                GestureDetector(
+                  onTap:_incrementCounter,
+                  child:
+                    Image.asset(
+                      'images/rahbert.png',
+                      scale: _scale,
+                    )
                 ),
                 Text(
                   'You have pushed the button this many times:',
@@ -128,16 +132,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               Colors.red,
                               Colors.blue,
                             ],
-                          ))),
+                          )
+                    )
+                ),
               ],
             ),
           ),
         ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+        // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
