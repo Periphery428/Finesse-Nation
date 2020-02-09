@@ -34,16 +34,16 @@ jobs:
           FOLDER: build/web
 
 
-#  drive_android:
-#    runs-on: macOS-latest
-#    needs: build
-#    steps:
-#      - uses: actions/checkout@v1
-#      - uses: subosito/flutter-action@v1
-#        with:
-#          channel: 'dev'
-#      - name: Integration tests
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 29
-#          script: flutter drive --target=test_driver/app.dart
+  drive_android:
+    runs-on: macOS-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - name: Integration tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: flutter drive --target=test_driver/app.dart
