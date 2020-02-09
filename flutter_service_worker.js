@@ -7,7 +7,7 @@ const RESOURCES = {
 "/icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
 "/assets/AssetManifest.json": "30823eeecf34b4c7bcef33308cacd19e",
-"/assets/LICENSE": "dfeb952b6bd9db9ae50aafef86cf5ce5",
+"/assets/LICENSE": "28eaf584c7f90ed893cff7f4c06156f7",
 "/assets/images/rahbert.png": "98e5b6c34fa8cd40d5ada1e3deacb58d",
 "/assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
 "/assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
