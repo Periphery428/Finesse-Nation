@@ -25,13 +25,13 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/debug/*.apk,build/macos/Build/Products/Release/*.app"
           token: ${{ secrets.TOKEN }}
-        - run: flutter build web
-        - uses: JamesIves/github-pages-deploy-action@releases/v3
-          with:
-            GITHUB_TOKEN: ${{ secrets.TOKEN }}
-            BASE_BRANCH: master
-            BRANCH: gh-pages
-            FOLDER: build/web
+      - run: flutter build web
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          BASE_BRANCH: master
+          BRANCH: gh-pages
+          FOLDER: build/web
 
 
 #  drive_android:
