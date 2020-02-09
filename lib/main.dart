@@ -115,6 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Image.asset(
                       'images/rahbert.png',
                       scale: _scale,
+                      height: 470,
+                      width: 470,
                     )
                 ),
                 Text(
