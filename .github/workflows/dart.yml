@@ -18,6 +18,7 @@ jobs:
     - run: flutter build apk
 
   drive_android:
+    name: Integration tests
     runs-on: macOS-latest
     needs: build
     steps:
