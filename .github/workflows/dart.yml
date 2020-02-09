@@ -24,8 +24,8 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/debug/*.apk"
           token: ${{ secrets.TOKEN }}
-          allowUpdates: True
-          tag: v1.0
+#          allowUpdates: True
+#          tag: v1.0
       - run: flutter build web
       - uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
