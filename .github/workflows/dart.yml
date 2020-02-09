@@ -23,7 +23,7 @@ jobs:
       - name: Create a Release APK
         uses: ncipollo/release-action@v1
         with:
-          artifacts: artifacts: "build/app/outputs/apk/debug/*.apk"
+          artifacts: "build/app/outputs/apk/debug/*.apk"
           token: ${{ secrets.TOKEN }}
 #      - run: flutter build web
 #      - uses: JamesIves/github-pages-deploy-action@releases/v3
