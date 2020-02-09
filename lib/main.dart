@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
+                  key: Key('rahbert'),
                   onTap:_incrementCounter,
                   child:
                     Image.asset(
