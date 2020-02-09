@@ -15,6 +15,7 @@ jobs:
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk --debug
+      - run: flutter build web
 
 #  drive_android:
 #    runs-on: macOS-latest
