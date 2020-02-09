@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -114,27 +113,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   child:
                     Image.asset(
                       'images/rahbert.png',
+                      key: Key('rahbertImage'),
                       scale: _scale,
                       height: 470,
                       width: 470,
                     )
                 ),
                 Text(
-                  'You have pushed the button this many times:',
+                  'You have tapped the image the following number of times:',
                 ),
                 Text('$_counter',
                     key: Key('counterKey'),
                     style: TextStyle(
                         fontSize: 60,
                         foreground: Paint()
-                          ..shader = ui.Gradient.linear(
-                            const Offset(0, 50),
-                            const Offset(500, 50),
-                            <Color>[
-                              Colors.red,
-                              Colors.blue,
-                            ],
-                          )
+                          ..shader = new LinearGradient(
+                            colors: [Colors.red, Colors.blue]
+                          ).createShader(Rect.fromLTWH(0, 0, 400, 0))
                     )
                 ),
               ],
