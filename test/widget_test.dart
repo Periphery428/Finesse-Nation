@@ -18,9 +18,9 @@ void main() {
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
-
+    final testKey = Key('rahbert');
     // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byType(GestureDetector));
+    await tester.tap(find.byKey(testKey));
     await tester.pump();
 
     // Verify that our counter has incremented.

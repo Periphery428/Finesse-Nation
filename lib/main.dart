@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Rahbert'),
+
     );
   }
 }
@@ -45,6 +46,7 @@ class SecondRoute extends StatelessWidget {
     );
   }
 }
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -98,6 +100,17 @@ class _MyHomePageState extends State<MyHomePage> {
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SecondRoute()),
+          );
+        },
+        label: Text('Add Event'),
+        icon: Icon(Icons.add),
+        backgroundColor: Colors.pink,
+      ),
         body: new Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -156,18 +169,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SecondRoute()),
-          );
-        },
-        label: Text('Add Event'),
-        icon: Icon(Icons.add),
-        backgroundColor: Colors.pink,
-      ),
-        // This trailing comma makes auto-formatting nicer for build methods.
+
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
