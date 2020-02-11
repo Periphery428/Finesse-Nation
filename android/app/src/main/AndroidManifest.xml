@@ -7,8 +7,9 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="finesse_nation"
-        android:icon="@mipmap/launcher_icon">
+        android:label="Finesse Nation"
+        android:icon="@mipmap/launcher_icon"
+        android:theme="@style/LaunchTheme">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -16,6 +17,10 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"
+                />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
