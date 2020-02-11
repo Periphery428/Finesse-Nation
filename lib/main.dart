@@ -26,6 +26,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+
+      body: Center(
+        child: TextFormField(
+          decoration: InputDecoration(
+              hintText: 'Title'
+          ),
+        ),
+      ),
+    );
+  }
+}
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -137,6 +156,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SecondRoute()),
+          );
+        },
+        label: Text('Add Event'),
+        icon: Icon(Icons.add),
+        backgroundColor: Colors.pink,
+      ),
         // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
