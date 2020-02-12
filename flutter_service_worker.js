@@ -12,7 +12,7 @@ const RESOURCES = {
 "/assets/images/app_icon.png": "5f5244069ceba8559afa0a04f02321ef",
 "/assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
 "/assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
-"/main.dart.js": "c10cd2fa6a27bbaeb01c15ef317b8b1e"
+"/main.dart.js": "8e0af10462b02a8daa935b054026de08"
 };
 
 self.addEventListener('activate', function (event) {

@@ -23644,7 +23644,7 @@ if(r<s){m=l.b[r]
 if(t.$2(a,m)>0){C.d.n(l.b,b,m)
 b=r}}C.d.n(l.b,b,a)}}
 B.Ck.prototype={
-H:function(a){var t="Form Validation Demo",s=null
+H:function(a){var t="Share Free Stuff",s=null
 return S.Vd(M.VW(E.U8(L.fC(t,s,s,s,s,s,s)),new B.oe(s),s),s,t)}}
 B.oe.prototype={
 ao:function(){return new B.w0(new N.b6(null,u.jH),C.o)}}
@@ -23652,7 +23652,7 @@ B.w0.prototype={
 H:function(a){var t=null
 return new A.nj(T.Ur(H.c([E.a0J(new B.I5()),new T.fm(C.q3,new D.oF(new B.I6(this,a),t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,L.fC("Submit",t,t,t,t,t,t),t,t,t,C.at,t,!1,t,t,t),t)],u.F),C.eg,C.iV),this.d)}}
 B.I5.prototype={
-$1:function(a){if(a.length===0)return"Please enter some text"
+$1:function(a){if(a.length===0)return"Please Enter a Title"
 return null}}
 B.I6.prototype={
 $0:function(){var t=null,s=this.a.d.gap()
