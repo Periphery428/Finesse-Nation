@@ -85,7 +85,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    final CREATE_POST_URL = 'finesse-nation-server.herokuapp.com:54573';
+    final CREATE_POST_URL = 'http://finesse-nation-server.herokuapp.com/api/food/getPlaces';
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
