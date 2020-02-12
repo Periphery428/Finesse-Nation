@@ -8,14 +8,11 @@ class AddEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     final appTitle = 'Share Free Stuff';
 
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
         ),
         body: MyCustomForm(),
-      ),
     );
   }
 }
@@ -45,9 +42,9 @@ class Post {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["eventName"] = eventName;
-    map["location"] = location;
-    map["image"] = image;
+    map["city"] = eventName;
+    map["state"] = location;
+//    map["image"] = image;
 
     return map;
   }
@@ -88,7 +85,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    final CREATE_POST_URL = 'https://ptsv2.com/t/yofb8-1581474248/post';
+    final CREATE_POST_URL = 'finesse-nation-server.herokuapp.com:54573';
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -142,8 +139,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                       location: location.data,
                       image: image.data);
 
-                  Post p =
-                      await createPost(CREATE_POST_URL, body: newPost.toMap());
+
+                  await createPost(CREATE_POST_URL, body: newPost.toMap());
                 }
               },
               child: Text('Submit'),
