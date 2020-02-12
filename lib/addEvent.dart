@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class addEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Form Validation Demo';
+    final appTitle = 'Share Free Stuff';
 
     return MaterialApp(
       title: appTitle,
@@ -46,7 +46,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           TextFormField(
             validator: (value) {
               if (value.isEmpty) {
-                return 'Please enter some text';
+                return 'Please Enter a Title';
               }
               return null;
             },
