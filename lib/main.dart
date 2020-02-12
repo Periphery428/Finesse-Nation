@@ -181,7 +181,7 @@ class Finesse{
   }
 
   String getTitle(){
-    return image;
+    return title;
   }
 }
 
