@@ -27,6 +27,7 @@ class MyCustomForm extends StatefulWidget {
     return MyCustomFormState();
   }
 }
+
 class Post {
   final String eventName;
   final String location;
@@ -41,6 +42,7 @@ class Post {
       image: json['image'],
     );
   }
+
   Map toMap() {
     var map = new Map<String, dynamic>();
     map["eventName"] = eventName;
@@ -70,7 +72,19 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
+  final eventNameController = TextEditingController();
+  final locationController = TextEditingController();
+  final imageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    eventNameController.dispose();
+    locationController.dispose();
+    imageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +96,28 @@ class MyCustomFormState extends State<MyCustomForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+            controller: eventNameController,
             validator: (value) {
               if (value.isEmpty) {
-                return 'Please Enter a Title';
+                return 'Event Name';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: locationController,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Location';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: imageController,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Image';
               }
               return null;
             },
@@ -100,11 +133,17 @@ class MyCustomFormState extends State<MyCustomForm> {
                   // If the form is valid, display a Snackbar.
                   Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  Text eventName = Text(eventNameController.text);
+                  Text location = Text(locationController.text);
+                  Text image = Text(imageController.text);
 
                   Post newPost = new Post(
-                      eventName: "name", location: "90.00000", image: "test");
-                  Post p = await createPost(CREATE_POST_URL,
-                      body: newPost.toMap());
+                      eventName: eventName.data,
+                      location: location.data,
+                      image: image.data);
+
+                  Post p =
+                      await createPost(CREATE_POST_URL, body: newPost.toMap());
                 }
               },
               child: Text('Submit'),
@@ -115,4 +154,3 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
-
