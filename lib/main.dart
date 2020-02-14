@@ -100,15 +100,15 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Finesse> _finesses = new List();
     getFinesses() {
       _finesses.add(Finesse("Fin 1 Title", "Fin 1 Duration", "images/rahbert.png"));
-      _finesses.add(Finesse("Fin 2 Title", "Fin 2 Duration", "images/rahbert.png"));
+      _finesses.add(Finesse("Fin 2 Title", "Fin 2 Duration", "images/bemzo.jpg"));
       _finesses.add(Finesse("Fin 3 Title", "Fin 3 Duration", "images/rahbert.png"));
-      _finesses.add(Finesse("Fin 4 Title", "Fin 4 Duration", "images/rahbert.png"));
+      _finesses.add(Finesse("Fin 4 Title", "Fin 4 Duration", "images/bemzo.jpg"));
       _finesses.add(Finesse("Fin 5 Title", "Fin 5 Duration", "images/rahbert.png"));
-      _finesses.add(Finesse("Fin 6 Title", "Fin 6 Duration", "images/rahbert.png"));
+      _finesses.add(Finesse("Fin 6 Title", "Fin 6 Duration", "images/bemzo.jpg"));
       _finesses.add(Finesse("Fin 7 Title", "Fin 7 Duration", "images/rahbert.png"));
-      _finesses.add(Finesse("Fin 8 Title", "Fin 8 Duration", "images/rahbert.png"));
+      _finesses.add(Finesse("Fin 8 Title", "Fin 8 Duration", "images/bemzo.jpg"));
       _finesses.add(Finesse("Fin 9 Title", "Fin 9 Duration", "images/rahbert.png"));
-      _finesses.add(Finesse("Fin 10 Title", "Fin 10 Duration", "images/rahbert.png"));
+      _finesses.add(Finesse("Fin 10 Title", "Fin 10 Duration", "images/bemzo.jpg"));
       _finesses.add(Finesse("Fin 11 Title", "Fin 11 Duration", "images/rahbert.png"));
     }
 
