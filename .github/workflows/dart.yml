@@ -1,8 +1,9 @@
+# TODO: https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
 on: push
 name: Finesse Nation CI/CD
 jobs:
-  build:
-    name: Build APK
+  unit:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -14,13 +15,29 @@ jobs:
           channel: 'dev'
       - run: flutter pub get
       - run: flutter test
+
+
+  integration:
+    name: Integration Tests
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          profile: Nexus 6
+          script: flutter drive --target=test_driver/app.dart
+
+  release:
+    name: Release
+    needs: [unit, integration]
+    steps:
       - run: flutter build apk --debug --split-per-abi
-      - run: flutter  config --enable-web
-      - run: flutter  config --enable-linux-desktop
-      - run: flutter  config --enable-macos-desktop
-      - run: flutter  config --enable-windows-desktop
-      - name: Create a Release APK
-        uses: ncipollo/release-action@v1
+      - run: flutter config --enable-web
+      - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/debug/*.apk"
           token: ${{ secrets.TOKEN }}
@@ -33,18 +50,3 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: build/web
-
-
-#  drive_android:
-#    runs-on: macOS-latest
-#    needs: build
-#    steps:
-#      - uses: actions/checkout@v1
-#      - uses: subosito/flutter-action@v1
-#        with:
-#          channel: 'stable'
-#      - name: Integration tests
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: 29
-#          script: flutter drive --target=test_driver/app.dart
