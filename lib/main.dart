@@ -101,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
       floatingActionButton: FloatingActionButton.extended(
+        key: Key('add event'),
         onPressed: () {
           Navigator.push(
             context,

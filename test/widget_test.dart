@@ -5,26 +5,32 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:finesse_nation/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:finesse_nation/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Check maps link smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-    final testKey = Key('rahbert');
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byKey(testKey));
-    await tester.pump();
+    // Add a new finesse for testing purposes
+    await tester.tap(find.byKey(Key('add event')));
+    await tester.enterText(find.byKey(Key('name')), 'Test Free Food');
+    await tester.enterText(
+        find.byKey(Key('location')), '201 N Goodwin Ave, Urbana, IL 61801');
+    await tester.enterText(find.byKey(Key('duration')), '60');
+    await tester.enterText(find.byKey(Key('type')), 'Food');
+    await tester.tap(find.byKey(Key('submit')));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the new finesse was added
+    expect(find.text('Test Free Food'), findsOneWidget);
+
+    // Click on the new finesse
+    await tester.tap(find.text('Test Free Food'));
+
+    // Make sure the address link is displayed
+    expect(find.text('201 N Goodwin Ave, Urbana, IL 61801'), findsOneWidget);
+    await tester.tap(find.text('201 N Goodwin Ave, Urbana, IL 61801'));
   });
 }
