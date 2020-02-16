@@ -26,6 +26,7 @@ void main() {
 
     test('increments the app counter', () async {
       await driver.tap(buttonFinder);
+      await driver.waitFor(find.text('1'));
       expect(await driver.getText(counterTextFinder), "1");
     });
   });
