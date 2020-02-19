@@ -28,23 +28,26 @@ class MyCustomForm extends StatefulWidget {
 class Post {
   final String eventName;
   final String location;
-  final String image;
+  final String description;
+  final String duration;
 
-  Post({this.eventName, this.location, this.image});
+  Post({this.eventName, this.location, this.description, this.duration});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      eventName: json['eventName'],
+      eventName: json['name'],
       location: json['location'],
-      image: json['image'],
+      description: json['description'],
+      duration: json['duration'],
     );
   }
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["city"] = eventName;
-    map["state"] = location;
-//    map["image"] = image;
+    map["name"] = eventName;
+    map["location"] = location;
+    map["description"] = description;
+    map["duration"] = duration;
 
     return map;
   }
@@ -85,7 +88,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    final CREATE_POST_URL = 'http://finesse-nation-server.herokuapp.com/api/food/getPlaces';
+    final CREATE_POST_URL = 'https://finesse-nation.herokuapp.com/api/food/addEvent';
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -132,12 +135,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                       .showSnackBar(SnackBar(content: Text('Processing Data')));
                   Text eventName = Text(eventNameController.text);
                   Text location = Text(locationController.text);
-                  Text image = Text(imageController.text);
+                  Text description = Text(imageController.text);
 
                   Post newPost = new Post(
                       eventName: eventName.data,
                       location: location.data,
-                      image: image.data);
+                      description: description.data,
+                      duration: "20");
 
 
                   await createPost(CREATE_POST_URL, body: newPost.toMap());
