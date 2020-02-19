@@ -38,19 +38,18 @@ class buildFinesseList extends StatelessWidget{
         decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
-              end: Alignment.topRight,
-              colors: [Colors.lightBlue, Colors.lightGreen],
+              end: Alignment.bottomRight,
+              colors: [Colors.lightBlue, Colors.pink],
             )
         ),
         child: new Center(
             child:
             ListView.builder(
+                itemCount: _finesses.length*2,
                 itemBuilder: (context, i) {
+                  _finesses =_finesses.reversed.toList();
                   if (i.isOdd) return Divider();
                   final index = i ~/ 2;
-                  if(index >= _finesses.length){
-                    _finesses.addAll(_finesses.take(10));
-                  }
                   return buildFinesseCard(_finesses[index]);
                 })
         )
