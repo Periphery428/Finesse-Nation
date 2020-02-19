@@ -3,7 +3,7 @@ class Finesse {
   String description;
   String location;
   String type;
-  int duration;
+  String duration;
 
   //String image; //TODO:
 
@@ -12,5 +12,13 @@ class Finesse {
 
   getTitle() {
     return this.title;
+  }
+
+  getBody() {
+    return this.description;
+  }
+
+  getDuration() {
+    return this.duration;
   }
 }
