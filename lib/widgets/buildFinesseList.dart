@@ -7,7 +7,7 @@ import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:http/http.dart' as http;
 
 class buildFinesseList extends StatelessWidget{
-  Future<List<Finesse>> fetchFinesse() async{
+  Future<List<Finesse>> fetchFinesses() async{
     final response = await http.get('http://finesse-nation.herokuapp.com/api/food/getEvents');
     var responseJson;
 
@@ -23,7 +23,7 @@ class buildFinesseList extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: fetchFinesse(),
+        future: fetchFinesses(),
         builder: (context, snapshot){
           return snapshot.data != null ?
               listViewWidget(snapshot.data)
