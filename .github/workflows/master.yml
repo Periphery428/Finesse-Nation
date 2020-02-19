@@ -1,8 +1,12 @@
-on: push
+on:
+  push:
+    branches:        
+      - master
+      - develop
 name: Finesse Nation CI/CD
 jobs:
   unit:
-    name: Unit Tests
+    name: Unit and Widget Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -28,10 +32,9 @@ jobs:
           api-level: 29
           profile: Nexus 6
           script: flutter drive --target=test_driver/app.dart
-
-  # TODO: https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
-  release:
-    name: Release
+          
+  web:
+    name: Build website
     runs-on: ubuntu-latest
     needs: [unit, integration]
     steps:
@@ -42,14 +45,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - run: flutter build apk --debug --split-per-abi
       - run: flutter config --enable-web
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "build/app/outputs/apk/debug/*.apk"
-          token: ${{ secrets.TOKEN }}
-          allowUpdates: True
-          tag: v1.0
       - run: flutter build web
       - uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
