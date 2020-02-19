@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Share Free Stuff';
+    final appTitle = 'Share a Finesse';
 
     return Scaffold(
         appBar: AppBar(
@@ -74,7 +74,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   // not a GlobalKey<MyCustomFormState>.
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
-  final imageController = TextEditingController();
+  final descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -82,13 +82,13 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Clean up the controller when the widget is disposed.
     eventNameController.dispose();
     locationController.dispose();
-    imageController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final CREATE_POST_URL = 'https://finesse-nation.herokuapp.com/api/food/addEvent';
+    const CREATE_POST_URL = 'https://finesse-nation.herokuapp.com/api/food/addEvent';
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -97,6 +97,9 @@ class MyCustomFormState extends State<MyCustomForm> {
         children: <Widget>[
           TextFormField(
             controller: eventNameController,
+            decoration: const InputDecoration(
+              labelText: "EventName",
+            ),
             validator: (value) {
               if (value.isEmpty) {
                 return 'Event Name';
@@ -106,6 +109,9 @@ class MyCustomFormState extends State<MyCustomForm> {
           ),
           TextFormField(
             controller: locationController,
+            decoration: const InputDecoration(
+              labelText: "Location",
+            ),
             validator: (value) {
               if (value.isEmpty) {
                 return 'Location';
@@ -114,10 +120,13 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ),
           TextFormField(
-            controller: imageController,
+            controller: descriptionController,
+            decoration: const InputDecoration(
+              labelText: "Description",
+            ),
             validator: (value) {
               if (value.isEmpty) {
-                return 'Image';
+                return 'Description';
               }
               return null;
             },
@@ -132,10 +141,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                 if (_formKey.currentState.validate()) {
                   // If the form is valid, display a Snackbar.
                   Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                      .showSnackBar(SnackBar(content: Text('Sharing Finesse')));
                   Text eventName = Text(eventNameController.text);
                   Text location = Text(locationController.text);
-                  Text description = Text(imageController.text);
+                  Text description = Text(descriptionController.text);
 
                   Post newPost = new Post(
                       eventName: eventName.data,
@@ -145,9 +154,10 @@ class MyCustomFormState extends State<MyCustomForm> {
 
 
                   await createPost(CREATE_POST_URL, body: newPost.toMap());
+                  Navigator.pop(context);
                 }
               },
-              child: Text('Submit'),
+              child: Text('SUBMIT'),
             ),
           ),
         ],
