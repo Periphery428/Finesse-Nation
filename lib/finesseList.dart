@@ -1,13 +1,10 @@
 import 'package:finesse_nation/finesse.dart';
 
 class FinesseList {
-  List finesseList;
 
-  addFinesse(Finesse finesse) {
-    finesseList.add(finesse);
+  static addFinesse(Finesse finesse) {
   }
 
-  getFinesses() {
-    return this.finesseList;
+  static getFinesses() {
   }
 }

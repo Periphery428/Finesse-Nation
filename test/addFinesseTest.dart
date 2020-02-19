@@ -11,12 +11,11 @@ import 'package:finesse_nation/finesseList.dart';
 
 void main() {
   test('Adding a new Finesse', () {
-    FinesseList finesses = FinesseList();
     Finesse finesse =
         Finesse("Free food here", "Good Pizza", "Second floor Arc", "Food", "60 hours");
-    finesses.addFinesse(finesse); //This call adds a finesse to the DB
+    FinesseList.addFinesse(finesse); //This call adds a finesse to the DB
     List finesses_list =
-        finesses.getFinesses(); //This call gets finesses from DB
+        FinesseList.getFinesses(); //This call gets finesses from DB
 
     expect(finesses_list.first.getTitle(), finesse.getTitle());
   });
