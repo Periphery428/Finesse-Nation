@@ -1,14 +1,18 @@
 class Finesse{
-  String title;
-  String body;
-  String duration;
-  String image;
+  final String title;
+  final String body;
+  final String image;
 
-  Finesse(String title, String body, String img){
-    this.title = title;
-    this.body = body;
-    this.image = img;
+  Finesse(this.title, this.body, this.image);
+
+  factory Finesse.fromJson(Map<String, dynamic> json){
+      return Finesse(
+        json['name'] != null ? json['name'] : "",
+        json['description'],
+        json['duration'],
+    );
   }
+
 
   String getImage(){
     return image;

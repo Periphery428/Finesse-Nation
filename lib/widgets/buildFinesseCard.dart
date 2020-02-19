@@ -5,11 +5,11 @@ Card buildFinesseCard(Finesse fin) {
   return Card(
     color: Colors.white,
     child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-      Image.asset(fin.getImage()),
+      fin.getImage()==null ? Text("Null") : Text(fin.getImage()),
       ListTile(
         leading: Icon(Icons.accessible_forward),
-        title: Text(fin.getTitle()),
-        subtitle: Text(fin.getBody()),
+        title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),
+        subtitle: fin.getBody() == null ? Text("Null") :Text(fin.getBody()),
       ),
     ]),
   );
