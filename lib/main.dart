@@ -1,5 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:finesse_nation/addEvent.dart';
+import 'package:finesse_nation/widgets/buildFinesseCard.dart';
+import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/widgets/buildFinesseList.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,28 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Rahbert'),
-
-    );
-  }
-}
-
-
-class SecondRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-
-      body: Center(
-        child: TextFormField(
-          decoration: InputDecoration(
-              hintText: 'Title'
-          ),
-        ),
-      ),
+      home: MyHomePage(title: 'Finesse Nation'),
     );
   }
 }
@@ -66,25 +49,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  double _scale = 1;
-
-//  Color _color = Color.fromRGBO(0, 255, 0, 0.1);
-  void _incrementCounter() {
-    var rng = new Random();
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-      var old = _scale;
-      while (_scale == old) {
-        _scale = rng.nextInt(9) + 1.0; //rng.nextDouble() * 9 + 1;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,82 +59,31 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SecondRoute()),
+            MaterialPageRoute(builder: (context) => AddEvent()),
           );
         },
         label: Text('Add Event'),
         icon: Icon(Icons.add),
         backgroundColor: Colors.pink,
       ),
-        body: new Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.lightBlue, Colors.lightGreen],
-            )
-          ),
-         child: new Center(
-            // Center is a layout widget. It takes a single child and positions it
-            // in the middle of the parent.
-
-            child: Column(
-              // Column is also a layout widget. It takes a list of children and
-              // arranges them vertically. By default, it sizes itself to fit its
-              // children horizontally, and tries to be as tall as its parent.
-              //
-              // Invoke "debug painting" (press "p" in the console, choose the
-              // "Toggle Debug Paint" action from the Flutter Inspector in Android
-              // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-              // to see the wireframe for each widget.
-              //
-              // Column has various properties to control how it sizes itself and
-              // how it positions its children. Here we use mainAxisAlignment to
-              // center the children vertically; the main axis here is the vertical
-              // axis because Columns are vertical (the cross axis would be
-              // horizontal).
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  key: Key('rahbert'),
-                  onTap:_incrementCounter,
-                  child:
-                    Image.asset(
-                      'images/rahbert.png',
-                      key: Key('rahbertImage'),
-                      scale: _scale,
-                      height: 470,
-                      width: 470,
-                    )
-                ),
-                Text(
-                  'You have tapped the image the following number of times:',
-                ),
-                Text('$_counter',
-                    key: Key('counterKey'),
-                    style: TextStyle(
-                        fontSize: 60,
-                        foreground: Paint()
-                          ..shader = new LinearGradient(
-                            colors: [Colors.red, Colors.blue]
-                          ).createShader(Rect.fromLTWH(0, 0, 400, 0))
-                    )
-                ),
-              ],
-            ),
-          ),
-        ),
-
+      body: buildFinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
+
 }
+
+
+
+
