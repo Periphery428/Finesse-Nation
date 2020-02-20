@@ -2,6 +2,7 @@ on:
   push:
     branches-ignore:
       - master
+      - develop 
 name: Unit, Widget, and Integration Tests
 jobs:
   unit:
