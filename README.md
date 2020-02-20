@@ -3,6 +3,6 @@
 
 There are free meals and giveaways on campus all the time. Finesse Nation is an app that would allow users to share where the free items are located on campus.
 
-Most Recent Deployment: https://periphery428.github.io/Finesse-Nation
+Website: https://periphery428.github.io/Finesse-Nation
 
 Developed in Android Studio using the Flutter framework
