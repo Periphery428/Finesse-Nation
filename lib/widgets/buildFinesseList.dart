@@ -7,7 +7,14 @@ import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class buildFinesseList extends StatelessWidget{
+class buildFinesseList extends StatefulWidget {
+  buildFinesseList({Key key}) : super(key: key);
+
+  @override
+  _FinesseListState createState() => new _FinesseListState();
+}
+
+class _FinesseListState extends State<buildFinesseList>{
   Future<List<Finesse>> _finesses;
   Future<List<Finesse>> fetchFinesses() async{
     final response = await http.get('http://finesse-nation.herokuapp.com/api/food/getEvents');
@@ -28,14 +35,21 @@ class buildFinesseList extends StatelessWidget{
     RefreshController(initialRefresh: false);
 
   void _onRefresh() async{
-    await Future.delayed(Duration(milliseconds: 1000));
-    _refreshController.refreshCompleted();
+//    await Future.delayed(Duration(milliseconds: 1000));
+    setState(() {
+      _finesses = fetchFinesses();
+      _refreshController.refreshCompleted();
+    });
   }
 
    _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    _finesses = fetchFinesses();
-    _refreshController.loadComplete();
+//    await Future.delayed(Duration(milliseconds: 1000));
+    setState(() {
+      _finesses = fetchFinesses();
+      _refreshController.loadComplete();
+    });
+//    _finesses = fetchFinesses();
+//    _refreshController.loadComplete();
   }
 
 
