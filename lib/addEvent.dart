@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:finesse_nation/Finesse.dart';
 import 'package:http/http.dart' as http;
 
 class AddEvent extends StatelessWidget {
@@ -9,10 +10,10 @@ class AddEvent extends StatelessWidget {
     final appTitle = 'Share a Finesse';
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: MyCustomForm(),
+      appBar: AppBar(
+        title: Text(appTitle),
+      ),
+      body: MyCustomForm(),
     );
   }
 }
@@ -25,44 +26,6 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
-class Post {
-  final String eventName;
-  final String location;
-  final String description;
-  final String duration;
-
-  Post({this.eventName, this.location, this.description, this.duration});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      eventName: json['name'],
-      location: json['location'],
-      description: json['description'],
-      duration: json['duration'],
-    );
-  }
-
-  Map toMap() {
-    var map = new Map<String, dynamic>();
-    map["name"] = eventName;
-    map["location"] = location;
-    map["description"] = description;
-    map["duration"] = duration;
-
-    return map;
-  }
-}
-
-Future<Post> createPost(String url, {Map body}) async {
-  return http.post(url, body: body).then((http.Response response) {
-    final int statusCode = response.statusCode;
-
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while fetching data");
-    }
-    return Post.fromJson(json.decode(response.body));
-  });
-}
 
 // Create a corresponding State class.
 // This class holds data related to the form.
@@ -88,7 +51,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    const CREATE_POST_URL = 'https://finesse-nation.herokuapp.com/api/food/addEvent';
+
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -146,14 +109,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                   Text location = Text(locationController.text);
                   Text description = Text(descriptionController.text);
 
-                  Post newPost = new Post(
-                      eventName: eventName.data,
-                      location: location.data,
-                      description: description.data,
-                      duration: "20");
-
-
-                  await createPost(CREATE_POST_URL, body: newPost.toMap());
+                  Finesse newFinesse = new Finesse(
+                    eventName.data,
+                    description.data,
+                    "image",
+                    location.data,
+                    "duration",
+                    "type",
+                  );
+                  await newFinesse.addFinesse();
                   Navigator.pop(context);
                 }
               },
