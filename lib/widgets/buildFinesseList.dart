@@ -44,10 +44,7 @@ class _FinesseListState extends State<buildFinesseList>{
 
    _onLoading() async {
 //    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-      _finesses = fetchFinesses();
-      _refreshController.loadComplete();
-    });
+//    _refreshController.loadComplete();
 //    _finesses = fetchFinesses();
 //    _refreshController.loadComplete();
   }

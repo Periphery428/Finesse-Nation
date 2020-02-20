@@ -141,7 +141,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 if (_formKey.currentState.validate()) {
                   // If the form is valid, display a Snackbar.
                   Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Sharing Finesse')));
+                      .showSnackBar(SnackBar(duration: const Duration(seconds: 1), content: Text('Sharing Finesse')));
                   Text eventName = Text(eventNameController.text);
                   Text location = Text(locationController.text);
                   Text description = Text(descriptionController.text);
