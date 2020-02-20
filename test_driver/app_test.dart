@@ -18,16 +18,5 @@ void main() {
         driver.close();
       }
     });
-
-    test('starts app at 0', () async {
-      expect(await driver.getText(counterTextFinder), "0");
-    });
-
-
-    test('increments the app counter', () async {
-      await driver.tap(buttonFinder);
-      await driver.waitFor(find.text('1'));
-      expect(await driver.getText(counterTextFinder), "1");
-    });
   });
 }
