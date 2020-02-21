@@ -12,5 +12,5 @@ Download Flutter here https://flutter.dev/docs/get-started/install
 
 ```git clone https://github.com/Periphery428/Finesse-Nation.git```
 
-Open the project up in Android Studio
+Open the project in Android Studio
 
