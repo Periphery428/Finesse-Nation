@@ -9,7 +9,8 @@ Card buildFinesseCard(Finesse fin) {
       ListTile(
         leading: Icon(Icons.accessible_forward),
         title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),
-        subtitle: fin.getBody() == null ? Text("Null") :Text(fin.getBody()),
+        subtitle: fin.getDescription() == null ? Text("Null") : Text(
+            fin.getDescription()),
       ),
     ]),
   );

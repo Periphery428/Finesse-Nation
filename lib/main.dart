@@ -6,6 +6,10 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 
 void main() => runApp(MyApp());
+const POST_URL =
+    'https://finesse-nation.herokuapp.com/api/food/addEvent';
+const GET_URL =
+    'https://finesse-nation.herokuapp.com/api/food/getEvents';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
