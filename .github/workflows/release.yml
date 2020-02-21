@@ -18,19 +18,19 @@ jobs:
       - run: flutter pub get
       - run: flutter test
 
-  integration:
-    name: Integration Tests
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'dev'
-      - uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          profile: Nexus 6
-          script: flutter drive --target=test_driver/app.dart
+  # integration:
+  #   name: Integration Tests
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: 'dev'
+  #     - uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         api-level: 29
+  #         profile: Nexus 6
+  #         script: flutter drive --target=test_driver/app.dart
           
   release:
     name: Release
