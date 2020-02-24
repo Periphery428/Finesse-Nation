@@ -23,9 +23,6 @@ jobs:
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
       - run: flutter pub get
       - run: flutter test
-        env:
-          CI: true
-          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
 
   integration:
     name: Integration Tests
@@ -38,12 +35,9 @@ jobs:
           channel: 'dev'
       - run: dart tool/env.dart
         env:
-          CI: true
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           profile: Nexus 6
           script: flutter drive --target=test_driver/app.dart
-        env:
-          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
