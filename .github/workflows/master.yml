@@ -57,8 +57,8 @@ jobs:
         with:
           channel: 'dev'
       - run: dart tool/env.dart
-          env:
-            FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
+        env:
+          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
       - run: flutter config --enable-web
       - run: flutter build web
       - uses: JamesIves/github-pages-deploy-action@releases/v3
