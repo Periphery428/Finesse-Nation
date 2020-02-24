@@ -19,7 +19,6 @@ jobs:
           channel: 'dev'
       - run: dart tool/env.dart
         env:
-          CI: true
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
       - run: flutter pub get
       - run: flutter test
