@@ -1,6 +1,6 @@
 on:
   push:
-    tags:        
+    tags:
       - v*
 name: Release
 jobs:
@@ -15,6 +15,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
+      - run: dart tool/env.dart
       - run: flutter build apk --split-per-abi
       - run: flutter config --enable-web
       - uses: ncipollo/release-action@v1
@@ -28,3 +29,5 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: build/web
+        env:
+          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}

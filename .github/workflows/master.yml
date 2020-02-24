@@ -1,6 +1,6 @@
 on:
   push:
-    branches:        
+    branches:
       - master
       - develop
 name: Finesse Nation CI/CD
@@ -16,8 +16,11 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
+      - run: dart tool/env.dart
       - run: flutter pub get
       - run: flutter test
+        env:
+          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
 
   integration:
     name: Integration Tests
@@ -32,7 +35,9 @@ jobs:
           api-level: 29
           profile: Nexus 6
           script: flutter drive --target=test_driver/app.dart
-          
+        env:
+          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
+
   web:
     name: Build website
     runs-on: ubuntu-latest
@@ -53,3 +58,5 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: build/web
+        env:
+          FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
