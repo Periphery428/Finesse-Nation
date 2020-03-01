@@ -2,16 +2,20 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:flutter/material.dart';
 
-class AddEvent extends StatelessWidget {
-  @override
+class FinessePage extends StatelessWidget {
+  Finesse fin;
+  FinessePage(Finesse fin) {
+    this.fin = fin;
+  }
+
   Widget build(BuildContext context) {
-    final appTitle = 'Share a Finesse';
+    final appTitle = fin.getTitle();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      body: MyCustomForm(),
+      body: Center(child: Text(fin.getDescription())),
     );
   }
 }
