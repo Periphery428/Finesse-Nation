@@ -137,7 +137,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               Text(
-                'Room 1131' /*fin.getDuration()*/,
+                'Room 1331' /*fin.getDuration()*/,
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.grey
@@ -150,16 +150,17 @@ class FinesseDetailsState extends State<FinesseDetails> {
     );
     return ListView(
       children: [
-        Image.asset(
-          'images/remram.png',
-          width: 600,
-          height: 240,
-          fit: BoxFit.cover,
-        ),
+
         Card(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Image.network(
+                fin.getImage(),
+                width: 600,
+                height: 240,
+                fit: BoxFit.cover,
+              ),
               titleSection,
               descriptionSection,
               timeSection,
