@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:finesse_nation/Finesse.dart';
-import 'package:http/http.dart' as http;
+import 'package:finesse_nation/Network.dart';
+import 'package:flutter/material.dart';
 
 class AddEvent extends StatelessWidget {
   @override
@@ -25,7 +23,6 @@ class MyCustomForm extends StatefulWidget {
     return MyCustomFormState();
   }
 }
-
 
 // Create a corresponding State class.
 // This class holds data related to the form.
@@ -51,7 +48,6 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   Widget build(BuildContext context) {
-
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -117,7 +113,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     "duration",
                     "type",
                   );
-                  await newFinesse.addFinesse();
+                  await Network.addFinesse(newFinesse);
                   Navigator.pop(context);
                 }
               },

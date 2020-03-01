@@ -6,3 +6,11 @@ There are free meals and giveaways on campus all the time. Finesse Nation is an 
 Website: https://periphery428.github.io/Finesse-Nation
 
 Developed in Android Studio using the Flutter framework
+
+## Instructions to Edit
+Download Flutter here https://flutter.dev/docs/get-started/install
+
+```git clone https://github.com/Periphery428/Finesse-Nation.git```
+
+Open the project in Android Studio
+
