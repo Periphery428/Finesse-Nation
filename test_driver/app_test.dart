@@ -3,10 +3,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('Counter App', () {
-    final counterTextFinder = find.byValueKey('counterKey');
-    final buttonFinder = find.byValueKey('rahbert');
-
-
     FlutterDriver driver;
 
     setUpAll(() async {

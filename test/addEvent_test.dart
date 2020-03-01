@@ -5,17 +5,18 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 import 'dart:async';
-import 'package:test/test.dart';
+
 import 'package:finesse_nation/Finesse.dart';
-import 'package:finesse_nation/FinesseList.dart';
+import 'package:finesse_nation/Network.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('Adding a new Finesse', () async {
     Finesse newFinesse = Finesse("Add Event unit test", "Good Pizza", "",
         "Second floor Arc", "60 hours", "Food");
-    await newFinesse.addFinesse(); //This call adds a finesse to the DB
-    List<Finesse> finesseList = await Future.value(FinesseList.fetchFinesses());
+    await Network.addFinesse(newFinesse); //This call adds a finesse to the DB
+    List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getTitle(), newFinesse.getTitle());
-    newFinesse.removeFinesse();
+    Network.removeFinesse(newFinesse);
   });
 }
