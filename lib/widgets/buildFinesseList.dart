@@ -8,11 +8,12 @@ class BuildFinesseList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.lightBlue, Colors.pink],
-        )),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.lightBlue, Colors.pink],
+          ),
+        ),
         child: FutureBuilder(
           future: Network.fetchFinesses(),
           builder: (context, snapshot) {

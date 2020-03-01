@@ -15,117 +15,159 @@ class FinessePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      body: Center(child: Text(fin.getDescription())),
+      body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.lightBlue, Colors.pink],
+            ),
+          ),
+          child: FinesseDetails(fin)),
     );
   }
 }
 
 // Create a Form widget.
-class MyCustomForm extends StatefulWidget {
+class FinesseDetails extends StatefulWidget {
+  Finesse fin;
+  FinesseDetails(Finesse fin) {
+    this.fin = fin;
+  }
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  FinesseDetailsState createState() {
+    return FinesseDetailsState(fin);
   }
 }
 
 // Create a corresponding State class.
-// This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
-  final eventNameController = TextEditingController();
-  final locationController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    eventNameController.dispose();
-    locationController.dispose();
-    descriptionController.dispose();
-    super.dispose();
+class FinesseDetailsState extends State<FinesseDetails> {
+  Finesse fin;
+  FinesseDetailsState(Finesse fin) {
+    this.fin = fin;
   }
-
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: eventNameController,
-            decoration: const InputDecoration(
-              labelText: "EventName",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Event Name';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: locationController,
-            decoration: const InputDecoration(
-              labelText: "Location",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Location';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: descriptionController,
-            decoration: const InputDecoration(
-              labelText: "Description",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Description';
-              }
-              return null;
-            },
-          ),
+    Widget titleSection = Container(
+      padding: const EdgeInsets.all(20),
+      child: Text(
+        fin.getTitle(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+        ),
+      ),
+    );
+    Widget descriptionSection = Container(
+      padding: const EdgeInsets.only(left: 20, bottom: 20),
+      child: Row(
+//        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              color: Colors.blue,
-              onPressed: () async {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Sharing Finesse')));
-                  Text eventName = Text(eventNameController.text);
-                  Text location = Text(locationController.text);
-                  Text description = Text(descriptionController.text);
-
-                  Finesse newFinesse = new Finesse(
-                    eventName.data,
-                    description.data,
-                    "image",
-                    location.data,
-                    "duration",
-                    "type",
-                  );
-                  await Network.addFinesse(newFinesse);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('SUBMIT'),
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.info,
+              color: Colors.grey,
+              size: 24.0,
+            ),
+          ),
+          Flexible(
+            child: Text(
+              fin.getDescription(),
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
           ),
         ],
       ),
+    );
+    Widget timeSection = Container(
+      padding: const EdgeInsets.only(left: 20, bottom: 20),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.calendar_today,
+              color: Colors.grey,
+              size: 24.0,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Ongoing',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '10 pizzas left' /*fin.getDuration()*/,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+    Widget locationSection = Container(
+      padding: const EdgeInsets.only(left: 20, bottom: 20),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.place,
+              color: Colors.grey,
+              size: 24.0,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Siebel Center',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                'Room 1131' /*fin.getDuration()*/,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+    return ListView(
+      children: [
+        Image.asset(
+          'images/remram.png',
+          width: 600,
+          height: 240,
+          fit: BoxFit.cover,
+        ),
+        Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              titleSection,
+              descriptionSection,
+              timeSection,
+              locationSection,
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
