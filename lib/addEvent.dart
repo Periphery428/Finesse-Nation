@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/cameraPage.dart';
@@ -8,6 +9,7 @@ import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 
 var firstCamera = CameraDescription();
+
 
 class AddEvent extends StatelessWidget {
   @override
@@ -43,7 +45,6 @@ class MyCustomForm extends StatefulWidget {
     return MyCustomFormState();
   }
 }
-
 
 // Create a corresponding State class.
 // This class holds data related to the form.
@@ -195,7 +196,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     duration.data,
                     _type,
                   );
-                  await newFinesse.addFinesse();
+                  await Network.addFinesse(newFinesse);
                   Navigator.pop(context);
                 }
               },
