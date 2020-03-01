@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
+import 'package:finesse_nation/cameraPage.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+
+var firstCamera = CameraDescription();
 
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Share a Finesse';
 
-
+    setupCamera();
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
@@ -19,8 +24,20 @@ class AddEvent extends StatelessWidget {
   }
 }
 
+void setupCamera() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  firstCamera = cameras.first;
+}
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
+
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -36,12 +53,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
+
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
   final durationController = TextEditingController();
   final typeController = TextEditingController();
   String _type = "FOOD";
+  String image = "images/photo_camera_black_288x288.png";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -55,6 +74,19 @@ class MyCustomFormState extends State<MyCustomForm> {
     super.dispose();
   }
 
+  navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    image = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TakePictureScreen(camera: firstCamera,)),
+    );
+//    Scaffold.of(context)
+//      ..removeCurrentSnackBar()
+//      ..showSnackBar(SnackBar(content: Text("$image")));
+  }
+
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -64,6 +96,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+            key: Key('name'),
             controller: eventNameController,
             decoration: const InputDecoration(
               labelText: "EventName*",
@@ -76,6 +109,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ),
           TextFormField(
+            key: Key('location'),
             controller: locationController,
             decoration: const InputDecoration(
               labelText: "Location*",
@@ -97,6 +131,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ),
           TextFormField(
+            key: Key('duration'),
             controller: durationController,
             decoration: const InputDecoration(
               labelText: "Duration",
@@ -106,7 +141,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             },
           ),
           new DropdownButton<String>(
-//        hint: Text("Select an event type")
+            hint: Text("Select an event type"),
             items: <String>['FOOD', 'OTHER'].map((String value) {
               return new DropdownMenuItem<String>(
                 value: value,
@@ -120,9 +155,24 @@ class MyCustomFormState extends State<MyCustomForm> {
               });
             },
           ),
+          Material(
+              child: InkWell(
+                onTap: () {
+                  navigateAndDisplaySelection(context);
+                },
+                child: Container(
+                  child: ClipRRect(
+                    child: Image.asset(
+                        image, //TODO: Fix this not showing the taken image.
+                        width: 150.0, height: 150.0),
+                  ),),
+              )
+          ),
+//          Image.file(File(image)),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
+              key: Key('submit'),
               color: Colors.blue,
               onPressed: () async {
                 // Validate returns true if the form is valid, or false
@@ -135,6 +185,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                   Text location = Text(locationController.text);
                   Text description = Text(descriptionController.text);
                   Text duration = Text(durationController.text);
+                  Image imageObject = Image.file(File(image));
+
                   Finesse newFinesse = new Finesse(
                     eventName.data,
                     description.data,
