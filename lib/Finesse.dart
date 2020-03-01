@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 class Finesse {
   final String title;
   final String description;

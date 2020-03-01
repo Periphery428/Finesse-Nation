@@ -1,5 +1,4 @@
 import 'package:finesse_nation/Finesse.dart';
-import 'package:finesse_nation/Network.dart';
 import 'package:flutter/material.dart';
 
 class FinessePage extends StatelessWidget {
@@ -28,7 +27,7 @@ class FinessePage extends StatelessWidget {
   }
 }
 
-// Create a Form widget.
+// Create the details widget.
 class FinesseDetails extends StatefulWidget {
   Finesse fin;
   FinesseDetails(Finesse fin) {
