@@ -1,13 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Finesse.dart';
-import 'package:http/http.dart' as http;
+import 'package:camera/camera.dart';
+import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
 
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Share a Finesse';
+
 
     return Scaffold(
       appBar: AppBar(
@@ -38,6 +39,9 @@ class MyCustomFormState extends State<MyCustomForm> {
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
+  final durationController = TextEditingController();
+  final typeController = TextEditingController();
+  String _type = "FOOD";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -46,12 +50,13 @@ class MyCustomFormState extends State<MyCustomForm> {
     eventNameController.dispose();
     locationController.dispose();
     descriptionController.dispose();
+    durationController.dispose();
+    typeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
@@ -61,7 +66,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           TextFormField(
             controller: eventNameController,
             decoration: const InputDecoration(
-              labelText: "EventName",
+              labelText: "EventName*",
             ),
             validator: (value) {
               if (value.isEmpty) {
@@ -73,7 +78,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           TextFormField(
             controller: locationController,
             decoration: const InputDecoration(
-              labelText: "Location",
+              labelText: "Location*",
             ),
             validator: (value) {
               if (value.isEmpty) {
@@ -88,10 +93,31 @@ class MyCustomFormState extends State<MyCustomForm> {
               labelText: "Description",
             ),
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Description';
-              }
               return null;
+            },
+          ),
+          TextFormField(
+            controller: durationController,
+            decoration: const InputDecoration(
+              labelText: "Duration",
+            ),
+            validator: (value) {
+              return null;
+            },
+          ),
+          new DropdownButton<String>(
+//        hint: Text("Select an event type")
+            items: <String>['FOOD', 'OTHER'].map((String value) {
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+            value: _type,
+            onChanged: (newValue) {
+              setState(() {
+                _type = newValue;
+              });
             },
           ),
           Padding(
@@ -108,14 +134,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                   Text eventName = Text(eventNameController.text);
                   Text location = Text(locationController.text);
                   Text description = Text(descriptionController.text);
-
+                  Text duration = Text(durationController.text);
                   Finesse newFinesse = new Finesse(
                     eventName.data,
                     description.data,
                     "image",
                     location.data,
-                    "duration",
-                    "type",
+                    duration.data,
+                    _type,
                   );
                   await newFinesse.addFinesse();
                   Navigator.pop(context);
