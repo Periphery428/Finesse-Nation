@@ -10,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 
 var firstCamera = CameraDescription();
 
-
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,9 +36,9 @@ void setupCamera() async {
   // Get a specific camera from the list of available cameras.
   firstCamera = cameras.first;
 }
+
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
-
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -78,133 +77,251 @@ class MyCustomFormState extends State<MyCustomForm> {
   navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
-    image = await Navigator.push(
+    String newImage = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => TakePictureScreen(camera: firstCamera,)),
+          builder: (context) =>
+              TakePictureScreen(
+                camera: firstCamera,
+              )),
     );
-//    Scaffold.of(context)
-//      ..removeCurrentSnackBar()
-//      ..showSnackBar(SnackBar(content: Text("$image")));
+    if (newImage != null) {
+      image = newImage;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            key: Key('name'),
-            controller: eventNameController,
-            decoration: const InputDecoration(
-              labelText: "EventName*",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Event Name';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            key: Key('location'),
-            controller: locationController,
-            decoration: const InputDecoration(
-              labelText: "Location*",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Location';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: descriptionController,
-            decoration: const InputDecoration(
-              labelText: "Description",
-            ),
-            validator: (value) {
-              return null;
-            },
-          ),
-          TextFormField(
-            key: Key('duration'),
-            controller: durationController,
-            decoration: const InputDecoration(
-              labelText: "Duration",
-            ),
-            validator: (value) {
-              return null;
-            },
-          ),
-          new DropdownButton<String>(
-            hint: Text("Select an event type"),
-            items: <String>['FOOD', 'OTHER'].map((String value) {
-              return new DropdownMenuItem<String>(
-                value: value,
-                child: new Text(value),
-              );
-            }).toList(),
-            value: _type,
-            onChanged: (newValue) {
-              setState(() {
-                _type = newValue;
-              });
-            },
-          ),
-          Material(
-              child: InkWell(
-                onTap: () {
-                  navigateAndDisplaySelection(context);
-                },
-                child: Container(
-                  child: ClipRRect(
-                    child: Image.asset(
-                        image, //TODO: Fix this not showing the taken image.
-                        width: 150.0, height: 150.0),
-                  ),),
-              )
-          ),
-//          Image.file(File(image)),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              key: Key('submit'),
-              color: Colors.blue,
-              onPressed: () async {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Sharing Finesse')));
-                  Text eventName = Text(eventNameController.text);
-                  Text location = Text(locationController.text);
-                  Text description = Text(descriptionController.text);
-                  Text duration = Text(durationController.text);
-                  Image imageObject = Image.file(File(image));
-
-                  Finesse newFinesse = new Finesse(
-                    eventName.data,
-                    description.data,
-                    "image",
-                    location.data,
-                    duration.data,
-                    _type,
-                  );
-                  await Network.addFinesse(newFinesse);
-                  Navigator.pop(context);
+    if (image == "images/photo_camera_black_288x288.png") {
+      return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              key: Key('name'),
+              controller: eventNameController,
+              decoration: const InputDecoration(
+                labelText: "EventName*",
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Event Name';
                 }
+                return null;
               },
-              child: Text('SUBMIT'),
             ),
-          ),
-        ],
-      ),
-    );
+            TextFormField(
+              key: Key('location'),
+              controller: locationController,
+              decoration: const InputDecoration(
+                labelText: "Location*",
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Location';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                labelText: "Description",
+              ),
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              key: Key('duration'),
+              controller: durationController,
+              decoration: const InputDecoration(
+                labelText: "Duration",
+              ),
+              validator: (value) {
+                return null;
+              },
+            ),
+            new DropdownButton<String>(
+              hint: Text("Select an event type"),
+              items: <String>['FOOD', 'OTHER'].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              value: _type,
+              onChanged: (newValue) {
+                setState(() {
+                  _type = newValue;
+                });
+              },
+            ),
+            Material(
+                child: InkWell(
+                  onTap: () {
+                    navigateAndDisplaySelection(context);
+                  },
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Image.asset(image),
+                  ),
+                )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: RaisedButton(
+                key: Key('submit'),
+                color: Colors.blue,
+                onPressed: () async {
+                  // Validate returns true if the form is valid, or false
+                  // otherwise.
+                  if (_formKey.currentState.validate()) {
+                    // If the form is valid, display a Snackbar.
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('Sharing Finesse')));
+                    Text eventName = Text(eventNameController.text);
+                    Text location = Text(locationController.text);
+                    Text description = Text(descriptionController.text);
+                    Text duration = Text(durationController.text);
+                    Image imageObject = Image.file(File(image));
+
+                    Finesse newFinesse = new Finesse(
+                      eventName.data,
+                      description.data,
+                      "image",
+                      location.data,
+                      duration.data,
+                      _type,
+                    );
+                    await Network.addFinesse(newFinesse);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('SUBMIT'),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  key: Key('name'),
+                  controller: eventNameController,
+                  decoration: const InputDecoration(
+                    labelText: "EventName*",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Event Name';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  key: Key('location'),
+                  controller: locationController,
+                  decoration: const InputDecoration(
+                    labelText: "Location*",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Location';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: "Description",
+                  ),
+                  validator: (value) {
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  key: Key('duration'),
+                  controller: durationController,
+                  decoration: const InputDecoration(
+                    labelText: "Duration",
+                  ),
+                  validator: (value) {
+                    return null;
+                  },
+                ),
+                new DropdownButton<String>(
+                  hint: Text("Select an event type"),
+                  items: <String>['FOOD', 'OTHER'].map((String value) {
+                    return new DropdownMenuItem<String>(
+                      value: value,
+                      child: new Text(value),
+                    );
+                  }).toList(),
+                  value: _type,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _type = newValue;
+                    });
+                  },
+                ),
+                Material(
+                    child: InkWell(
+                      onTap: () {
+                        navigateAndDisplaySelection(context);
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 150.0,
+                        alignment: Alignment.center,
+                        child: Image.file(File(image)),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: RaisedButton(
+                    key: Key('submit'),
+                    color: Colors.blue,
+                    onPressed: () async {
+                      // Validate returns true if the form is valid, or false
+                      // otherwise.
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, display a Snackbar.
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text('Sharing Finesse')));
+                        Text eventName = Text(eventNameController.text);
+                        Text location = Text(locationController.text);
+                        Text description = Text(descriptionController.text);
+                        Text duration = Text(durationController.text);
+                        Image imageObject = Image.file(File(image));
+
+                        Finesse newFinesse = new Finesse(
+                          eventName.data,
+                          description.data,
+                          "image",
+                          location.data,
+                          duration.data,
+                          _type,
+                        );
+                        await Network.addFinesse(newFinesse);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text('SUBMIT'),
+                  ),
+                ),
+              ],
+            ),
+          ));
+    }
   }
 }

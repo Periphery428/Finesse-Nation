@@ -14,7 +14,7 @@ Download Flutter here https://flutter.dev/docs/get-started/install
 
 Open the project in Android Studio
 
-###Setup Token
+### Setup Token
 
 You must set the environment variable ```FINESSE_NATION_TOKEN``` with the secret token.
 
