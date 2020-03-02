@@ -15,8 +15,12 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         fin.getImage() == null
             ? Text("Null")
-            : Image.network(
-                fin.getImage(),
+            : Hero(
+                tag: fin.getImage(),
+                child: Image.network(
+                  fin.getImage(),
+                  fit: BoxFit.cover,
+                ),
               ),
         ListTile(
           leading: Icon(Icons.accessible_forward),

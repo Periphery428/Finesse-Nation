@@ -104,10 +104,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               ),
               Text(
                 '10 pizzas left' /*fin.getDuration()*/,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey
-                ),
+                style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
             ],
           ),
@@ -137,10 +134,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               ),
               Text(
                 'Room 1331' /*fin.getDuration()*/,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey
-                ),
+                style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
             ],
           ),
@@ -149,16 +143,24 @@ class FinesseDetailsState extends State<FinesseDetails> {
     );
     return ListView(
       children: [
-
         Card(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                fin.getImage(),
-                width: 600,
-                height: 240,
-                fit: BoxFit.cover,
+              InkWell(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FullImage(fin.getImage()))),
+                child: Hero(
+                  tag: fin.getImage(),
+                  child: Image.network(
+                    fin.getImage(),
+                    width: 600,
+                    height: 240,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               titleSection,
               descriptionSection,
@@ -168,6 +170,31 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FullImage extends StatelessWidget {
+  String img;
+  FullImage(String img) {
+    this.img = img;
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: InkWell(
+        onTap: () => Navigator.pop(context),
+        child: Center(
+          child: Hero(
+            tag: img,
+            child: Image.network(
+              img,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
