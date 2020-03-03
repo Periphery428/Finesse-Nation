@@ -12,7 +12,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('Adding a new Finesse', () async {
-    Finesse newFinesse = Finesse("Add Event unit test", "Good Pizza", "",
+    Finesse newFinesse = Finesse.finesseAdd("Add Event unit test", "Good Pizza", "",
         "Second floor Arc", "60 hours", "Food");
     await Network.addFinesse(newFinesse); //This call adds a finesse to the DB
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
