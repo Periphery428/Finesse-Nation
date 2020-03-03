@@ -1,5 +1,6 @@
-class Finesse {
+import 'dart:math';
 
+class Finesse {
   final String title;
   final String description;
   final String image;
@@ -11,10 +12,15 @@ class Finesse {
       this.duration, this.type);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
+    var rng = Random();
+    var imgInt = rng.nextInt(2048);
+    var imgStr = (imgInt < 100)
+        ? 'https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id=${rng.nextInt(2048)}'
+        : 'https://picsum.photos/500?id=$imgInt';
     return Finesse(
       json['name'] != null ? json['name'] : "",
       json['description'] != null ? json['description'] : "",
-      "image",
+      imgStr,
       json['location'] != null ? json['location'] : "",
       json['type'] != null ? json['type'] : "",
       json['duration'] != null ? json['duration'] : "",
