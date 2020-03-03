@@ -53,6 +53,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------------
 _fe_analyzer_shared
+package_config
 
 Copyright 2019, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -985,7 +986,6 @@ collection
 convert
 crypto
 mime
-package_config
 package_resolver
 shelf_static
 source_map_stack_trace
