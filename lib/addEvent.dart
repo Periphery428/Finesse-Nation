@@ -105,7 +105,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   Text location = Text(locationController.text);
                   Text description = Text(descriptionController.text);
 
-                  Finesse newFinesse = new Finesse(
+                  Finesse newFinesse = Finesse.finesseAdd(
                     eventName.data,
                     description.data,
                     "image",

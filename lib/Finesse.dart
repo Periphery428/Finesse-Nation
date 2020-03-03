@@ -5,12 +5,21 @@ class Finesse {
   final String location;
   final String duration;
   final String type;
+  String _id;
 
-  Finesse(this.title, this.description, this.image, this.location,
+  static finesseAdd( title, description, image, location,
+    duration, type){
+    return Finesse(null, title, description, image, location,
+    duration, type);
+
+  }
+
+  Finesse(this._id, this.title, this.description, this.image, this.location,
       this.duration, this.type);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     return Finesse(
+      json['_id'],
       json['name'] != null ? json['name'] : "",
       json['description'] != null ? json['description'] : "",
       "image",
@@ -52,5 +61,9 @@ class Finesse {
 
   String getType() {
     return type;
+  }
+
+  String get_Id(){
+    return _id;
   }
 }
