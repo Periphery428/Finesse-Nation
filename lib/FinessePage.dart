@@ -8,11 +8,11 @@ class FinessePage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    final appTitle = fin.getTitle();
+    final title = fin.getTitle();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(appTitle),
+        title: Text(title),
       ),
       body: Container(
           decoration: BoxDecoration(
@@ -104,7 +104,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
               ),
               Text(
                 '10 pizzas left' /*fin.getDuration()*/,
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),
@@ -134,7 +137,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
               ),
               Text(
                 'Room 1331' /*fin.getDuration()*/,
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),
@@ -149,9 +155,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
             children: [
               InkWell(
                 onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FullImage(fin.getImage()))),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FullImage(
+                      fin.getImage(),
+                    ),
+                  ),
+                ),
                 child: Hero(
                   tag: fin.getImage(),
                   child: Image.network(
