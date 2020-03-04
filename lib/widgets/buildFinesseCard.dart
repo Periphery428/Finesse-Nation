@@ -6,7 +6,8 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
     color: Colors.white,
     child: InkWell(
-      onTap: () => {
+      onTap: () =>
+      {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FinessePage(fin)),
@@ -16,12 +17,12 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         fin.getImage() == null
             ? Text("Null")
             : Hero(
-                tag: fin.getImage(),
-                child: Image.network(
-                  fin.getImage(),
-                  fit: BoxFit.cover,
-                ),
-              ),
+          tag: fin.getImage(),
+          child: Image.network(
+            fin.getImage(),
+            fit: BoxFit.cover,
+          ),
+        ),
         ListTile(
           leading: Icon(Icons.accessible_forward),
           title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),

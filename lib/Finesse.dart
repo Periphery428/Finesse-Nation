@@ -21,8 +21,8 @@ class Finesse {
       json['name'] != null ? json['name'] : "",
       json['description'] != null ? json['description'] : "",
       imgStr,
-      "22",
-      "23",
+      json['location'] != null ? json['location'] : "",
+      json['type'] != null ? json['type'] : "",
       json['duration'] != null ? json['duration'] : "",
     );
   }
@@ -30,9 +30,11 @@ class Finesse {
   Map toMap() {
     var map = new Map<String, dynamic>();
     map["name"] = title;
-    map["location"] = location;
     map["description"] = description;
+    //Image
+    map["location"] = location;
     map["duration"] = duration;
+    map["type"] = type;
 
     return map;
   }
