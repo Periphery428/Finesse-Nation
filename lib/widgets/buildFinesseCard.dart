@@ -17,7 +17,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         fin.getImage() == null
             ? Text("Null")
             : Hero(
-          tag: fin.getImage(),
+          tag: fin.get_Id(),
           child: Image.network(
             fin.getImage(),
             fit: BoxFit.cover,

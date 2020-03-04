@@ -163,12 +163,12 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => FullImage(
-                      fin.getImage(),
+                      fin,
                     ),
                   ),
                 ),
                 child: Hero(
-                  tag: fin.getImage(),
+                  tag: fin.get_Id(),
                   child: Image.network(
                     fin.getImage(),
                     width: 600,
@@ -190,10 +190,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
 }
 
 class FullImage extends StatelessWidget {
-  String img;
+  Finesse fin;
 
-  FullImage(String img) {
-    this.img = img;
+  FullImage(Finesse fin) {
+    this.fin = fin;
   }
 
   Widget build(BuildContext context) {
@@ -203,9 +203,9 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-            tag: img,
+            tag: fin.get_Id(),
             child: Image.network(
-              img,
+              fin.getImage(),
               fit: BoxFit.cover,
             ),
           ),
