@@ -26790,8 +26790,13 @@ $0:function(){K.fx(this.a).mq(null)
 return null},
 $S:1}
 R.NT.prototype={
-$1:function(a){var t="description",s="location",r="duration",q=C.l6.Ea(2048),p=q<100?"https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id="+C.l6.Ea(2048):"https://picsum.photos/500?id="+q,o=J.ai(a),n=o.i(a,"name")!=null?o.i(a,"name"):"",m=o.i(a,t)!=null?o.i(a,t):"",l=o.i(a,s)!=null?o.i(a,s):"",k=o.i(a,"type")!=null?o.i(a,"type"):""
-return new U.ic(n,m,p,l,k,o.i(a,r)!=null?o.i(a,r):"")},
+$1:function(a){var t,s,r,q,p="description",o="location",n="duration",m=C.l6.Ea(2048),l=m<100?"https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id="+C.l6.Ea(2048):"https://picsum.photos/500?id="+m,k=J.ai(a)
+k.i(a,"_id")
+t=k.i(a,"name")!=null?k.i(a,"name"):""
+s=k.i(a,p)!=null?k.i(a,p):""
+r=k.i(a,o)!=null?k.i(a,o):""
+q=k.i(a,"type")!=null?k.i(a,"type"):""
+return new U.ic(t,s,l,r,q,k.i(a,n)!=null?k.i(a,n):"")},
 $S:164}
 B.wA.prototype={
 J:function(a){var t=null
