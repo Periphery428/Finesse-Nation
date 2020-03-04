@@ -93,264 +93,139 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
+    var render;
     if (image == "images/photo_camera_black_288x288.png") {
-      return SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  key: Key('name'),
-                  controller: eventNameController,
-                  decoration: const InputDecoration(
-                    labelText: "EventName*",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Event Name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  key: Key('location'),
-                  controller: locationController,
-                  decoration: const InputDecoration(
-                    labelText: "Location*",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Location';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: "Description",
-                  ),
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  key: Key('duration'),
-                  controller: durationController,
-                  decoration: const InputDecoration(
-                    labelText: "Duration",
-                  ),
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text("Type: "),
-                ),
-                new DropdownButton<String>(
-                  hint: Text("Select an event type"),
-                  items: <String>['FOOD', 'OTHER'].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(value),
-                    );
-                  }).toList(),
-                  value: _type,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _type = newValue;
-                    });
-                  },
-                ),
-                Material(
-                    child: InkWell(
-                      onTap: () {
-                        navigateAndDisplaySelection(context);
-                      },
-                      child: Container(
-                        height: 150.0,
-                        alignment: Alignment.center,
-                        child: Image.asset(image),
-                      ),
-                    )),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: ButtonTheme(
-                      minWidth: 100,
-                      height: 50,
-                      child: RaisedButton(
-                        key: Key('submit'),
-                        color: Colors.blue,
-                        onPressed: () async {
-                          // Validate returns true if the form is valid, or false
-                          // otherwise.
-                          if (_formKey.currentState.validate()) {
-                            // If the form is valid, display a Snackbar.
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Sharing Finesse')));
-                            Text eventName = Text(eventNameController.text);
-                            Text location = Text(locationController.text);
-                            Text description = Text(descriptionController.text);
-                            Text duration = Text(durationController.text);
-                            Image imageObject = Image.file(File(image));
-
-                            Finesse newFinesse = new Finesse(
-                              eventName.data,
-                              description.data,
-                              "image",
-                              location.data,
-                              duration.data,
-                              _type,
-                            );
-                            await Network.addFinesse(newFinesse);
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text('SUBMIT'),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+      render = Image.asset(image);
     } else {
-      return SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  key: Key('name'),
-                  controller: eventNameController,
-                  decoration: const InputDecoration(
-                    labelText: "EventName*",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Event Name';
-                    }
-                    return null;
-                  },
+      render = Image.file(File(image));
+    }
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                key: Key('name'),
+                controller: eventNameController,
+                decoration: const InputDecoration(
+                  labelText: "EventName*",
                 ),
-                TextFormField(
-                  key: Key('location'),
-                  controller: locationController,
-                  decoration: const InputDecoration(
-                    labelText: "Location*",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Location';
-                    }
-                    return null;
-                  },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Event Name';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                key: Key('location'),
+                controller: locationController,
+                decoration: const InputDecoration(
+                  labelText: "Location*",
                 ),
-                TextFormField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: "Description",
-                  ),
-                  validator: (value) {
-                    return null;
-                  },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Location';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: const InputDecoration(
+                  labelText: "Description",
                 ),
-                TextFormField(
-                  key: Key('duration'),
-                  controller: durationController,
-                  decoration: const InputDecoration(
-                    labelText: "Duration",
-                  ),
-                  validator: (value) {
-                    return null;
-                  },
+                validator: (value) {
+                  return null;
+                },
+              ),
+              TextFormField(
+                key: Key('duration'),
+                controller: durationController,
+                decoration: const InputDecoration(
+                  labelText: "Duration",
                 ),
-                Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text("Type: "),
-                ),
-                new DropdownButton<String>(
-                  hint: Text("Select an event type"),
-                  items: <String>['FOOD', 'OTHER'].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(value),
-                    );
-                  }).toList(),
-                  value: _type,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _type = newValue;
-                    });
-                  },
-                ),
-                Material(
-                    child: InkWell(
-                      onTap: () {
-                        navigateAndDisplaySelection(context);
-                      },
-                      child: Container(
-                        height: 150.0,
-                        alignment: Alignment.center,
-                        child: Image.file(File(image)),
-                      ),
-                    )),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: ButtonTheme(
-                      minWidth: 100,
-                      height: 50,
-                      child: RaisedButton(
-                        key: Key('submit'),
-                        color: Colors.blue,
-                        onPressed: () async {
-                          // Validate returns true if the form is valid, or false
-                          // otherwise.
-                          if (_formKey.currentState.validate()) {
-                            // If the form is valid, display a Snackbar.
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Sharing Finesse')));
-                            Text eventName = Text(eventNameController.text);
-                            Text location = Text(locationController.text);
-                            Text description = Text(descriptionController.text);
-                            Text duration = Text(durationController.text);
-                            Image imageObject = Image.file(File(image));
+                validator: (value) {
+                  return null;
+                },
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text("Type: "),
+              ),
+              new DropdownButton<String>(
+                hint: Text("Select an event type"),
+                items: <String>['FOOD', 'OTHER'].map((String value) {
+                  return new DropdownMenuItem<String>(
+                    value: value,
+                    child: new Text(value),
+                  );
+                }).toList(),
+                value: _type,
+                onChanged: (newValue) {
+                  setState(() {
+                    _type = newValue;
+                  });
+                },
+              ),
+              Material(
+                  child: InkWell(
+                    onTap: () {
+                      navigateAndDisplaySelection(context);
+                    },
+                    child: Container(
+                      height: 150.0,
+                      alignment: Alignment.center,
+                      child: render,
+                    ),
+                  )),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ButtonTheme(
+                    minWidth: 100,
+                    height: 50,
+                    child: RaisedButton(
+                      key: Key('submit'),
+                      color: Colors.blue,
+                      onPressed: () async {
+                        // Validate returns true if the form is valid, or false
+                        // otherwise.
+                        if (_formKey.currentState.validate()) {
+                          // If the form is valid, display a Snackbar.
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text('Sharing Finesse')));
+                          Text eventName = Text(eventNameController.text);
+                          Text location = Text(locationController.text);
+                          Text description = Text(descriptionController.text);
+                          Text duration = Text(durationController.text);
+                          Image imageObject = Image.file(File(image));
 
-                            Finesse newFinesse = new Finesse(
-                              eventName.data,
-                              description.data,
-                              "image",
-                              location.data,
-                              duration.data,
-                              _type,
-                            );
-                            await Network.addFinesse(newFinesse);
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text('SUBMIT'),
-                      ),
+                          Finesse newFinesse = new Finesse(
+                            eventName.data,
+                            description.data,
+                            "image",
+                            location.data,
+                            duration.data,
+                            _type,
+                          );
+                          await Network.addFinesse(newFinesse);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text('SUBMIT'),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }
