@@ -67,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
         label: Text('Add Event'),
+        key: Key('add event'),
         icon: Icon(Icons.add),
         backgroundColor: Colors.pink,
       ),

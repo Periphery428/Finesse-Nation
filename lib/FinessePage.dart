@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class FinessePage extends StatelessWidget {
   Finesse fin;
+
   FinessePage(Finesse fin) {
     this.fin = fin;
   }
@@ -30,9 +31,11 @@ class FinessePage extends StatelessWidget {
 // Create the details widget.
 class FinesseDetails extends StatefulWidget {
   Finesse fin;
+
   FinesseDetails(Finesse fin) {
     this.fin = fin;
   }
+
   @override
   FinesseDetailsState createState() {
     return FinesseDetailsState(fin);
@@ -42,9 +45,11 @@ class FinesseDetails extends StatefulWidget {
 // Create a corresponding State class.
 class FinesseDetailsState extends State<FinesseDetails> {
   Finesse fin;
+
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
   }
+
   @override
   Widget build(BuildContext context) {
     Widget titleSection = Container(
@@ -186,6 +191,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
 
 class FullImage extends StatelessWidget {
   String img;
+
   FullImage(String img) {
     this.img = img;
   }
