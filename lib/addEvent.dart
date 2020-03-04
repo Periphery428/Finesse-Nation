@@ -205,7 +205,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text duration = Text(durationController.text);
                           Image imageObject = Image.file(File(image));
 
-                          Finesse newFinesse = new Finesse(
+                          Finesse newFinesse = Finesse.finesseAdd(
                             eventName.data,
                             description.data,
                             "image",
