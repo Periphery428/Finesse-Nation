@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/FinessePage.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +14,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
       },
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         fin.getImage() == null
-            ? Text("Null"):querySelector(selectors)
+            ? Text("Null")
             : Hero(
                 tag: fin.getImage(),
                 child: Image.network(
