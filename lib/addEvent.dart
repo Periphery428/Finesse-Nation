@@ -5,8 +5,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/cameraPage.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
+import 'package:finesse_nation/main.dart';
 
 var firstCamera = CameraDescription();
 
@@ -214,7 +213,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                             _type,
                           );
                           await Network.addFinesse(newFinesse);
-                          Navigator.pop(context);
+                          Navigator.removeRouteBelow(context, ModalRoute.of(context));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MyApp()));
                         }
                       },
                       child: Text('SUBMIT'),
