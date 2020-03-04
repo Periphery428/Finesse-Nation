@@ -3,18 +3,19 @@ const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "/icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "/icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"/main.dart.js": "1ce27c2e670fc70d62d8d64529075b8b",
+"/main.dart.js": "8d5b4aa355d7ccd224606c1bd09a41a0",
 "/manifest.json": "e635fd6dd182a2cf920db16d047ea5f3",
 "/index.html": "f4e9d07268c4959f6f64e425712ec2e1",
 "/assets/images/bemzo.jpg": "570492a60b67ca635d4c5015d4f8a5b3",
 "/assets/images/app_icon.png": "5f5244069ceba8559afa0a04f02321ef",
 "/assets/images/rahbert.png": "98e5b6c34fa8cd40d5ada1e3deacb58d",
+"/assets/images/photo_camera_black_288x288.png": "275d57df909d036c2ae1934171260e37",
 "/assets/images/remram.png": "b5b8ffc328d2b85fd373a8b6e0e5a909",
 "/assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "/assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
-"/assets/LICENSE": "cae46c075412c628ddfc083c67a7cf9b",
+"/assets/LICENSE": "c6684ffaa446e5818fffc304000b8a2a",
 "/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"/assets/AssetManifest.json": "1488b1c8c65b7dfa45dacdb9ea306512"
+"/assets/AssetManifest.json": "8192e4217a3b5f9cd6156451ce89f453"
 };
 
 self.addEventListener('activate', function (event) {
