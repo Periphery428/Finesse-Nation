@@ -1,20 +1,40 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:finesse_nation/Network.dart';
+import 'package:finesse_nation/Finesse.dart';
+import 'package:camera/camera.dart';
+import 'package:finesse_nation/cameraPage.dart';
+import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
+
+var firstCamera = CameraDescription();
 
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Share a Finesse';
 
+    setupCamera();
     return Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: MyCustomForm(),
+      appBar: AppBar(
+        title: Text(appTitle),
+      ),
+      body: MyCustomForm(),
     );
   }
+}
+
+void setupCamera() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  firstCamera = cameras.first;
 }
 
 // Create a Form widget.
@@ -25,45 +45,6 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
-class Post {
-  final String eventName;
-  final String location;
-  final String description;
-  final String duration;
-
-  Post({this.eventName, this.location, this.description, this.duration});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      eventName: json['name'],
-      location: json['location'],
-      description: json['description'],
-      duration: json['duration'],
-    );
-  }
-
-  Map toMap() {
-    var map = new Map<String, dynamic>();
-    map["name"] = eventName;
-    map["location"] = location;
-    map["description"] = description;
-    map["duration"] = duration;
-
-    return map;
-  }
-}
-
-Future<Post> createPost(String url, {Map body}) async {
-  return http.post(url, body: body).then((http.Response response) {
-    final int statusCode = response.statusCode;
-
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while fetching data");
-    }
-    return Post.fromJson(json.decode(response.body));
-  });
-}
-
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
@@ -72,9 +53,14 @@ class MyCustomFormState extends State<MyCustomForm> {
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
+
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
+  final durationController = TextEditingController();
+  final typeController = TextEditingController();
+  String _type = "FOOD";
+  String image = "images/photo_camera_black_288x288.png";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -83,84 +69,162 @@ class MyCustomFormState extends State<MyCustomForm> {
     eventNameController.dispose();
     locationController.dispose();
     descriptionController.dispose();
+    durationController.dispose();
+    typeController.dispose();
     super.dispose();
+  }
+
+  navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    String newImage = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              TakePictureScreen(
+                camera: firstCamera,
+              )),
+    );
+    if (newImage != null) {
+      image = newImage;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    const CREATE_POST_URL = 'https://finesse-nation.herokuapp.com/api/food/addEvent';
     // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: eventNameController,
-            decoration: const InputDecoration(
-              labelText: "EventName",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Event Name';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: locationController,
-            decoration: const InputDecoration(
-              labelText: "Location",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Location';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: descriptionController,
-            decoration: const InputDecoration(
-              labelText: "Description",
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Description';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              color: Colors.blue,
-              onPressed: () async {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(duration: const Duration(seconds: 1), content: Text('Sharing Finesse')));
-                  Text eventName = Text(eventNameController.text);
-                  Text location = Text(locationController.text);
-                  Text description = Text(descriptionController.text);
+    var render;
+    if (image == "images/photo_camera_black_288x288.png") {
+      render = Image.asset(image);
+    } else {
+      render = Image.file(File(image));
+    }
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                key: Key('name'),
+                controller: eventNameController,
+                decoration: const InputDecoration(
+                  labelText: "EventName*",
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Event Name';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                key: Key('location'),
+                controller: locationController,
+                decoration: const InputDecoration(
+                  labelText: "Location*",
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Location';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: const InputDecoration(
+                  labelText: "Description",
+                ),
+                validator: (value) {
+                  return null;
+                },
+              ),
+              TextFormField(
+                key: Key('duration'),
+                controller: durationController,
+                decoration: const InputDecoration(
+                  labelText: "Duration",
+                ),
+                validator: (value) {
+                  return null;
+                },
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text("Type: "),
+              ),
+              new DropdownButton<String>(
+                hint: Text("Select an event type"),
+                items: <String>['FOOD', 'OTHER'].map((String value) {
+                  return new DropdownMenuItem<String>(
+                    value: value,
+                    child: new Text(value),
+                  );
+                }).toList(),
+                value: _type,
+                onChanged: (newValue) {
+                  setState(() {
+                    _type = newValue;
+                  });
+                },
+              ),
+              Material(
+                  child: InkWell(
+                    onTap: () {
+                      navigateAndDisplaySelection(context);
+                    },
+                    child: Container(
+                      height: 150.0,
+                      alignment: Alignment.center,
+                      child: render,
+                    ),
+                  )),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ButtonTheme(
+                    minWidth: 100,
+                    height: 50,
+                    child: RaisedButton(
+                      key: Key('submit'),
+                      color: Colors.blue,
+                      onPressed: () async {
+                        // Validate returns true if the form is valid, or false
+                        // otherwise.
+                        if (_formKey.currentState.validate()) {
+                          // If the form is valid, display a Snackbar.
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text('Sharing Finesse')));
+                          Text eventName = Text(eventNameController.text);
+                          Text location = Text(locationController.text);
+                          Text description = Text(descriptionController.text);
+                          Text duration = Text(durationController.text);
+                          Image imageObject = Image.file(File(image));
 
-                  Post newPost = new Post(
-                      eventName: eventName.data,
-                      location: location.data,
-                      description: description.data,
-                      duration: "20");
-
-
-                  await createPost(CREATE_POST_URL, body: newPost.toMap());
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('SUBMIT'),
-            ),
+                          Finesse newFinesse = Finesse.finesseAdd(
+                            eventName.data,
+                            description.data,
+                            "image",
+                            location.data,
+                            duration.data,
+                            _type,
+                          );
+                          await Network.addFinesse(newFinesse);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text('SUBMIT'),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
