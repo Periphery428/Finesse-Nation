@@ -9,6 +9,7 @@ class Finesse {
   final String type;
   String _id;
 
+
   static finesseAdd( title, description, image, location,
     duration, type){
     return Finesse(null, title, description, image, location,
