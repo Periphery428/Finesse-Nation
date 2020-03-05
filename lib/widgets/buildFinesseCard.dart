@@ -34,7 +34,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                 fin.getDescription() == null
                     ? Text("Null")
                     : Text(fin.getDescription()),
-                fin.getDuration() == null ? Text("") : Text(fin.getDuration())
+                fin.getLocation() == null ? Text("") : Text(fin.getLocation())
               ]),
           trailing: fin.getTimePosted() == null
               ? Text('')
