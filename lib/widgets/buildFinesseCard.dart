@@ -17,12 +17,13 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         fin.getImage() == null
             ? Text("Null")
             : Hero(
-                tag: fin.getImage(),
-                child: Image.network(
-                  fin.getImage(),
-                  fit: BoxFit.cover,
-                ),
-              ),
+
+          tag: fin.getId(),
+          child: Image.network(
+            fin.getImage(),
+            fit: BoxFit.cover,
+          ),
+        ),
         ListTile(
           isThreeLine: true,
           leading: Icon(Icons.fastfood),
