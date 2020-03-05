@@ -13,7 +13,7 @@ void main() {
   test('Adding a new Finesse', () async {
     var now = new DateTime.now();
     Finesse newFinesse = Finesse.finesseAdd("Add Event unit test", now.toString(), "",
-        "Second floor Arc", "60 hours", "Food");
+        "Second floor Arc", "60 hours", "Food", new DateTime.now());
     await Network.addFinesse(newFinesse);
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getTitle(), newFinesse.getTitle());

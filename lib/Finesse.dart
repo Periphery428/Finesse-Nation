@@ -1,24 +1,24 @@
 import 'dart:math';
 
 class Finesse {
+  String _id;
   final String title;
   final String description;
   final String image;
   final String location;
   final String duration;
   final String type;
-  String _id;
+  final DateTime timePosted;
 
 
   static finesseAdd( title, description, image, location,
-    duration, type){
+    duration, type, timePosted){
     return Finesse(null, title, description, image, location,
-    duration, type);
-
+    duration, type, timePosted);
   }
 
   Finesse(this._id, this.title, this.description, this.image, this.location,
-      this.duration, this.type);
+      this.duration, this.type, this.timePosted);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     var rng = Random();
@@ -32,8 +32,9 @@ class Finesse {
       json['description'] != null ? json['description'] : "",
       imgStr,
       json['location'] != null ? json['location'] : "",
-      json['type'] != null ? json['type'] : "",
       json['duration'] != null ? json['duration'] : "",
+      json['type'] != null ? json['type'] : "",
+      json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
     );
   }
 
@@ -41,11 +42,11 @@ class Finesse {
     var map = new Map<String, dynamic>();
     map["name"] = title;
     map["description"] = description;
-    //Image
+    map["image"] = null;
     map["location"] = location;
     map["duration"] = duration;
     map["type"] = type;
-
+    map['timePosted'] = timePosted.toString();
     return map;
   }
 
@@ -73,7 +74,11 @@ class Finesse {
     return type;
   }
 
-  String get_Id(){
+  String getId(){
     return _id;
+  }
+
+  DateTime getTimePosted(){
+    return timePosted;
   }
 }
