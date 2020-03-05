@@ -24,11 +24,17 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                 ),
               ),
         ListTile(
-//          leading: Icon(Icons.accessible_forward),
+          isThreeLine: true,
+          leading: Icon(Icons.fastfood),
           title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),
-          subtitle: fin.getDescription() == null
-              ? Text("Null")
-              : Text(fin.getDescription()),
+          subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                fin.getDescription() == null
+                    ? Text("Null")
+                    : Text(fin.getDescription()),
+                fin.getDuration() == null ? Text("") : Text(fin.getDuration())
+              ]),
           trailing: fin.getTimePosted() == null
               ? Text('')
               : Text(timeSince(fin.timePosted)),
@@ -38,7 +44,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
   );
 }
 
-String timeSince(DateTime timePosted){
+String timeSince(DateTime timePosted) {
   DateTime currTime = new DateTime.now();
   Duration difference = currTime.difference(timePosted);
   int seconds = difference.inSeconds;
@@ -46,20 +52,21 @@ String timeSince(DateTime timePosted){
   int hours = difference.inHours;
   int days = difference.inDays;
 
-  if(days < 1){
-    if(hours < 1){
-      if(minutes < 1){
-        return seconds.toString() + " seconds ago";
-      }
-      else{
+  if (days < 1) {
+    if (hours < 1) {
+      if (minutes < 1) {
+        if (seconds < 0) {
+          return "";
+        } else {
+          return seconds.toString() + " seconds ago";
+        }
+      } else {
         return minutes.toString() + " minutes ago";
       }
-    }
-    else{
+    } else {
       return hours.toString() + " hours ago";
     }
-  }
-  else{
+  } else {
     return days.toString() + " days ago";
   }
 }
