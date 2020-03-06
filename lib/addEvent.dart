@@ -206,14 +206,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text duration = Text(durationController.text);
                           File imageFile = new File(image);
                           String imageString =  base64Encode(imageFile.readAsBytesSync());
+                          DateTime currTime = new DateTime.now();
 
-                          Finesse newFinesse = new Finesse(
+                          Finesse newFinesse = Finesse.finesseAdd(
                             eventName.data,
                             description.data,
                             imageString,
                             location.data,
                             duration.data,
                             _type,
+                            currTime,
                           );
                           await Network.addFinesse(newFinesse);
                           Navigator.pop(context);
