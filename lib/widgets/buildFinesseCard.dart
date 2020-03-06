@@ -17,23 +17,22 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         fin.getImage() == null
             ? Text("Null")
             : Hero(
-
-          tag: fin.getId(),
-          child: Image.network(
-            fin.getImage(),
-            fit: BoxFit.cover,
-          ),
-        ),
+                tag: fin.getId(),
+                child: Image.network(
+                  fin.getImage(),
+                  fit: BoxFit.cover,
+                ),
+              ),
         ListTile(
-          isThreeLine: true,
+//          isThreeLine: true,
           leading: Icon(Icons.fastfood),
           title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                fin.getDescription() == null
-                    ? Text("Null")
-                    : Text(fin.getDescription()),
+//                fin.getDescription() == null
+//                    ? Text("Null")
+//                    : Text(fin.getDescription()),
                 fin.getLocation() == null ? Text("") : Text(fin.getLocation())
               ]),
           trailing: fin.getTimePosted() == null

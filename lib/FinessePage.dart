@@ -108,7 +108,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               Text(
-                '10 pizzas left' /*fin.getDuration()*/,
+                fin.getDuration(),
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.grey,
@@ -135,18 +135,18 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Siebel Center',
+                fin.getLocation(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
-              Text(
-                'Room 1331' /*fin.getDuration()*/,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
+//              Text(
+//                'Room 1331' /*fin.getDuration()*/,
+//                style: TextStyle(
+//                  fontSize: 15,
+//                  color: Colors.grey,
+//                ),
+//              ),
             ],
           ),
         ],
@@ -178,8 +178,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               titleSection,
-              descriptionSection,
-              timeSection,
+              fin.getDescription() != "" ? descriptionSection : Container(),
+              fin.getDuration() != "" ? timeSection : Container(),
               locationSection,
             ],
           ),
