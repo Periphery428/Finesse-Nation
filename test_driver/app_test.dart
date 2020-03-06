@@ -24,7 +24,7 @@ void main() {
       await driver.tap(find.byValueKey('location'));
       await driver.enterText('Integration Test Location');
       await driver.tap(find.byValueKey('submit'));
-      expect(await driver.getText(find.byValueKey('title')),
+      expect(await driver.getText(find.text('Integration Test Free Food')),
           "Integration Test Free Food");
     });
   });
