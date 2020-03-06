@@ -204,6 +204,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
                           Image imageObject = Image.file(File(image));
+                          DateTime currTime = new DateTime.now();
 
                           Finesse newFinesse = Finesse.finesseAdd(
                             eventName.data,
@@ -212,6 +213,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                             location.data,
                             duration.data,
                             _type,
+                            currTime,
                           );
                           await Network.addFinesse(newFinesse);
                           Navigator.pop(context);

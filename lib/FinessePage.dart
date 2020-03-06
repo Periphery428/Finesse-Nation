@@ -168,7 +168,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   ),
                 ),
                 child: Hero(
-                  tag: fin.get_Id(),
+                  tag: fin.getId(),
                   child: Image.network(
                     fin.getImage(),
                     width: 600,
@@ -203,7 +203,7 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-            tag: fin.get_Id(),
+            tag: fin.getId(),
             child: Image.network(
               fin.getImage(),
               fit: BoxFit.cover,
