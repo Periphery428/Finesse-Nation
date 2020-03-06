@@ -28,7 +28,8 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         ListTile(
           isThreeLine: true,
           leading: Icon(Icons.fastfood),
-          title: fin.getTitle() == null ? Text("Null") : Text(fin.getTitle()),
+          title: fin.getTitle() == null ? Text("Null") : Text(
+            fin.getTitle(), key: Key("title"),),
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

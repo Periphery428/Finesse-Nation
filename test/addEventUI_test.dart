@@ -7,7 +7,7 @@ void main() {
   testWidgets('Add Event UI Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
-
+//    await tester.tap(find.byKey(Key('name')));
 //    // Add a new finesse for testing purposes
 //    await tester.tap(find.byKey(Key('name')));
 //    await tester.enterText(find.byKey(Key('name')), 'Test Free Food');

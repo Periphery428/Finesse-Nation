@@ -204,11 +204,17 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
-                          File imageFile = new File(image);
-                          String imageString =  base64Encode(imageFile.readAsBytesSync());
-                          print("LENGTH:");
-                          print(imageString.length);
                           DateTime currTime = new DateTime.now();
+
+                          String imageString;
+                          if (image ==
+                              "images/photo_camera_black_288x288.png") {
+                            imageString = null;
+                          } else {
+                            File imageFile = new File(image);
+                            imageString =
+                                base64Encode(imageFile.readAsBytesSync());
+                          }
 
                           Finesse newFinesse = Finesse.finesseAdd(
                             eventName.data,
