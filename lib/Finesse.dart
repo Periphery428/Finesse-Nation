@@ -14,13 +14,13 @@ class Finesse {
   factory Finesse.fromJson(Map<String, dynamic> json) {
     var rng = Random();
     var imgInt = rng.nextInt(2048);
-    var imgStr = (imgInt < 100)
-        ? 'https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id=${rng.nextInt(2048)}'
-        : 'https://picsum.photos/500?id=$imgInt';
+//    var imgStr = (imgInt < 100)
+//        ? 'https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id=${rng.nextInt(2048)}'
+//        : 'https://picsum.photos/500?id=$imgInt';
     return Finesse(
       json['name'] != null ? json['name'] : "",
       json['description'] != null ? json['description'] : "",
-      imgStr,
+      json['image'] != null ? json['image'] : "",
       json['location'] != null ? json['location'] : "",
       json['type'] != null ? json['type'] : "",
       json['duration'] != null ? json['duration'] : "",
@@ -31,7 +31,7 @@ class Finesse {
     var map = new Map<String, dynamic>();
     map["name"] = title;
     map["description"] = description;
-    //Image
+    map["image"] = image;
     map["location"] = location;
     map["duration"] = duration;
     map["type"] = type;

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -203,12 +204,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
-                          Image imageObject = Image.file(File(image));
+                          File imageFile = new File(image);
+                          String imageString =  base64Encode(imageFile.readAsBytesSync());
 
                           Finesse newFinesse = new Finesse(
                             eventName.data,
                             description.data,
-                            "image",
+                            imageString,
                             location.data,
                             duration.data,
                             _type,
