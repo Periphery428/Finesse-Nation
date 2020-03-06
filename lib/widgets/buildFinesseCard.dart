@@ -14,13 +14,14 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         )
       },
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        fin.getImage() == null
-            ? Text("Null")
+        fin.getImage() == ""
+            ? Container()
             : Hero(
 
           tag: fin.getId(),
-          child: Image.network(
-            fin.getImage(),
+          child: new Image.memory(fin.getConvertedImage(),
+            width: 600,
+            height: 240,
             fit: BoxFit.cover,
           ),
         ),

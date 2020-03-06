@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:convert';
 
 class Finesse {
   String _id;
@@ -52,6 +54,10 @@ class Finesse {
 
   String getImage() {
     return image;
+  }
+
+  Uint8List getConvertedImage() {
+    return base64.decode(image);
   }
 
   String getTitle() {

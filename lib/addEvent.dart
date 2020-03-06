@@ -206,6 +206,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text duration = Text(durationController.text);
                           File imageFile = new File(image);
                           String imageString =  base64Encode(imageFile.readAsBytesSync());
+                          print("LENGTH:");
+                          print(imageString.length);
                           DateTime currTime = new DateTime.now();
 
                           Finesse newFinesse = Finesse.finesseAdd(
