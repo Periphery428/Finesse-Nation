@@ -17,7 +17,6 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         fin.getImage() == ""
             ? Container()
             : Hero(
-
           tag: fin.getId(),
           child: new Image.memory(fin.getConvertedImage(),
             width: 600,
@@ -26,16 +25,16 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
           ),
         ),
         ListTile(
-          isThreeLine: true,
+//          isThreeLine: true,
           leading: Icon(Icons.fastfood),
           title: fin.getTitle() == null ? Text("Null") : Text(
             fin.getTitle(), key: Key("title"),),
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                fin.getDescription() == null
-                    ? Text("Null")
-                    : Text(fin.getDescription()),
+//                fin.getDescription() == null
+//                    ? Text("Null")
+//                    : Text(fin.getDescription()),
                 fin.getLocation() == null ? Text("") : Text(fin.getLocation())
               ]),
           trailing: fin.getTimePosted() == null
