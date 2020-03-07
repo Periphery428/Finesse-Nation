@@ -49,10 +49,11 @@ class Network {
   }
 
   static void removeFinesse(Finesse newFinesse) async {
-    var jsonObject = {"name": newFinesse.title};
+    var jsonObject = {"eventId": newFinesse.getId()};
     final http.Response response = await http.post(DELETE_URL,
-        headers: <String, String>{
+        headers: {
           'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
         },
         body: json.encode(jsonObject));
 
@@ -61,7 +62,7 @@ class Network {
       throw new Exception("Error while posting data");
     }
     if (response.statusCode == 201) {
-      ;
+      // TODO
     }
   }
 }

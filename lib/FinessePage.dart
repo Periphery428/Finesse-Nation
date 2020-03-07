@@ -108,7 +108,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               Text(
-                '10 pizzas left' /*fin.getDuration()*/,
+                fin.getDuration(),
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.grey,
@@ -135,18 +135,18 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Siebel Center',
+                fin.getLocation(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
-              Text(
-                'Room 1331' /*fin.getDuration()*/,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
+//              Text(
+//                'Room 1331' /*fin.getDuration()*/,
+//                style: TextStyle(
+//                  fontSize: 15,
+//                  color: Colors.grey,
+//                ),
+//              ),
             ],
           ),
         ],
@@ -163,14 +163,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => FullImage(
-                      fin.getImage(),
+                      fin,
                     ),
                   ),
                 ),
                 child: Hero(
-                  tag: fin.getImage(),
-                  child: Image.network(
-                    fin.getImage(),
+                  tag: fin.getId(),
+                  child: new Image.memory(fin.getConvertedImage(),
                     width: 600,
                     height: 240,
                     fit: BoxFit.cover,
@@ -178,8 +177,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               titleSection,
-              descriptionSection,
-              timeSection,
+              fin.getDescription() != "" ? descriptionSection : Container(),
+              fin.getDuration() != "" ? timeSection : Container(),
               locationSection,
             ],
           ),
@@ -190,10 +189,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
 }
 
 class FullImage extends StatelessWidget {
-  String img;
+  Finesse fin;
 
-  FullImage(String img) {
-    this.img = img;
+  FullImage(Finesse fin) {
+    this.fin = fin;
   }
 
   Widget build(BuildContext context) {
@@ -203,9 +202,8 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-            tag: img,
-            child: Image.network(
-              img,
+            tag: fin.getId(),
+            child: new Image.memory(fin.getConvertedImage(),
               fit: BoxFit.cover,
             ),
           ),
