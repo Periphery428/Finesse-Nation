@@ -169,8 +169,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
                 child: Hero(
                   tag: fin.getId(),
-                  child: Image.network(
-                    fin.getImage(),
+                  child: new Image.memory(fin.getConvertedImage(),
                     width: 600,
                     height: 240,
                     fit: BoxFit.cover,
@@ -204,8 +203,7 @@ class FullImage extends StatelessWidget {
         child: Center(
           child: Hero(
             tag: fin.getId(),
-            child: Image.network(
-              fin.getImage(),
+            child: new Image.memory(fin.getConvertedImage(),
               fit: BoxFit.cover,
             ),
           ),
