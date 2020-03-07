@@ -3,7 +3,7 @@ const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
   "/icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "/icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"/main.dart.js": "b31b55c528c4e6b55beda1c83d66d041",
+"/main.dart.js": "a20aa117bda971f5f0107c398e742bf1",
 "/manifest.json": "e635fd6dd182a2cf920db16d047ea5f3",
 "/index.html": "f4e9d07268c4959f6f64e425712ec2e1",
 "/assets/images/bemzo.jpg": "570492a60b67ca635d4c5015d4f8a5b3",
