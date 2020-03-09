@@ -227,7 +227,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          Navigator.pop(context);
+                          Navigator.removeRouteBelow(context, ModalRoute.of(context));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MyApp()));
                         }
                       },
                       child: Text('SUBMIT'),
@@ -242,3 +243,4 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
+
