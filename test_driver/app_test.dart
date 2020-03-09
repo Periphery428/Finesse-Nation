@@ -19,6 +19,41 @@ void main() {
       }
     });
 
+    test('Add Event Form Fail Test', () async {
+      // Build our app and trigger a frame.
+      var now = new DateTime.now();
+      String nameText = 'Integration Test Free Food';
+      String descriptionText = 'The location is a timestamp to make a unique value for the test to look for.';
+      String durationText = 'Integration Test Duration';
+
+      await driver.tap(find.byValueKey('add event'));
+
+      await driver.tap(find.byValueKey('name'));
+      await driver.enterText(nameText);
+      await driver.waitFor(find.text(nameText));
+
+      await driver.tap(find.byValueKey('description'));
+      await driver.enterText(descriptionText);
+      await driver.waitFor(find.text(descriptionText));
+
+      await driver.tap(find.byValueKey('duration'));
+      await driver.enterText(durationText);
+      await driver.waitFor(find.text(durationText));
+
+      await driver.tap(find.byValueKey('submit'));
+
+      await delay(1000);
+
+      expect(await driver.getText(find.text("Please Enter a Location")),
+          "Please Enter a Location");
+
+      await driver.tap(find.byTooltip('Back'));
+
+      expect(await driver.getText(find.text("Finesse Nation")),
+          "Finesse Nation");
+
+    });
+
     test('Add Event UI Test', () async {
       // Build our app and trigger a frame.
       var now = new DateTime.now();
@@ -47,15 +82,12 @@ void main() {
 
       await driver.tap(find.byValueKey('submit'));
 
-      //Swipe to refresh
-      await delay(2000);
-      await driver.scroll(
-          find.byValueKey('listview'), 0, 300, Duration(milliseconds: 350));
       await delay(5000);
 
       expect(await driver.getText(find.text(locationText)),
           locationText);
     });
+
 
   });
 }
