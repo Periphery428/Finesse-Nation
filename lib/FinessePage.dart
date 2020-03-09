@@ -52,6 +52,24 @@ class FinesseDetailsState extends State<FinesseDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Widget imageSection = InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FullImage(
+            fin,
+          ),
+        ),
+      ),
+      child: Hero(
+        tag: fin.getId(),
+        child: new Image.memory(fin.getConvertedImage(),
+          width: 600,
+          height: 240,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
     Widget titleSection = Container(
       padding: const EdgeInsets.all(20),
       child: Text(
@@ -158,24 +176,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FullImage(
-                      fin,
-                    ),
-                  ),
-                ),
-                child: Hero(
-                  tag: fin.getId(),
-                  child: new Image.memory(fin.getConvertedImage(),
-                    width: 600,
-                    height: 240,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              fin.getImage() != "" ? imageSection : Container(),
               titleSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
               fin.getDuration() != "" ? timeSection : Container(),
