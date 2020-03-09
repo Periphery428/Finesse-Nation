@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/cameraPage.dart';
-import 'package:finesse_nation/main.dart';
+import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
 
 var firstCamera = CameraDescription();
 
@@ -133,6 +135,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                key: Key('description'),
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   labelText: "Description",
@@ -202,15 +205,26 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
-                          Image imageObject = Image.file(File(image));
+                          DateTime currTime = new DateTime.now();
+
+                          String imageString;
+                          if (image ==
+                              "images/photo_camera_black_288x288.png") {
+                            imageString = null;
+                          } else {
+                            File imageFile = new File(image);
+                            imageString =
+                                base64Encode(imageFile.readAsBytesSync());
+                          }
 
                           Finesse newFinesse = Finesse.finesseAdd(
                             eventName.data,
                             description.data,
-                            "image",
+                            imageString,
                             location.data,
                             duration.data,
                             _type,
+                            currTime,
                           );
                           await Network.addFinesse(newFinesse);
                           Navigator.removeRouteBelow(context, ModalRoute.of(context));
@@ -229,3 +243,4 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
+

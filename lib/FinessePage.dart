@@ -108,7 +108,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               Text(
-                '10 pizzas left' /*fin.getDuration()*/,
+                fin.getDuration(),
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.grey,
@@ -135,18 +135,18 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Siebel Center',
+                fin.getLocation(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
-              Text(
-                'Room 1331' /*fin.getDuration()*/,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey,
-                ),
-              ),
+//              Text(
+//                'Room 1331' /*fin.getDuration()*/,
+//                style: TextStyle(
+//                  fontSize: 15,
+//                  color: Colors.grey,
+//                ),
+//              ),
             ],
           ),
         ],
@@ -168,9 +168,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   ),
                 ),
                 child: Hero(
-                  tag: fin.get_Id(),
-                  child: Image.network(
-                    fin.getImage(),
+                  tag: fin.getId(),
+                  child: new Image.memory(fin.getConvertedImage(),
                     width: 600,
                     height: 240,
                     fit: BoxFit.cover,
@@ -178,8 +177,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               titleSection,
-              descriptionSection,
-              timeSection,
+              fin.getDescription() != "" ? descriptionSection : Container(),
+              fin.getDuration() != "" ? timeSection : Container(),
               locationSection,
             ],
           ),
@@ -203,9 +202,8 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-            tag: fin.get_Id(),
-            child: Image.network(
-              fin.getImage(),
+            tag: fin.getId(),
+            child: new Image.memory(fin.getConvertedImage(),
               fit: BoxFit.cover,
             ),
           ),

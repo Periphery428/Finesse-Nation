@@ -1,39 +1,37 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:convert';
 
 class Finesse {
+  String eventId;
   final String title;
   final String description;
   final String image;
   final String location;
   final String duration;
   final String type;
-  String _id;
+  final DateTime timePosted;
 
 
   static finesseAdd( title, description, image, location,
-    duration, type){
+    duration, type, timePosted){
     return Finesse(null, title, description, image, location,
-    duration, type);
-
+    duration, type, timePosted);
   }
 
-  Finesse(this._id, this.title, this.description, this.image, this.location,
-      this.duration, this.type);
+  Finesse(this.eventId, this.title, this.description, this.image, this.location,
+      this.duration, this.type, this.timePosted);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
-    var rng = Random();
-    var imgInt = rng.nextInt(2048);
-    var imgStr = (imgInt < 100)
-        ? 'https://wallup.net/wp-content/uploads/2017/10/25/484538-blue_hair-Rem-Re_Zero_Kara_Hajimeru_Isekai_Seikatsu-anime_girls-anime-748x421.jpg?id=${rng.nextInt(2048)}'
-        : 'https://picsum.photos/500?id=$imgInt';
     return Finesse(
       json['_id'],
       json['name'] != null ? json['name'] : "",
       json['description'] != null ? json['description'] : "",
-      imgStr,
+      json['image'] != null ? json['image'] : "",
       json['location'] != null ? json['location'] : "",
-      json['type'] != null ? json['type'] : "",
       json['duration'] != null ? json['duration'] : "",
+      json['type'] != null ? json['type'] : "",
+      json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
     );
   }
 
@@ -41,16 +39,20 @@ class Finesse {
     var map = new Map<String, dynamic>();
     map["name"] = title;
     map["description"] = description;
-    //Image
+    map["image"] = image;
     map["location"] = location;
     map["duration"] = duration;
     map["type"] = type;
-
+    map['timePosted'] = timePosted.toString();
     return map;
   }
 
   String getImage() {
     return image;
+  }
+
+  Uint8List getConvertedImage() {
+    return base64.decode(image);
   }
 
   String getTitle() {
@@ -73,7 +75,11 @@ class Finesse {
     return type;
   }
 
-  String get_Id(){
-    return _id;
+  String getId(){
+    return eventId;
+  }
+
+  DateTime getTimePosted(){
+    return timePosted;
   }
 }

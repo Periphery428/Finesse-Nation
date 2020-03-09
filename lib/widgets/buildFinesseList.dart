@@ -63,6 +63,7 @@ class _FinesseListState extends State<buildFinesseList>{
             )
         ),
         child: new Center(
+            key: Key("refresher"),
             child: SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: false,
@@ -71,6 +72,7 @@ class _FinesseListState extends State<buildFinesseList>{
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
                 child: ListView.builder(
+                    key: Key("listview"),
                     itemCount: _finesses.length*2,
                     itemBuilder: (context, i) {
                       _finesses =_finesses.reversed.toList();
