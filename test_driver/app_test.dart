@@ -96,12 +96,9 @@ void main() {
 
   group('Finesse Page', () {
     FlutterDriver driver;
-    IsolatesWorkaround workaround;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      workaround = IsolatesWorkaround(driver);
-      await workaround.resumeIsolates();
     });
 
     tearDownAll(() async {
@@ -117,6 +114,7 @@ void main() {
       String descriptionText = 'View Info description';
       String locationText =
           await addEvent(driver, nameText, descriptionText, durationText);
+      await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.getText(find.text(descriptionText));
