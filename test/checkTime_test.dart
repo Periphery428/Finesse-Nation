@@ -4,6 +4,10 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:test/test.dart';
 
+Future<void> delay([int milliseconds = 250]) async {
+  await Future<void>.delayed(Duration(milliseconds: milliseconds));
+}
+
 void main(){
   test('Testing time posted post and fetch', () async {
     var now = new DateTime.now();
@@ -17,6 +21,7 @@ void main(){
         new DateTime.now());
     await Network.addFinesse(newFinesse);
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+    delay((1000));
     DateTime currTime = new DateTime.now();
     Duration difference = currTime.difference(finesseList.last.getTimePosted());
     expect(true, difference.inSeconds > 0);
