@@ -1,5 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'IsolatesWorkaround.dart';
 
 Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
@@ -95,9 +96,12 @@ void main() {
 
   group('Finesse Page', () {
     FlutterDriver driver;
+    IsolatesWorkaround workaround;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
+      workaround = IsolatesWorkaround(driver);
+      await workaround.resumeIsolates();
     });
 
     tearDownAll(() async {
