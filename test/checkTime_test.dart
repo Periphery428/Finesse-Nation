@@ -9,24 +9,24 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 void main(){
-  test('Testing time posted post and fetch', () async {
-    var now = new DateTime.now();
-    Finesse newFinesse = Finesse.finesseAdd(
-        "Add Event unit test",
-        now.toString(),
-        "",
-        "Second floor Arc",
-        "60 hours",
-        "Food",
-        new DateTime.now());
-    await Network.addFinesse(newFinesse);
-    List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
-    delay((1000));
-    DateTime currTime = new DateTime.now();
-    Duration difference = currTime.difference(finesseList.last.getTimePosted());
-    expect(true, difference.inSeconds > 0);
-    Network.removeFinesse(finesseList.last);
-  });
+//  test('Testing time posted post and fetch', () async {
+//    var now = new DateTime.now();
+//    Finesse newFinesse = Finesse.finesseAdd(
+//        "Add Event unit test",
+//        now.toString(),
+//        "",
+//        "Second floor Arc",
+//        "60 hours",
+//        "Food",
+//        new DateTime.now());
+//    await Network.addFinesse(newFinesse);
+//    List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+//    delay((1000));
+//    DateTime currTime = new DateTime.now();
+//    Duration difference = currTime.difference(finesseList.last.getTimePosted());
+//    expect(true, difference.inSeconds > 0);
+//    Network.removeFinesse(finesseList.last);
+//  });
 
   test('Testing timeSince hours', () async {
     DateTime currTime = new DateTime.now();
