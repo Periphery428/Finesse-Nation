@@ -4,20 +4,20 @@ import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 
-class buildFinesseList extends StatefulWidget {
-  buildFinesseList({Key key}) : super(key: key);
+class BuildFinesseList extends StatefulWidget {
+  BuildFinesseList({Key key}) : super(key: key);
 
   @override
   _FinesseListState createState() => new _FinesseListState();
 }
 
-class _FinesseListState extends State<buildFinesseList>{
+class _FinesseListState extends State<BuildFinesseList> {
   Future<List<Finesse>> _finesses;
 
   RefreshController _refreshController =
-    RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
-  void _onRefresh() async{
+  void _onRefresh() async {
 //    await Future.delayed(Duration(milliseconds: 1000));
     setState(() {
       _finesses = Network.fetchFinesses();
@@ -25,13 +25,12 @@ class _FinesseListState extends State<buildFinesseList>{
     });
   }
 
-   _onLoading() async {
+  _onLoading() async {
 //    await Future.delayed(Duration(milliseconds: 1000));
 //    _refreshController.loadComplete();
 //    _finesses = fetchFinesses();
 //    _refreshController.loadComplete();
   }
-
 
   Widget build(BuildContext context) {
     return Container(
@@ -55,33 +54,32 @@ class _FinesseListState extends State<buildFinesseList>{
 
   Widget listViewWidget(List<Finesse> _finesses, BuildContext context) {
     return new Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.lightBlue, Colors.pink],
-            )
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.lightBlue, Colors.pink],
+      )),
+      child: new Center(
+        key: Key("refresher"),
+        child: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          header: WaterDropHeader(),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView.builder(
+              key: Key("listview"),
+              itemCount: _finesses.length * 2,
+              itemBuilder: (context, i) {
+                _finesses = _finesses.reversed.toList();
+                if (i.isOdd) return Divider();
+                final index = i ~/ 2;
+                return buildFinesseCard(_finesses[index], context);
+              }),
         ),
-        child: new Center(
-            key: Key("refresher"),
-            child: SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: false,
-                header: WaterDropHeader(),
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                onLoading: _onLoading,
-                child: ListView.builder(
-                    key: Key("listview"),
-                    itemCount: _finesses.length*2,
-                    itemBuilder: (context, i) {
-                      _finesses =_finesses.reversed.toList();
-                      if (i.isOdd) return Divider();
-                      final index = i ~/ 2;
-                      return buildFinesseCard(_finesses[index], context);
-                    })
-            )
-        )
+      ),
     );
   }
 }

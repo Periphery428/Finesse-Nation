@@ -7,8 +7,6 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/cameraPage.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 
 var firstCamera = CameraDescription();
 
@@ -82,8 +80,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     String newImage = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              TakePictureScreen(
+          builder: (context) => TakePictureScreen(
                 camera: firstCamera,
               )),
     );
@@ -176,15 +173,15 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               Material(
                   child: InkWell(
-                    onTap: () {
-                      navigateAndDisplaySelection(context);
-                    },
-                    child: Container(
-                      height: 150.0,
-                      alignment: Alignment.center,
-                      child: render,
-                    ),
-                  )),
+                onTap: () {
+                  navigateAndDisplaySelection(context);
+                },
+                child: Container(
+                  height: 150.0,
+                  alignment: Alignment.center,
+                  child: render,
+                ),
+              )),
               Container(
                 alignment: Alignment.bottomRight,
                 child: Padding(
@@ -228,8 +225,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          Navigator.removeRouteBelow(context, ModalRoute.of(context));
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MyApp()));
+                          Navigator.removeRouteBelow(
+                              context, ModalRoute.of(context));
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => MyApp()));
                         }
                       },
                       child: Text('SUBMIT'),
@@ -244,4 +245,3 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
-

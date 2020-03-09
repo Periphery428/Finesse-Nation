@@ -46,7 +46,7 @@ jobs:
   web:
     name: Build website
     runs-on: ubuntu-latest
-    needs: [unit]
+    needs: [unit,integration]
     steps:
       - uses: cedx/setup-dart@v1
       - uses: actions/checkout@v1
