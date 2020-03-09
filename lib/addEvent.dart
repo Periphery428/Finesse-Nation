@@ -135,6 +135,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 },
               ),
               TextFormField(
+                key: Key('description'),
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   labelText: "Description",
