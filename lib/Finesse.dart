@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:convert';
 
@@ -12,11 +11,10 @@ class Finesse {
   final String type;
   final DateTime timePosted;
 
-
-  static finesseAdd( title, description, image, location,
-    duration, type, timePosted){
-    return Finesse(null, title, description, image, location,
-    duration, type, timePosted);
+  static finesseAdd(
+      title, description, image, location, duration, type, timePosted) {
+    return Finesse(
+        null, title, description, image, location, duration, type, timePosted);
   }
 
   Finesse(this.eventId, this.title, this.description, this.image, this.location,
@@ -75,11 +73,11 @@ class Finesse {
     return type;
   }
 
-  String getId(){
+  String getId() {
     return eventId;
   }
 
-  DateTime getTimePosted(){
+  DateTime getTimePosted() {
     return timePosted;
   }
 }

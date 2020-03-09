@@ -61,13 +61,11 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
         ),
       ),
-      child: Hero(
-        tag: fin.getId(),
-        child: new Image.memory(fin.getConvertedImage(),
-          width: 600,
-          height: 240,
-          fit: BoxFit.cover,
-        ),
+      child: Image.memory(
+        fin.getConvertedImage(),
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
       ),
     );
     Widget titleSection = Container(
@@ -202,11 +200,9 @@ class FullImage extends StatelessWidget {
       body: InkWell(
         onTap: () => Navigator.pop(context),
         child: Center(
-          child: Hero(
-            tag: fin.getId(),
-            child: new Image.memory(fin.getConvertedImage(),
-              fit: BoxFit.cover,
-            ),
+          child: Image.memory(
+            fin.getConvertedImage(),
+            fit: BoxFit.cover,
           ),
         ),
       ),

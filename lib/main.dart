@@ -1,8 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
-import 'package:finesse_nation/widgets/buildFinesseCard.dart';
-import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 
 void main() => runApp(MyApp());
@@ -48,7 +45,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -75,12 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
         icon: Icon(Icons.add),
         backgroundColor: Colors.pink,
       ),
-      body: buildFinesseList(),
+      body: BuildFinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-
-
 }
-

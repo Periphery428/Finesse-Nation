@@ -5,7 +5,8 @@ Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
 }
 
-Future<String> addEvent(FlutterDriver driver, nameText, descriptionText, durationText) async {
+Future<String> addEvent(
+    FlutterDriver driver, nameText, descriptionText, durationText) async {
   var now = new DateTime.now();
   String locationText = 'Location: ' + now.toString();
   await driver.tap(find.byValueKey('add event'));
@@ -46,9 +47,9 @@ void main() {
 
     test('Add Event Form Fail Test', () async {
       // Build our app and trigger a frame.
-      var now = new DateTime.now();
       String nameText = 'Integration Test Free Food';
-      String descriptionText = 'The location is a timestamp to make a unique value for the test to look for.';
+      String descriptionText =
+          'The location is a timestamp to make a unique value for the test to look for.';
       String durationText = 'Integration Test Duration';
 
       await driver.tap(find.byValueKey('add event'));
@@ -74,23 +75,22 @@ void main() {
 
       await driver.tap(find.byTooltip('Back'));
 
-      expect(await driver.getText(find.text("Finesse Nation")),
-          "Finesse Nation");
-
+      expect(
+          await driver.getText(find.text("Finesse Nation")), "Finesse Nation");
     });
 
     test('Add Event UI Test', () async {
       // Build our app and trigger a frame.
       String nameText = 'Integration Test Free Food';
       String durationText = 'Integration Test Duration';
-      String descriptionText = 'The location is a timestamp to make a unique value for the test to look for.';
-      String locationText = await addEvent(driver, nameText, descriptionText, durationText);
+      String descriptionText =
+          'The location is a timestamp to make a unique value for the test to look for.';
+      String locationText =
+          await addEvent(driver, nameText, descriptionText, durationText);
       await delay(1000);
 
-      expect(await driver.getText(find.text(locationText)),
-          locationText);
+      expect(await driver.getText(find.text(locationText)), locationText);
     });
-
   });
 
   group('Finesse Page', () {
@@ -111,15 +111,13 @@ void main() {
       String nameText = 'View Info Integration Test Free Food';
       String durationText = 'Integration Test Duration';
       String descriptionText = 'View Info description';
-      String locationText = await addEvent(driver, nameText, descriptionText, durationText);
+      String locationText =
+          await addEvent(driver, nameText, descriptionText, durationText);
       await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.getText(find.text(descriptionText));
       await driver.getText(find.text(durationText));
       await driver.getText(find.text(locationText));
     });
-
-
   });
-
 }
