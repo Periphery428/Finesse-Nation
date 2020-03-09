@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
+import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/cameraPage.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
