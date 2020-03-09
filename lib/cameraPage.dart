@@ -123,6 +123,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           }
         },
       ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
     );
   }
 }

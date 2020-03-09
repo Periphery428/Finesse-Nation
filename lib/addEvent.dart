@@ -116,7 +116,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Event Name';
+                    return 'Please Enter an Event Name';
                   }
                   return null;
                 },
@@ -129,7 +129,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Location';
+                    return 'Please Enter a Location';
                   }
                   return null;
                 },
