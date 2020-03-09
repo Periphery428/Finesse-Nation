@@ -85,7 +85,7 @@ void main() {
       String durationText = 'Integration Test Duration';
       String descriptionText = 'The location is a timestamp to make a unique value for the test to look for.';
       String locationText = await addEvent(driver, nameText, descriptionText, durationText);
-      await delay(5000);
+      await delay(1000);
 
       expect(await driver.getText(find.text(locationText)),
           locationText);
@@ -113,7 +113,7 @@ void main() {
       String descriptionText = 'View Info description';
       String locationText = await addEvent(driver, nameText, descriptionText, durationText);
       await driver.tap(find.text(locationText));
-      await delay(5000);
+      await delay(1000);
       await driver.getText(find.text(descriptionText));
       await driver.getText(find.text(durationText));
       await driver.getText(find.text(locationText));
