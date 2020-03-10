@@ -1,7 +1,8 @@
 on:
   push:
     tags:
-      - *
+      - v*
+      - iteration*
 name: Release
 jobs:
   release:
