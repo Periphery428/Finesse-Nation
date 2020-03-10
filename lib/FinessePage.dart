@@ -52,6 +52,22 @@ class FinesseDetailsState extends State<FinesseDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Widget imageSection = InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FullImage(
+            fin,
+          ),
+        ),
+      ),
+      child: Image.memory(
+        fin.getConvertedImage(),
+        width: 600,
+        height: 240,
+        fit: BoxFit.cover,
+      ),
+    );
     Widget titleSection = Container(
       padding: const EdgeInsets.all(20),
       child: Text(
@@ -158,24 +174,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FullImage(
-                      fin,
-                    ),
-                  ),
-                ),
-                child: Hero(
-                  tag: fin.getId(),
-                  child: new Image.memory(fin.getConvertedImage(),
-                    width: 600,
-                    height: 240,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              fin.getImage() != "" ? imageSection : Container(),
               titleSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
               fin.getDuration() != "" ? timeSection : Container(),
@@ -201,11 +200,9 @@ class FullImage extends StatelessWidget {
       body: InkWell(
         onTap: () => Navigator.pop(context),
         child: Center(
-          child: Hero(
-            tag: fin.getId(),
-            child: new Image.memory(fin.getConvertedImage(),
-              fit: BoxFit.cover,
-            ),
+          child: Image.memory(
+            fin.getConvertedImage(),
+            fit: BoxFit.cover,
           ),
         ),
       ),

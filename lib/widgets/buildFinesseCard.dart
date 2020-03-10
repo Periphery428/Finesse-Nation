@@ -1,7 +1,6 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/FinessePage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
@@ -16,19 +15,21 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         fin.getImage() == ""
             ? Container()
-            : Hero(
-          tag: fin.getId(),
-          child: new Image.memory(fin.getConvertedImage(),
-            width: 600,
-            height: 240,
-            fit: BoxFit.cover,
-          ),
-        ),
+            : Image.memory(
+                fin.getConvertedImage(),
+                width: 600,
+                height: 240,
+                fit: BoxFit.cover,
+              ),
         ListTile(
 //          isThreeLine: true,
           leading: Icon(Icons.fastfood),
-          title: fin.getTitle() == null ? Text("Null") : Text(
-            fin.getTitle(), key: Key("title"),),
+          title: fin.getTitle() == null
+              ? Text("Null")
+              : Text(
+                  fin.getTitle(),
+                  key: Key("title"),
+                ),
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
