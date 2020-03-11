@@ -117,14 +117,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 //                builder: (context) => DisplayPictureScreen(imagePath: path),
 //              ),
 //            );
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
-      ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
-    );
+            } catch (e) {
+              // If an error occurs, log the error to the console.
+              print(e);
+            }
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
   }
 }
 

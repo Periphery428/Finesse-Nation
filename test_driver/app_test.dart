@@ -1,6 +1,5 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
-import 'IsolatesWorkaround.dart';
 
 Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
@@ -50,7 +49,8 @@ void main() {
       // Build our app and trigger a frame.
       var now = new DateTime.now();
       String nameText = 'Integration Test Free Food';
-      String descriptionText = 'The location is a timestamp to make a unique value for the test to look for.';
+      String descriptionText =
+          'The location is a timestamp to make a unique value for the test to look for.';
       String durationText = 'Integration Test Duration';
 
       await driver.tap(find.byValueKey('add event'));
@@ -76,9 +76,8 @@ void main() {
 
       await driver.tap(find.byTooltip('Back'));
 
-      expect(await driver.getText(find.text("Finesse Nation")),
-          "Finesse Nation");
-
+      expect(
+          await driver.getText(find.text("Finesse Nation")), "Finesse Nation");
     });
 
     test('Add Event UI Test', () async {
