@@ -1,5 +1,6 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
+import 'package:snappable/snappable.dart';
 
 class FinessePage extends StatelessWidget {
   Finesse fin;
@@ -168,6 +169,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+    Widget rezero = Snappable(
+      snapOnTap: true,
+      child: Image.asset(
+        'images/rem.png',
+        scale: 4,
+      ),
+    );
     return ListView(
       children: [
         Card(
@@ -182,6 +190,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             ],
           ),
         ),
+        rezero,
       ],
     );
   }

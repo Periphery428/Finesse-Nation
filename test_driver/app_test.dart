@@ -6,7 +6,7 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 //Fill out the form with the necessary information.
-Future<String> addEvent(FlutterDriver driver, nameText, locationText,
+Future<void> addEvent(FlutterDriver driver, nameText, locationText,
     descriptionText, durationText) async {
   await driver.tap(find.byValueKey('add event'));
 
@@ -27,7 +27,6 @@ Future<String> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.waitFor(find.text(durationText));
 
   await driver.tap(find.byValueKey('submit'));
-  return locationText;
 }
 
 void main() {
