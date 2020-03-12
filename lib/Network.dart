@@ -48,7 +48,7 @@ class Network {
     }
   }
 
-  static void removeFinesse(Finesse newFinesse) async {
+  static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     final http.Response response = await http.post(DELETE_URL,
         headers: {
@@ -59,7 +59,27 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while posting data");
+      throw new Exception("Error while removing finesses");
+    }
+    if (response.statusCode == 201) {
+      // TODO
+    }
+  }
+
+  static Future<void> updateFinesse(Finesse newFinesse) async {
+    var jsonObject = {"eventId": newFinesse.getId()};
+    var bodyMap = newFinesse.toMap();
+    bodyMap.addAll(jsonObject);
+    final http.Response response = await http.post(UPDATE_URL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(bodyMap));
+
+    final int statusCode = response.statusCode;
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while removing finesses");
     }
     if (response.statusCode == 201) {
       // TODO
