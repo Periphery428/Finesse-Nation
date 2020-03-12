@@ -3,13 +3,13 @@ import 'dart:convert';
 
 class Finesse {
   String eventId;
-  final String title;
-  final String description;
-  final String image;
-  final String location;
-  final String duration;
-  final String type;
-  final DateTime timePosted;
+  String title;
+  String description;
+  String image;
+  String location;
+  String duration;
+  String type;
+  DateTime timePosted;
 
   static finesseAdd(
       title, description, image, location, duration, type, timePosted) {
@@ -43,6 +43,14 @@ class Finesse {
     map["type"] = type;
     map['timePosted'] = timePosted.toString();
     return map;
+  }
+
+  void setId(id) {
+    this.eventId = id;
+  }
+
+  void setDescription(desc) {
+    this.description = desc;
   }
 
   String getImage() {
