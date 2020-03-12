@@ -8,6 +8,7 @@ const RESOURCES = {
 "/index.html": "f4e9d07268c4959f6f64e425712ec2e1",
 "/assets/images/bemzo.jpg": "570492a60b67ca635d4c5015d4f8a5b3",
 "/assets/images/icon.png": "9090849005505bcd203a3b3b6ca8b841",
+"/assets/images/rem.png": "cbb0da3c829b27defb2bf3504eac6ee8",
 "/assets/images/app_icon.png": "5f5244069ceba8559afa0a04f02321ef",
 "/assets/images/rahbert.png": "98e5b6c34fa8cd40d5ada1e3deacb58d",
 "/assets/images/photo_camera_black_288x288.png": "275d57df909d036c2ae1934171260e37",
@@ -17,7 +18,7 @@ const RESOURCES = {
 "/assets/FontManifest.json": "f7161631e25fbd47f3180eae84053a51",
 "/assets/LICENSE": "ff6e14cef02d36bf547c102bdd8a1aed",
 "/assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"/assets/AssetManifest.json": "bad732edd0c0c6b87005b12360989e3d"
+"/assets/AssetManifest.json": "89c652f8b94876276d718c9022db49e7"
 };
 
 self.addEventListener('activate', function (event) {
