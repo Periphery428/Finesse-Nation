@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
+import 'package:popup_box/popup_box.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+
 
 void main() => runApp(MyApp());
+
+// This is the type used by the popup menu below.
+enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -56,9 +62,76 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+        // the App.build method, and use it to set our appbar title
+          title: Text(widget.title),
+          actions: <Widget>[
+            IconButton(
+              icon: Image.asset("images/baseline_filter_list_black_18dp.png",
+                  color: Colors.white),
+              onPressed: () async {
+                await PopupBox.showPopupBox(
+                    context: context,
+                    button: MaterialButton(
+                      color: Colors.blue,
+                      child: Text(
+                        'Ok',
+                        style: TextStyle(fontSize: 20),
+                      ),
+
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    willDisplayWidget: Column(
+                      children: <Widget>[
+                        Text(
+                          'Filter',
+                          style: TextStyle(fontSize: 40, color: Colors.black),
+                        ),
+                        ToggleSwitch(
+                            minWidth: 90.0,
+                            cornerRadius: 20,
+                            activeBgColor: Colors.green,
+                            activeTextColor: Colors.white,
+                            inactiveBgColor: Colors.grey,
+                            inactiveTextColor: Colors.white,
+                            labels: ['ON', 'OFF'],
+                            activeColors: [Colors.blue, Colors.pink],
+                            onToggle: (index) {
+                              print('switched to: $index');
+                            }),
+
+                        SizedBox(
+                          height: 50,
+                        )
+                      ],
+                    ));
+              },
+            ),
+
+            PopupMenuButton<WhyFarther>(
+              onSelected: (WhyFarther result) {
+                setState(() {
+                  print(result);
+                });
+              },
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<WhyFarther>>[
+                const PopupMenuItem<WhyFarther>(
+                  value: WhyFarther.harder,
+                  child: Text('Settings'),
+                ),
+                const PopupMenuItem<WhyFarther>(
+                  value: WhyFarther.smarter,
+                  child: Text('About'),
+                ),
+                const PopupMenuItem<WhyFarther>(
+                  value: WhyFarther.selfStarter,
+                  child: Text('Contact'),
+                ),
+              ],
+            )
+          ]),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
