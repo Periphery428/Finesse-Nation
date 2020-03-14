@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
+import 'LoginScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Finesse Nation'),
+      home: LoginScreen(),
     );
   }
 }
