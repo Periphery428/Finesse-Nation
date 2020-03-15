@@ -224,7 +224,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          Network.sendToAll(title: newFinesse.getTitle(), body: newFinesse.getLocation());
+                          Network.sendToAll(
+                              title: newFinesse.getTitle(),
+                              body: newFinesse.getLocation());
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
                           Navigator.pushReplacement(

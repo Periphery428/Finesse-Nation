@@ -95,9 +95,9 @@ class Network {
       sendToTopic(title: title, body: body, topic: 'all');
 
   static Future<void> sendToTopic(
-      {@required String title,
-        @required String body,
-        @required String topic}) =>
+          {@required String title,
+          @required String body,
+          @required String topic}) =>
       sendTo(title: title, body: body, fcmToken: '/topics/$topic');
 
   static Future<void> sendTo({
@@ -108,7 +108,12 @@ class Network {
       http.post(
         'https://fcm.googleapis.com/fcm/send',
         body: json.encode({
-          'notification': {'body': '$body', 'title': '$title'},
+          'notification': {
+            'body': '$body',
+            'title': '$title',
+            'image':
+                'https://vignette.wikia.nocookie.net/rezero/images/0/02/Rem_Anime.png',
+          },
           'priority': 'high',
           'data': {
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',

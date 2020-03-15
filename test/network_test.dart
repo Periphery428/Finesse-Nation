@@ -73,5 +73,4 @@ void main() {
 
     await Network.removeFinesse(finesseList.last);
   });
-
 }
