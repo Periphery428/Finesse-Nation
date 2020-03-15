@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:finesse_nation/Finesse.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 import '.env.dart';
 
 class Network {
@@ -15,6 +16,7 @@ class Network {
       'https://finesse-nation.herokuapp.com/api/food/updateEvent';
 
   static final token = environment['FINESSE_API_TOKEN'];
+  static final serverKey = environment['FINESSE_SERVER_KEY'];
 
   static Future<void> addFinesse(Finesse newFinesse) async {
     Map bodyMap = newFinesse.toMap();
@@ -85,6 +87,41 @@ class Network {
       // TODO
     }
   }
+
+  static Future<void> sendToAll({
+    @required String title,
+    @required String body,
+  }) =>
+      sendToTopic(title: title, body: body, topic: 'all');
+
+  static Future<void> sendToTopic(
+      {@required String title,
+        @required String body,
+        @required String topic}) =>
+      sendTo(title: title, body: body, fcmToken: '/topics/$topic');
+
+  static Future<void> sendTo({
+    @required String title,
+    @required String body,
+    @required String fcmToken,
+  }) =>
+      http.post(
+        'https://fcm.googleapis.com/fcm/send',
+        body: json.encode({
+          'notification': {'body': '$body', 'title': '$title'},
+          'priority': 'high',
+          'data': {
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'id': '1',
+            'status': 'done',
+          },
+          'to': '$fcmToken',
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverKey',
+        },
+      );
 }
 
 void main() {

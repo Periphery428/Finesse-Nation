@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
@@ -225,6 +224,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
+                          Network.sendToAll(title: newFinesse.getTitle(), body: newFinesse.getLocation());
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
                           Navigator.pushReplacement(
