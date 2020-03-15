@@ -1,6 +1,7 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
 import 'package:snappable/snappable.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FinessePage extends StatelessWidget {
   Finesse fin;
@@ -151,11 +152,15 @@ class FinesseDetailsState extends State<FinesseDetails> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                fin.getLocation(),
-                style: TextStyle(
-                  fontSize: 16,
+              InkWell(
+                child: Text(
+                  fin.getLocation(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
+                onTap: () => launch('https://www.google.com/maps/search/${fin.getLocation()}'),
               ),
 //              Text(
 //                'Room 1331' /*fin.getDuration()*/,
