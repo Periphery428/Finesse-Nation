@@ -6,6 +6,7 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/cameraPage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 var firstCamera = CameraDescription();
 
@@ -224,9 +225,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          Network.sendToAll(
+                          FirebaseMessaging().unsubscribeFromTopic('all');
+                          await Network.sendToAll(
                               title: newFinesse.getTitle(),
                               body: newFinesse.getLocation());
+                          FirebaseMessaging().subscribeToTopic('all');
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
                           Navigator.pushReplacement(

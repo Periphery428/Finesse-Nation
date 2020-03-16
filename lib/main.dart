@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar.dart';
 
 void main() => runApp(MyApp());
 
@@ -47,6 +48,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  void reload() {
+    setState(() {
+      print('refreshed');
+//      Flushbar(
+//        message: 'Reloading...',
+//        duration: Duration(seconds: 3),
+//      )..show(context);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        Flushbar(
+          title: message['notification']['title'],
+          message: message['notification']['body'],
+          duration: Duration(seconds: 3),
+          mainButton: FlatButton(
+            onPressed: () => reload(),
+            child: Text(
+              'REFRESH',
+            ),
+            textColor: Colors.lightBlue,
+          ),
+        )..show(context);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
