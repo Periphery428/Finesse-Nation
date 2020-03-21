@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/User.dart';
 import 'package:http/http.dart' as http;
 import '.env.dart';
 
 class Network {
-  static const DELETE_URL =
-      'https://finesse-nation.herokuapp.com/api/food/deleteEvent';
-  static const ADD_URL =
-      'https://finesse-nation.herokuapp.com/api/food/addEvent';
-  static const GET_URL =
-      'https://finesse-nation.herokuapp.com/api/food/getEvents';
-  static const UPDATE_URL =
-      'https://finesse-nation.herokuapp.com/api/food/updateEvent';
+  static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
+  static const DELETE_URL = DOMAIN + 'food/deleteEvent';
+  static const ADD_URL = DOMAIN + 'food/addEvent';
+  static const GET_URL = DOMAIN + 'food/getEvents';
+  static const UPDATE_URL = DOMAIN + 'food/updateEvent';
+  static const LOGIN_URL = DOMAIN + 'user/login';
+  static const SIGNUP_URL = DOMAIN + 'user/signup';
 
   static final token = environment['FINESSE_API_TOKEN'];
 
@@ -84,6 +84,33 @@ class Network {
     if (response.statusCode == 201) {
       // TODO
     }
+  }
+
+  static Future<dynamic> loginUser(User currUser) async {
+    Map bodyMap = currUser.toMap();
+    final http.Response response = await http.post(LOGIN_URL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(bodyMap));
+    return [response.statusCode, response.body];
+  }
+
+  static Future<dynamic> signupUser(User currUser) async {
+    var username = currUser.username.split('@')[0];
+    var payload = {
+      "userName": username,
+      "emailId": currUser.username,
+      "password": currUser.password
+    };
+    final http.Response response = await http.post(SIGNUP_URL,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'api_token': token
+      },
+      body: json.encode(payload));
+    return [response.statusCode, response.body];
   }
 }
 

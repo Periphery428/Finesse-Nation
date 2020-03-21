@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'LoginScreen.dart';
@@ -46,6 +47,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<bool> _goToLogin(BuildContext context) {
+    return Navigator.of(context)
+        .pushReplacementNamed('/')
+        .then((_) => false);
+  }
+  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -59,6 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(FontAwesomeIcons.signOutAlt),
+            color: Colors.black38,
+            onPressed: () => _goToLogin(context),
+          ),
+        ]
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
