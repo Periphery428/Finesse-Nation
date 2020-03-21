@@ -24,6 +24,8 @@ dependencies:
   camera: ^0.5.7
   path_provider: ^1.6.5
   path: ^1.6.4
+  popup_box: ^0.1.0
+  toggle_switch: ^0.1.4
   pull_to_refresh: ^1.5.8
   snappable: ^1.0.1
   # The following adds the Cupertino Icons font to your application.
