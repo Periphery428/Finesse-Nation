@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:finesse_nation/Finesse.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
 
 class Network {
@@ -38,6 +39,7 @@ class Network {
       var data = json.decode(response.body);
       var responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
+      responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
       print('nope');
@@ -46,6 +48,23 @@ class Network {
       print(response.toString());
       throw Exception('Failed to load finesses');
     }
+  }
+
+  static Future<List<Finesse>> applyFilters(responseJson) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool activeFilter = prefs.getBool('activeFilter');
+    final bool typeFilter = prefs.getBool('typeFilter');
+    print(activeFilter);
+    print(typeFilter);
+    if (activeFilter == false) {
+      responseJson.removeWhere((value) => value.getActive() == false);
+    }
+    if (typeFilter == false) {
+      print(responseJson[0].getType());
+      responseJson.removeWhere((value) => value.getType() == "OTHER");
+//      value.getType() == "OTHER");
+    }
+    return responseJson;
   }
 
   static Future<void> removeFinesse(Finesse newFinesse) async {

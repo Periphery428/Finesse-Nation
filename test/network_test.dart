@@ -7,7 +7,7 @@
 import 'dart:async';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Future<Finesse> addFinesseHelper() async {
   var now = new DateTime.now();
@@ -24,6 +24,8 @@ Future<Finesse> addFinesseHelper() async {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper();
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());

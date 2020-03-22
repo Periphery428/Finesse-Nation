@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:finesse_nation/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Finesse {
   String eventId;
@@ -10,7 +12,6 @@ class Finesse {
   String duration;
   String type;
   DateTime timePosted;
-
   static finesseAdd(
       title, description, image, location, duration, type, timePosted) {
     return Finesse(
@@ -21,6 +22,8 @@ class Finesse {
       this.duration, this.type, this.timePosted);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
+    //Filter the results based on applied filters.
+
     return Finesse(
       json['_id'],
       json['name'] != null ? json['name'] : "",
@@ -42,7 +45,12 @@ class Finesse {
     map["duration"] = duration;
     map["type"] = type;
     map['timePosted'] = timePosted.toString();
+//    map['active'] = true;
     return map;
+  }
+
+  bool getActive() {
+    return true;
   }
 
   void setId(id) {

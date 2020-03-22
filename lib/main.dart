@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'package:popup_box/popup_box.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:custom_switch/custom_switch.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-void main() => runApp(MyApp());
-
+void main() {
+//  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 // This is the type used by the popup menu below.
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
@@ -51,6 +54,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<bool> _activeFilter;
+  Future<bool> _typeFilter;
+
+  bool localActive;
+  bool localType;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeFilter = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getBool('activeFilter') ?? true);
+    });
+    _typeFilter = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getBool('typeFilter') ?? true);
+    });
+  }
+
+  Future<void> _setActiveFilter(val) async {
+    final SharedPreferences prefs = await _prefs;
+    final bool activeFilter = val;
+
+    setState(() {
+      _activeFilter =
+          prefs.setBool("activeFilter", activeFilter).then((bool success) {
+            return activeFilter;
+          });
+    });
+  }
+
+  Future<void> _setTypeFilter(val) async {
+    final SharedPreferences prefs = await _prefs;
+    final bool typeFilter = val;
+
+    setState(() {
+      _typeFilter =
+          prefs.setBool("typeFilter", typeFilter).then((bool success) {
+            return typeFilter;
+          });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -73,42 +118,109 @@ class _MyHomePageState extends State<MyHomePage> {
                     context: context,
                     button: MaterialButton(
                       color: Colors.blue,
+                      shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(12.0),
+                          side: BorderSide(color: Colors.blue)),
                       child: Text(
                         'Ok',
                         style: TextStyle(fontSize: 20),
                       ),
-
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        if (localActive != null) {
+                          _setActiveFilter(localActive);
+                        }
+                        if (localType != null) {
+                          _setTypeFilter(localType);
+                        }
+                        Navigator.of(context)
+                            .pop(); //TODO: this will break after adding an event.
                       },
                     ),
-                    willDisplayWidget: Column(
-                      children: <Widget>[
+                    willDisplayWidget: Column(children: <Widget>[
+                      Wrap(alignment: WrapAlignment.center, children: <Widget>[
                         Text(
-                          'Filter',
-                          style: TextStyle(fontSize: 40, color: Colors.black),
+                          'Filters',
+                          style: TextStyle(fontSize: 30, color: Colors.black),
                         ),
-                        ToggleSwitch(
-                            minWidth: 90.0,
-                            cornerRadius: 20,
-                            activeBgColor: Colors.green,
-                            activeTextColor: Colors.white,
-                            inactiveBgColor: Colors.grey,
-                            inactiveTextColor: Colors.white,
-                            labels: ['ON', 'OFF'],
-                            activeColors: [Colors.blue, Colors.pink],
-                            onToggle: (index) {
-                              print('switched to: $index');
-                            }),
-
-                        SizedBox(
-                          height: 50,
-                        )
-                      ],
-                    ));
+                      ]),
+                      Row(children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 0),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                  padding:
+                                  EdgeInsets.only(right: 10, bottom: 30),
+                                  child: Text(
+                                    'Show inactive posts',
+                                  )),
+                              Padding(
+                                  padding:
+                                  EdgeInsets.only(right: 10, bottom: 10),
+                                  child: Text(
+                                    'Show non food posts',
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                child: FutureBuilder<bool>(
+                                    future: _activeFilter,
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<bool> snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return const CircularProgressIndicator();
+                                        default:
+                                          if (snapshot.hasError) {
+                                            print(snapshot.error);
+                                            return Wrap(
+                                                children: <Widget>[Text('')]);
+                                          } else {
+                                            return CustomSwitch(
+                                                key: Key("activeFilter"),
+                                                activeColor: Colors.pinkAccent,
+                                                value: snapshot.data,
+                                                onChanged: (value) {
+                                                  localActive = value;
+                                                });
+                                          }
+                                      }
+                                    })),
+                            Padding(
+                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                child: FutureBuilder<bool>(
+                                    future: _typeFilter,
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<bool> snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return const CircularProgressIndicator();
+                                        default:
+                                          if (snapshot.hasError) {
+                                            print(snapshot.error);
+                                            return Wrap(
+                                                children: <Widget>[Text('')]);
+                                          } else {
+                                            return CustomSwitch(
+                                                key: Key("typeFilter"),
+                                                activeColor: Colors.pinkAccent,
+                                                value: snapshot.data,
+                                                onChanged: (value) {
+                                                  localType = value;
+                                                });
+                                          }
+                                      }
+                                    })),
+                          ],
+                        ),
+                      ])
+                    ]));
               },
             ),
-
             PopupMenuButton<WhyFarther>(
               onSelected: (WhyFarther result) {
                 setState(() {
