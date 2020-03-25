@@ -30,6 +30,34 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
 }
 
 void main() {
+  group('Filters ', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Filter active', () async {
+      // Build our app and trigger a frame.
+      await driver.tap(find.byValueKey("Filter"));
+      await driver.tap(find.byValueKey("activeFilter"));
+      await driver.tap(find.byValueKey("FilterOK"));
+    });
+
+    test('Filter Other', () async {
+      // Build our app and trigger a frame.
+      await driver.tap(find.byValueKey("Filter"));
+      await driver.tap(find.byValueKey("typeFilter"));
+      await driver.tap(find.byValueKey("FilterOK"));
+    });
+  });
+
   group('Add Event', () {
     FlutterDriver driver;
 
