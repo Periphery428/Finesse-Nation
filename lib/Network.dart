@@ -143,7 +143,17 @@ class Network {
   }
 
   static String validateEmail(String email) {
-    return email.isEmpty ? 'Email can\'t be empty' : null;
+    if (email.isEmpty) {
+      return 'Email can\'t be empty';
+    }
+    bool emailValid = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+        .hasMatch(email);
+    if (emailValid) {
+      return null;
+    }
+
+    return "Invalid email address";
   }
 
   static String validatePassword(String password) {
