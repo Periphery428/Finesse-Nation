@@ -4,7 +4,6 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 //import 'package:flutter_test/flutter_test.dart';
 import 'package:test/test.dart';
 
@@ -13,13 +12,12 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
 
   test('Testing time posted post and fetch', () async {
     var now = new DateTime.now();
     Finesse newFinesse = Finesse.finesseAdd(
-        "Add Event unit test",
+        "Testing time posted post and fetch",
         "Description:" + now.toString(),
         "",
         "Second floor Arc",

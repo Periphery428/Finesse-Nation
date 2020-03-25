@@ -54,17 +54,17 @@ class Network {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool activeFilter = prefs.getBool('activeFilter') ?? true;
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
+    List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
+
     print(activeFilter);
     print(typeFilter);
     if (activeFilter == false) {
-      responseJson.removeWhere((value) => value.getActive() == false);
+      filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
     if (typeFilter == false) {
-      print(responseJson[0].getType());
-      responseJson.removeWhere((value) => value.getType() == "OTHER");
-//      value.getType() == "OTHER");
+      filteredFinesses.removeWhere((value) => value.getType() == "OTHER");
     }
-    return responseJson;
+    return filteredFinesses;
   }
 
   static Future<void> removeFinesse(Finesse newFinesse) async {

@@ -10,14 +10,24 @@ class Finesse {
   String duration;
   String type;
   DateTime timePosted;
-  static finesseAdd(
-      title, description, image, location, duration, type, timePosted) {
+  bool active;
+
+  static finesseAdd(title, description, image, location, duration, type,
+      timePosted, {bool active = true}) {
     return Finesse(
-        null, title, description, image, location, duration, type, timePosted);
+        null,
+        title,
+        description,
+        image,
+        location,
+        duration,
+        type,
+        timePosted,
+        active);
   }
 
   Finesse(this.eventId, this.title, this.description, this.image, this.location,
-      this.duration, this.type, this.timePosted);
+      this.duration, this.type, this.timePosted, this.active);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     //Filter the results based on applied filters.
@@ -31,6 +41,7 @@ class Finesse {
       json['duration'] != null ? json['duration'] : "",
       json['type'] != null ? json['type'] : "",
       json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
+      json['active'] != null ? json['active'] : true,
     );
   }
 
@@ -43,14 +54,10 @@ class Finesse {
     map["duration"] = duration;
     map["type"] = type;
     map['timePosted'] = timePosted.toString();
-//    map['active'] = true;
+    map['active'] = true;
     return map;
   }
 
-  bool getActive() {
-    //TODO
-    return true;
-  }
 
   void setId(id) {
     this.eventId = id;
@@ -95,4 +102,9 @@ class Finesse {
   DateTime getTimePosted() {
     return timePosted;
   }
+
+  bool getActive() {
+    return this.active;
+  }
+
 }
