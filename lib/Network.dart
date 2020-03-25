@@ -56,8 +56,8 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-    print(activeFilter);
-    print(typeFilter);
+//    print(activeFilter);
+//    print(typeFilter);
     if (activeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
