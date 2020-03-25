@@ -42,14 +42,8 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
 }
 
 Future<Finesse> addFinesseHelper([location]) async {
-  Finesse newFinesse = Finesse.finesseAdd(
-      "Add Event unit test",
-      "Description:",
-      null,
-      location,
-      "60 hours",
-      "FOOD",
-      new DateTime.now());
+  Finesse newFinesse = Finesse.finesseAdd("Add Event unit test", "Description:",
+      null, location, "60 hours", "FOOD", new DateTime.now());
   await Network.addFinesse(newFinesse);
   return newFinesse;
 }
