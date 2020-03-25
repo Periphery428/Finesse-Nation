@@ -13,6 +13,7 @@ void main() async {
   _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
   runApp(MyApp());
 }
+
 // This is the type used by the popup menu below.
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
@@ -136,8 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (localType != null) {
                           _setTypeFilter(localType);
                         }
-                        Navigator.of(context, rootNavigator: true).pop(
-                            'dialog');
+                        Navigator.of(context, rootNavigator: true)
+                            .pop('dialog');
                       },
                     ),
                     willDisplayWidget: Column(children: <Widget>[
