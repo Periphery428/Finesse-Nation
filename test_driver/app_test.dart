@@ -108,6 +108,38 @@ void main() {
       await driver.getText(find.text(descriptionText));
       await driver.getText(find.text(durationText));
       await driver.getText(find.text(locationText));
+      await driver.tap(find.pageBack());
+    });
+
+  });
+
+  group('Maps Link', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('View Map Test', () async {
+      // Build our app and trigger a frame.
+      var now = new DateTime.now();
+      String nameText = 'Maps Test ${now.toString()}';
+      String durationText = 'Integration Test Duration';
+      String descriptionText = 'View Info description';
+      String locationText = 'Siebel Center';
+      await addEvent(
+          driver, nameText, locationText, descriptionText, durationText);
+      await delay(1000);
+      await driver.tap(find.text(nameText));
+      await delay(1000);
+      await driver.tap(find.text(locationText));
+      await delay(1000);
     });
   });
 }
