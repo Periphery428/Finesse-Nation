@@ -52,8 +52,8 @@ class Network {
 
   static Future<List<Finesse>> applyFilters(responseJson) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool activeFilter = prefs.getBool('activeFilter');
-    final bool typeFilter = prefs.getBool('typeFilter');
+    final bool activeFilter = prefs.getBool('activeFilter') ?? true;
+    final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     print(activeFilter);
     print(typeFilter);
     if (activeFilter == false) {

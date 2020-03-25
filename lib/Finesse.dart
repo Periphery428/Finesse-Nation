@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 import 'dart:convert';
-import 'package:finesse_nation/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Finesse {
   String eventId;
@@ -50,6 +48,7 @@ class Finesse {
   }
 
   bool getActive() {
+    //TODO
     return true;
   }
 

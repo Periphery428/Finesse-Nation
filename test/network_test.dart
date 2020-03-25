@@ -7,24 +7,27 @@
 import 'dart:async';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test/test.dart';
 
 Future<Finesse> addFinesseHelper() async {
   var now = new DateTime.now();
   Finesse newFinesse = Finesse.finesseAdd(
       "Add Event unit test",
       "Description:" + now.toString(),
-      "",
+      null,
       "Second floor Arc",
       "60 hours",
-      "Food",
+      "FOOD",
       new DateTime.now());
   await Network.addFinesse(newFinesse);
   return newFinesse;
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
 
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper();

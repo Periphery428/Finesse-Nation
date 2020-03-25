@@ -6,8 +6,11 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-//  WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
+  _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
   runApp(MyApp());
 }
 // This is the type used by the popup menu below.
@@ -55,6 +58,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   Future<bool> _activeFilter;
   Future<bool> _typeFilter;
 
@@ -122,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: new BorderRadius.circular(12.0),
                           side: BorderSide(color: Colors.blue)),
                       child: Text(
-                        'Ok',
+                        'OK',
                         style: TextStyle(fontSize: 20),
                       ),
                       onPressed: () {
@@ -132,8 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (localType != null) {
                           _setTypeFilter(localType);
                         }
-                        Navigator.of(context)
-                            .pop(); //TODO: this will break after adding an event.
+                        Navigator.of(context, rootNavigator: true).pop(
+                            'dialog');
                       },
                     ),
                     willDisplayWidget: Column(children: <Widget>[
