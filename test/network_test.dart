@@ -80,7 +80,6 @@ void main() {
     String badEmail = 'Finesse';
     var result = Network.validateEmail(badEmail);
     expect(result, equals(failEmail));
-
   });
 
   test('Validate good email', () async {
