@@ -83,8 +83,6 @@ void main() {
 //      bool found = await isPresent(find.text(location), driver);
 //
 //      expect(found, false);
-
-
     });
 
     test('Filter Other', () async {

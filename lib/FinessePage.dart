@@ -124,7 +124,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   fontSize: 16,
                 ),
               ),
-
               Text(
                 fin.getDuration(),
                 style: TextStyle(
