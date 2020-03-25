@@ -4,6 +4,7 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:http/http.dart' as http;
 import '.env.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
@@ -105,15 +106,49 @@ class Network {
       "password": currUser.password
     };
     final http.Response response = await http.post(SIGNUP_URL,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'api_token': token
-      },
-      body: json.encode(payload));
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(payload));
     return [response.statusCode, response.body];
   }
-}
 
-void main() {
-  print(Network.token);
+  // Sign in callback
+  static Future<String> authUser(LoginData data) async {
+    User currUser = User.userAdd(data.name, data.password);
+    var resp = await Network.loginUser(currUser);
+    var status = resp[0], respBody = resp[1];
+    if (status == 400) {
+      return 'Username or password is incorrect.';
+    }
+    return null;
+  }
+
+  // Forgot Password callback
+  static Future<String> recoverPassword(String name) async {
+    // TODO
+    return 'Password recovery feature not yet built. Try again later.';
+  }
+
+  // Sign up callback
+  static Future<String> createUser(LoginData data) async {
+    User newUser = User.userAdd(data.name, data.password);
+    var resp = await Network.signupUser(newUser);
+    var status = resp[0], respBody = json.decode(resp[1]);
+    if (status == 400) {
+      return respBody['msg'];
+    }
+    return null;
+  }
+
+  static String validateEmail(String email) {
+    return email.isEmpty ? 'Email can\'t be empty' : null;
+  }
+
+  static String validatePassword(String password) {
+    return password.length < 6
+        ? 'Password must be at least 6 characters'
+        : null;
+  }
 }

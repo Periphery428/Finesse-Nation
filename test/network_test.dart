@@ -73,4 +73,28 @@ void main() {
 
     await Network.removeFinesse(finesseList.last);
   });
+
+  test('Validating email', () async {
+    var failEmail = 'Email can\'t be empty';
+
+    String badEmail = '';
+    var result = Network.validateEmail(badEmail);
+    expect(result, equals(failEmail));
+
+    String goodEmail = 'hello@world.com';
+    result = Network.validateEmail(goodEmail);
+    expect(result, equals(null));
+  });
+
+  test('Validating password', () async {
+    var failPassword = 'Password must be at least 6 characters';
+
+    String badPassword = 'short';
+    var result = Network.validatePassword(badPassword);
+    expect(result, equals(failPassword));
+
+    String goodPassword = 'longer';
+    result = Network.validatePassword(goodPassword);
+    expect(result, equals(null));
+  });
 }
