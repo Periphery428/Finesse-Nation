@@ -119,11 +119,12 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ongoing',
+                fin.getActive() == true ? 'Ongoing' : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
+
               Text(
                 fin.getDuration(),
                 style: TextStyle(
@@ -185,7 +186,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getImage() != "" ? imageSection : Container(),
               titleSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
-              fin.getDuration() != "" ? timeSection : Container(),
+              fin.getActive() ? timeSection : timeSection,
               locationSection,
             ],
           ),

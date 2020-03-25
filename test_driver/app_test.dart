@@ -1,3 +1,5 @@
+import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/Network.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -29,6 +31,29 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('submit'));
 }
 
+Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
+    {Duration timeout = const Duration(seconds: 5)}) async {
+  try {
+    await driver.waitFor(finder, timeout: timeout);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<Finesse> addFinesseHelper([location]) async {
+  Finesse newFinesse = Finesse.finesseAdd(
+      "Add Event unit test",
+      "Description:",
+      null,
+      location,
+      "60 hours",
+      "FOOD",
+      new DateTime.now());
+  await Network.addFinesse(newFinesse);
+  return newFinesse;
+}
+
 void main() {
   group('Filters ', () {
     FlutterDriver driver;
@@ -45,9 +70,21 @@ void main() {
 
     test('Filter active', () async {
       // Build our app and trigger a frame.
+//      var now = new DateTime.now();
+//      String location = now.toString();
+//      Finesse newFinesse = await addFinesseHelper(location);
+//
+//      await driver.getText(find.text(location));
+
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("activeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
+
+//      bool found = await isPresent(find.text(location), driver);
+//
+//      expect(found, false);
+
+
     });
 
     test('Filter Other', () async {

@@ -117,8 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
-                  key: Key("Filter"),
-                  color: Colors.white),
+                  key: Key("Filter"), color: Colors.white),
               onPressed: () async {
                 await PopupBox.showPopupBox(
                     context: context,
