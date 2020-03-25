@@ -84,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _activeFilter =
           prefs.setBool("activeFilter", activeFilter).then((bool success) {
-            return activeFilter;
-          });
+        return activeFilter;
+      });
     });
   }
 
@@ -96,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _typeFilter =
           prefs.setBool("typeFilter", typeFilter).then((bool success) {
-            return typeFilter;
-          });
+        return typeFilter;
+      });
     });
   }
 
@@ -111,8 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title
           title: Text(widget.title),
           actions: <Widget>[
             IconButton(
@@ -155,13 +155,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: <Widget>[
                               Padding(
                                   padding:
-                                  EdgeInsets.only(right: 10, bottom: 30),
+                                      EdgeInsets.only(right: 10, bottom: 30),
                                   child: Text(
                                     'Show inactive posts',
                                   )),
                               Padding(
                                   padding:
-                                  EdgeInsets.only(right: 10, bottom: 10),
+                                      EdgeInsets.only(right: 10, bottom: 10),
                                   child: Text(
                                     'Show non food posts',
                                   )),
@@ -233,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
               itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<WhyFarther>>[
+                  <PopupMenuEntry<WhyFarther>>[
                 const PopupMenuItem<WhyFarther>(
                   value: WhyFarther.harder,
                   child: Text('Settings'),

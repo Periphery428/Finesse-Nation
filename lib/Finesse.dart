@@ -12,19 +12,11 @@ class Finesse {
   DateTime timePosted;
   bool active;
 
-  static finesseAdd(title, description, image, location, duration, type,
-      timePosted,
+  static finesseAdd(
+      title, description, image, location, duration, type, timePosted,
       {bool active = true}) {
-    return Finesse(
-        null,
-        title,
-        description,
-        image,
-        location,
-        duration,
-        type,
-        timePosted,
-        active);
+    return Finesse(null, title, description, image, location, duration, type,
+        timePosted, active);
   }
 
   Finesse(this.eventId, this.title, this.description, this.image, this.location,
