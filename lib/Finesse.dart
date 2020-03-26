@@ -10,6 +10,7 @@ class Finesse {
   String duration;
   String type;
   DateTime timePosted;
+  Uint8List convertedImage;
 
   static finesseAdd(
       title, description, image, location, duration, type, timePosted) {
@@ -17,8 +18,18 @@ class Finesse {
         null, title, description, image, location, duration, type, timePosted);
   }
 
-  Finesse(this.eventId, this.title, this.description, this.image, this.location,
-      this.duration, this.type, this.timePosted);
+  Finesse(var eventId, var title, var description, var image, var location,
+      var duration, var type, var timePosted) {
+    this.eventId = eventId;
+    this.title = title;
+    this.description = description;
+    this.image = image;
+    this.location = location;
+    this.duration = duration;
+    this.type = type;
+    this.timePosted = timePosted;
+    this.convertedImage = base64.decode(image);
+  }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     return Finesse(
@@ -58,7 +69,7 @@ class Finesse {
   }
 
   Uint8List getConvertedImage() {
-    return base64.decode(image);
+    return convertedImage;
   }
 
   String getTitle() {

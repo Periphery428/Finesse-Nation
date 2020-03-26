@@ -35,11 +35,12 @@ class _FinesseListState extends State<BuildFinesseList> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.lightBlue, Colors.pink],
-        ),
+        color: Colors.black,
+//        gradient: LinearGradient(
+//          begin: Alignment.topLeft,
+//          end: Alignment.bottomRight,
+//          colors: [Colors.lightBlue, Colors.pink],
+//        ),
       ),
       child: FutureBuilder(
         future: Network.fetchFinesses(),
@@ -54,12 +55,13 @@ class _FinesseListState extends State<BuildFinesseList> {
 
   Widget listViewWidget(List<Finesse> _finesses, BuildContext context) {
     return new Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Colors.lightBlue, Colors.pink],
-      )),
+      color: Colors.black,
+//      decoration: BoxDecoration(
+//          gradient: LinearGradient(
+//        begin: Alignment.topLeft,
+//        end: Alignment.bottomRight,
+//        colors: [Colors.lightBlue, Colors.pink],
+
       child: new Center(
         key: Key("refresher"),
         child: SmartRefresher(

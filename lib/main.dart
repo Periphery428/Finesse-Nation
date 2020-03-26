@@ -13,15 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Finesse Nation',
       theme: ThemeData(
-        // This is the theme of your application.
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.black,
+        canvasColor: Colors.grey[850],
       ),
       home: LoginScreen(),
     );
@@ -46,7 +39,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Future<bool> _goToLogin(BuildContext context) {
     return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
   }
@@ -67,21 +60,24 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(FontAwesomeIcons.signOutAlt),
-              color: Colors.black38,
+              color: Colors.white,
               onPressed: () => _goToLogin(context),
             ),
           ]),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddEvent()),
           );
         },
-        label: Text('Add Event'),
+//        label: Text(''),
         key: Key('add event'),
-        icon: Icon(Icons.add),
-        backgroundColor: Colors.pink,
+        child: Icon(
+          Icons.add,
+          color: Colors.grey[850],
+        ),
+        backgroundColor: Color(0xffff9900),
       ),
       body: BuildFinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
