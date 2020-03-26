@@ -59,8 +59,9 @@ class LoginScreen extends StatelessWidget {
           ));
         },
         onRecoverPassword: Network.recoverPassword,
+        logoTag: 'logo',
         messages: LoginMessages(
             recoverPasswordDescription:
-                'Email will be sent with a link to reset your password.'));
+                'Email will be sent with a link to reset your password.'),);
   }
 }

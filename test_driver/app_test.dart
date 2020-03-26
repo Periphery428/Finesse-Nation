@@ -44,6 +44,10 @@ void main() {
     });
 
     test('Add Event Form Fail Test', () async {
+      await driver.tap(find.byType("TextFormField"));
+      await driver.enterText("a@a.com");
+      await driver.tap(find.byType("TextFormField"));
+      await driver.enterText("aaaaaa");
       await driver.tap(find.byType("AnimatedButton"));
       await delay(1000);
       String nameText = 'Integration Test Free Food';

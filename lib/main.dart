@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.black,
         canvasColor: Colors.grey[850],
+        accentColor: Color(0xffff9900),
       ),
       home: LoginScreen(),
     );
@@ -56,7 +57,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
+//          title: Text(widget.title),
+          title: Hero(
+              tag: 'logo',
+              child: Image.asset(
+                'images/logo.png',
+                height: 35,
+              )),
           actions: <Widget>[
             IconButton(
               icon: const Icon(FontAwesomeIcons.signOutAlt),

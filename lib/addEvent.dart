@@ -98,11 +98,16 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
     var render;
     if (image == "images/photo_camera_black_288x288.png") {
-      render = Image.asset(
-        image,
+      render = Icon(
+        Icons.camera_alt,
+        size: 100,
         color: Color(0xffFF9900),
-        height: 150,
       );
+//      render = Image.asset(
+//        image,
+//        color: Color(0xffFF9900),
+//        height: 100,
+//      );
     } else {
       render = Image.file(
         File(image),
@@ -126,7 +131,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 controller: eventNameController,
                 decoration: const InputDecoration(
-                  labelText: "EventName*",
+                  labelText: "Title*",
                   labelStyle: TextStyle(
                     color: Color(0xffFF9900),
                   ),
@@ -192,9 +197,10 @@ class MyCustomFormState extends State<MyCustomForm> {
               Container(
                 padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  "Type: ",
+                  "Type",
                   style: TextStyle(
                     color: Color(0xffFF9900),
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -218,6 +224,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                     _type = newValue;
                   });
                 },
+              ),
+              Container(
+                padding: const EdgeInsets.only(top: 15, bottom: 10),
+                child: Text(
+                  "Image",
+                  style: TextStyle(
+                    color: Color(0xffFF9900),
+                    fontSize: 16,
+                  ),
+                ),
               ),
               Material(
                 child: InkWell(
