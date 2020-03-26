@@ -37,31 +37,32 @@ class LoginScreen extends StatelessWidget {
     changeStatusColor(Colors.black);
     changeNavigationColor(Colors.black);
     return FlutterLogin(
-        title: null,
-        logo: 'images/logo.png',
-        theme: LoginTheme(
-            primaryColor: Colors.black,
-            accentColor: Colors.black,
-            cardTheme: CardTheme(color: Color(0xffff9900)),
-            buttonTheme: LoginButtonTheme(
-              splashColor: Colors.grey[800],
-            )
+      title: null,
+      logo: 'images/logo.png',
+      theme: LoginTheme(
+          primaryColor: Colors.black,
+          accentColor: Colors.black,
+          cardTheme: CardTheme(color: Color(0xffff9900)),
+          buttonTheme: LoginButtonTheme(
+            splashColor: Colors.grey[800],
+          )
 //        pageColorLight: Colors.lightblue,
 //        pageColorDark: Colors.pink,
-            ),
-        emailValidator: /*(_) => null  ,// */ Network.validateEmail,
-        passwordValidator: /*(_) => null  ,// */ Network.validatePassword,
-        onLogin: /*(_) => null  ,// */ Network.authUser,
-        onSignup: /*(_) => null  ,// */ Network.createUser,
-        onSubmitAnimationCompleted: () {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => MyHomePage(title: 'Finesse Nation'),
-          ));
-        },
-        onRecoverPassword: Network.recoverPassword,
-        logoTag: 'logo',
-        messages: LoginMessages(
-            recoverPasswordDescription:
-                'Email will be sent with a link to reset your password.'),);
+          ),
+      emailValidator: /*(_) => null  ,// */ Network.validateEmail,
+      passwordValidator: /*(_) => null  ,// */ Network.validatePassword,
+      onLogin: /*(_) => null  ,// */ Network.authUser,
+      onSignup: /*(_) => null  ,// */ Network.createUser,
+      onSubmitAnimationCompleted: () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => MyHomePage(title: 'Finesse Nation'),
+        ));
+      },
+      onRecoverPassword: Network.recoverPassword,
+      logoTag: 'logo',
+      messages: LoginMessages(
+          recoverPasswordDescription:
+              'Email will be sent with a link to reset your password.'),
+    );
   }
 }
