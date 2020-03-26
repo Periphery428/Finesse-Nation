@@ -13,6 +13,7 @@ void main() async {
   _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
   runApp(MyApp());
 }
+
 // This is the type used by the popup menu below.
 enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
 
@@ -83,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _activeFilter =
           prefs.setBool("activeFilter", activeFilter).then((bool success) {
-            return activeFilter;
-          });
+        return activeFilter;
+      });
     });
   }
 
@@ -95,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _typeFilter =
           prefs.setBool("typeFilter", typeFilter).then((bool success) {
-            return typeFilter;
-          });
+        return typeFilter;
+      });
     });
   }
 
@@ -110,13 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title
           title: Text(widget.title),
           actions: <Widget>[
             IconButton(
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
-                  color: Colors.white),
+                  key: Key("Filter"), color: Colors.white),
               onPressed: () async {
                 await PopupBox.showPopupBox(
                     context: context,
@@ -127,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           side: BorderSide(color: Colors.blue)),
                       child: Text(
                         'OK',
+                        key: Key("FilterOK"),
                         style: TextStyle(fontSize: 20),
                       ),
                       onPressed: () {
@@ -136,8 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (localType != null) {
                           _setTypeFilter(localType);
                         }
-                        Navigator.of(context, rootNavigator: true).pop(
-                            'dialog');
+                        Navigator.of(context, rootNavigator: true)
+                            .pop('dialog');
                       },
                     ),
                     willDisplayWidget: Column(children: <Widget>[
@@ -154,13 +156,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: <Widget>[
                               Padding(
                                   padding:
-                                  EdgeInsets.only(right: 10, bottom: 30),
+                                      EdgeInsets.only(right: 10, bottom: 30),
                                   child: Text(
                                     'Show inactive posts',
                                   )),
                               Padding(
                                   padding:
-                                  EdgeInsets.only(right: 10, bottom: 10),
+                                      EdgeInsets.only(right: 10, bottom: 10),
                                   child: Text(
                                     'Show non food posts',
                                   )),
@@ -232,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
               itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<WhyFarther>>[
+                  <PopupMenuEntry<WhyFarther>>[
                 const PopupMenuItem<WhyFarther>(
                   value: WhyFarther.harder,
                   child: Text('Settings'),

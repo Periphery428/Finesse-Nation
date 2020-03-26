@@ -21,7 +21,7 @@ jobs:
         env:
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
       - run: flutter pub get
-      - run: flutter format lib/ test/ test_driver/
+      #      - run: flutter format lib/ test/ test_driver/
       - run: flutter test
 
 #  integration:

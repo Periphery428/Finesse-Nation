@@ -12,18 +12,11 @@ class Finesse {
   DateTime timePosted;
   bool active;
 
-  static finesseAdd(title, description, image, location, duration, type,
-      timePosted, {bool active = true}) {
-    return Finesse(
-        null,
-        title,
-        description,
-        image,
-        location,
-        duration,
-        type,
-        timePosted,
-        active);
+  static finesseAdd(
+      title, description, image, location, duration, type, timePosted,
+      {bool active = true}) {
+    return Finesse(null, title, description, image, location, duration, type,
+        timePosted, active);
   }
 
   Finesse(this.eventId, this.title, this.description, this.image, this.location,
@@ -57,7 +50,6 @@ class Finesse {
     map['active'] = true;
     return map;
   }
-
 
   void setId(id) {
     this.eventId = id;
@@ -106,5 +98,4 @@ class Finesse {
   bool getActive() {
     return this.active;
   }
-
 }

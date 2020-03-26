@@ -38,8 +38,7 @@ List<Finesse> createFinesseList({String type = "FOOD", bool active = true}) {
         "60 hours",
         type,
         new DateTime.now(),
-        active: active
-    ));
+        active: active));
   }
   return finesseList;
 }
@@ -134,5 +133,4 @@ void main() {
     expect(newList.length, 4);
     expect(newList.length == finesseList.length, true);
   });
-
 }
