@@ -23,7 +23,6 @@ class Finesse {
       this.duration, this.type, this.timePosted, this.active);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
-    //Filter the results based on applied filters.
 
     return Finesse(
       json['_id'],

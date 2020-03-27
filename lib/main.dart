@@ -3,7 +3,8 @@ import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'package:popup_box/popup_box.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -15,7 +16,7 @@ void main() async {
 }
 
 // This is the type used by the popup menu below.
-enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
+enum DotMenu { settings, about, contact }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -227,24 +228,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]));
               },
             ),
-            PopupMenuButton<WhyFarther>(
-              onSelected: (WhyFarther result) {
+            PopupMenuButton<DotMenu>(
+              onSelected: (DotMenu result) {
                 setState(() {
                   print(result);
                 });
               },
               itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<WhyFarther>>[
-                const PopupMenuItem<WhyFarther>(
-                  value: WhyFarther.harder,
+              <PopupMenuEntry<DotMenu>>[
+                const PopupMenuItem<DotMenu>(
+                  value: DotMenu.settings,
                   child: Text('Settings'),
                 ),
-                const PopupMenuItem<WhyFarther>(
-                  value: WhyFarther.smarter,
+                const PopupMenuItem<DotMenu>(
+                  value: DotMenu.about,
                   child: Text('About'),
                 ),
-                const PopupMenuItem<WhyFarther>(
-                  value: WhyFarther.selfStarter,
+                const PopupMenuItem<DotMenu>(
+                  value: DotMenu.contact,
                   child: Text('Contact'),
                 ),
               ],

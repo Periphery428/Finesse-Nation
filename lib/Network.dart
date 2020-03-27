@@ -39,7 +39,7 @@ class Network {
       var data = json.decode(response.body);
       var responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
-      responseJson = await applyFilters(responseJson);
+//      responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
       print('nope');
@@ -56,14 +56,15 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-//    print(activeFilter);
-//    print(typeFilter);
+    print(activeFilter);
+    print(typeFilter);
     if (activeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getType() == "OTHER");
     }
+    print(filteredFinesses);
     return filteredFinesses;
   }
 
