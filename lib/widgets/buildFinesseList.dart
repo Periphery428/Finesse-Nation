@@ -17,29 +17,36 @@ class _FinesseListState extends State<BuildFinesseList> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  void _onRefresh() async {
-//    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-      _finesses = Network.fetchFinesses();
-      _refreshController.refreshCompleted();
-    });
+  Future<List<Finesse>> toFuture(var list) async {
+    return list;
   }
 
-  _onLoading() async {
-//    await Future.delayed(Duration(milliseconds: 1000));
-//    _refreshController.loadComplete();
-//    _finesses = fetchFinesses();
-//    _refreshController.loadComplete();
+  void _onRefresh() async {
+    List<Finesse> list = await Network.fetchFinesses();
+    setState(() {
+      _finesses = toFuture(list);
+    });
+//    await Future.delayed(Duration(seconds: 2));
+    _refreshController.refreshCompleted();
   }
+
+//  _onLoading() async {
+//    print('loading...');
+//    await Future.delayed(Duration(seconds: 10));
+////    _refreshController.loadComplete();
+////    _finesses = fetchFinesses();
+////    _refreshController.loadComplete();
+//  }
 
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.lightBlue, Colors.pink],
-        ),
+        color: Colors.black,
+//        gradient: LinearGradient(
+//          begin: Alignment.topLeft,
+//          end: Alignment.bottomRight,
+//          colors: [Colors.lightBlue, Colors.pink],
+//        ),
       ),
       child: FutureBuilder(
         future: Network.fetchFinesses(),
@@ -54,12 +61,13 @@ class _FinesseListState extends State<BuildFinesseList> {
 
   Widget listViewWidget(List<Finesse> _finesses, BuildContext context) {
     return new Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Colors.lightBlue, Colors.pink],
-      )),
+      color: Colors.black,
+//      decoration: BoxDecoration(
+//          gradient: LinearGradient(
+//        begin: Alignment.topLeft,
+//        end: Alignment.bottomRight,
+//        colors: [Colors.lightBlue, Colors.pink],
+
       child: new Center(
         key: Key("refresher"),
         child: SmartRefresher(
@@ -68,7 +76,7 @@ class _FinesseListState extends State<BuildFinesseList> {
           header: WaterDropHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
-          onLoading: _onLoading,
+//          onLoading: _onLoading,
           child: ListView.builder(
               key: Key("listview"),
               itemCount: _finesses.length * 2,
