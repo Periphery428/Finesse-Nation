@@ -15,7 +15,7 @@ class _FinesseListState extends State<BuildFinesseList> {
   Future<List<Finesse>> _finesses;
 
   RefreshController _refreshController =
-  RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
 //    await Future.delayed(Duration(milliseconds: 1000));

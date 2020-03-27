@@ -139,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (localType != null) {
                           _setTypeFilter(localType);
                         }
+
                         Navigator.of(context, rootNavigator: true)
                             .pop('dialog');
                       },
@@ -234,8 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   print(result);
                 });
               },
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<DotMenu>>[
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
                 const PopupMenuItem<DotMenu>(
                   value: DotMenu.settings,
                   child: Text('Settings'),

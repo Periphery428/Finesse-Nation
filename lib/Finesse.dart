@@ -23,7 +23,6 @@ class Finesse {
       this.duration, this.type, this.timePosted, this.active);
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
-
     return Finesse(
       json['_id'],
       json['name'] != null ? json['name'] : "",
