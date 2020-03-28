@@ -119,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 await PopUpBox.showPopupBox(
                   context: context,
                   button: FlatButton(
+                    key: Key("FilterOK"),
                     onPressed: () {
                       if (localActive != null) {
                         _setActiveFilter(localActive);
