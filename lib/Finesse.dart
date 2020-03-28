@@ -11,6 +11,7 @@ class Finesse {
   String type;
   DateTime timePosted;
   bool active;
+  Uint8List convertedImage;
 
   static finesseAdd(
       title, description, image, location, duration, type, timePosted,
@@ -62,7 +63,7 @@ class Finesse {
   }
 
   Uint8List getConvertedImage() {
-    return base64.decode(image);
+    return convertedImage;
   }
 
   String getTitle() {

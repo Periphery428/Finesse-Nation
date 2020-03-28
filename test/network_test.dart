@@ -26,7 +26,6 @@ Future<Finesse> addFinesseHelper([name]) async {
 }
 
 List<Finesse> createFinesseList({String type = "FOOD", bool active = true}) {
-//TODO Active
   List<Finesse> finesseList = [];
 
   for (var i = 0; i < 4; i++) {
@@ -98,6 +97,7 @@ void main() {
     await Network.removeFinesse(finesseList.last);
   });
 
+
   test('applyFilters Test Other', () async {
     List<Finesse> finesseList = createFinesseList(type: "OTHER", active: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
@@ -132,5 +132,44 @@ void main() {
 
     expect(newList.length, 4);
     expect(newList.length == finesseList.length, true);
+  });
+
+  test('Validate bad email', () async {
+    var failEmail = 'Invalid email address';
+
+    String badEmail = 'Finesse';
+    var result = Network.validateEmail(badEmail);
+    expect(result, equals(failEmail));
+  });
+
+  test('Validate good email', () async {
+    String goodEmail = 'hello@world.com';
+    var result = Network.validateEmail(goodEmail);
+    expect(result, equals(null));
+
+    String goodEmail2 = 'email234test@testemail.com';
+    result = Network.validateEmail(goodEmail2);
+    expect(result, equals(null));
+  });
+
+  test('Validating empty email', () async {
+    var failEmail = 'Email can\'t be empty';
+
+    String badEmail = '';
+    var result = Network.validateEmail(badEmail);
+    expect(result, equals(failEmail));
+  });
+
+  test('Validating password', () async {
+    var failPassword = 'Password must be at least 6 characters';
+
+    String badPassword = 'short';
+    var result = Network.validatePassword(badPassword);
+    expect(result, equals(failPassword));
+
+    String goodPassword = 'longer';
+    result = Network.validatePassword(goodPassword);
+    expect(result, equals(null));
+
   });
 }

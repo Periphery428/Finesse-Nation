@@ -20,6 +20,7 @@ class AddEvent extends StatelessWidget {
       appBar: AppBar(
         title: Text(appTitle),
       ),
+      backgroundColor: Colors.grey[850],
       body: MyCustomForm(),
     );
   }
@@ -80,12 +81,15 @@ class MyCustomFormState extends State<MyCustomForm> {
     String newImage = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => TakePictureScreen(
-                camera: firstCamera,
-              )),
+        builder: (context) => TakePictureScreen(
+          camera: firstCamera,
+        ),
+      ),
     );
     if (newImage != null) {
-      image = newImage;
+      setState(() {
+        image = newImage;
+      });
     }
   }
 
@@ -94,12 +98,26 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
     var render;
     if (image == "images/photo_camera_black_288x288.png") {
-      render = Image.asset(image);
+      render = Icon(
+        Icons.camera_alt,
+        size: 100,
+        color: Color(0xffFF9900),
+      );
+//      render = Image.asset(
+//        image,
+//        color: Color(0xffFF9900),
+//        height: 100,
+//      );
     } else {
-      render = Image.file(File(image));
+      render = Image.file(
+        File(image),
+        width: 600,
+        height: 240,
+      );
     }
     return SingleChildScrollView(
       child: Container(
+        color: Colors.grey[850],
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(
           key: _formKey,
@@ -108,9 +126,15 @@ class MyCustomFormState extends State<MyCustomForm> {
             children: <Widget>[
               TextFormField(
                 key: Key('name'),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
                 controller: eventNameController,
                 decoration: const InputDecoration(
-                  labelText: "EventName*",
+                  labelText: "Title*",
+                  labelStyle: TextStyle(
+                    color: Color(0xffFF9900),
+                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -121,9 +145,15 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               TextFormField(
                 key: Key('location'),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
                 controller: locationController,
                 decoration: const InputDecoration(
                   labelText: "Location*",
+                  labelStyle: TextStyle(
+                    color: Color(0xffFF9900),
+                  ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -134,9 +164,15 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               TextFormField(
                 key: Key('description'),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   labelText: "Description",
+                  labelStyle: TextStyle(
+                    color: Color(0xffFF9900),
+                  ),
                 ),
                 validator: (value) {
                   return null;
@@ -144,9 +180,15 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               TextFormField(
                 key: Key('duration'),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
                 controller: durationController,
                 decoration: const InputDecoration(
                   labelText: "Duration",
+                  labelStyle: TextStyle(
+                    color: Color(0xffFF9900),
+                  ),
                 ),
                 validator: (value) {
                   return null;
@@ -154,14 +196,26 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               Container(
                 padding: const EdgeInsets.only(top: 20),
-                child: Text("Type: "),
+                child: Text(
+                  "Type",
+                  style: TextStyle(
+                    color: Color(0xffFF9900),
+                    fontSize: 16,
+                  ),
+                ),
               ),
               new DropdownButton<String>(
-                hint: Text("Select an event type"),
+//                hint: Text("Select an event type"),
+                style: TextStyle(color: Colors.red),
                 items: <String>['FOOD', 'OTHER'].map((String value) {
                   return new DropdownMenuItem<String>(
                     value: value,
-                    child: new Text(value),
+                    child: new Text(
+                      value,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   );
                 }).toList(),
                 value: _type,
@@ -171,17 +225,29 @@ class MyCustomFormState extends State<MyCustomForm> {
                   });
                 },
               ),
-              Material(
-                  child: InkWell(
-                onTap: () {
-                  navigateAndDisplaySelection(context);
-                },
-                child: Container(
-                  height: 150.0,
-                  alignment: Alignment.center,
-                  child: render,
+              Container(
+                padding: const EdgeInsets.only(top: 15, bottom: 10),
+                child: Text(
+                  "Image",
+                  style: TextStyle(
+                    color: Color(0xffFF9900),
+                    fontSize: 16,
+                  ),
                 ),
-              )),
+              ),
+              Material(
+                child: InkWell(
+                  onTap: () {
+                    navigateAndDisplaySelection(context);
+                  },
+                  child: Container(
+                    color: Colors.grey[850],
+//                  height: 150.0,
+//                    alignment: Alignment.center,
+                    child: render,
+                  ),
+                ),
+              ),
               Container(
                 alignment: Alignment.bottomRight,
                 child: Padding(
@@ -191,14 +257,15 @@ class MyCustomFormState extends State<MyCustomForm> {
                     height: 50,
                     child: RaisedButton(
                       key: Key('submit'),
-                      color: Colors.blue,
+                      color: Color(0xffFF9900),
                       onPressed: () async {
                         // Validate returns true if the form is valid, or false
                         // otherwise.
                         if (_formKey.currentState.validate()) {
                           // If the form is valid, display a Snackbar.
-                          Scaffold.of(context).showSnackBar(
-                              SnackBar(content: Text('Sharing Finesse')));
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text('Sharing Finesse',
+                                  style: TextStyle(color: Color(0xffc47600)))));
                           Text eventName = Text(eventNameController.text);
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
@@ -230,10 +297,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (BuildContext context) => MyApp()));
+                                  builder: (BuildContext context) =>
+                                      MyHomePage(title: 'Finesse Nation')));
                         }
                       },
-                      child: Text('SUBMIT'),
+                      child: Text(
+                        'SUBMIT',
+                        style: TextStyle(color: Colors.grey[850]),
+                      ),
                     ),
                   ),
                 ),
