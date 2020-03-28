@@ -97,7 +97,6 @@ void main() {
     await Network.removeFinesse(finesseList.last);
   });
 
-
   test('applyFilters Test Other', () async {
     List<Finesse> finesseList = createFinesseList(type: "OTHER", active: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
@@ -170,6 +169,5 @@ void main() {
     String goodPassword = 'longer';
     result = Network.validatePassword(goodPassword);
     expect(result, equals(null));
-
   });
 }
