@@ -30,7 +30,7 @@ class Finesse {
     this.duration = duration;
     this.type = type;
     this.timePosted = timePosted;
-    this.convertedImage = base64.decode(image);
+    this.convertedImage = image == null ? null : base64.decode(image);
     this.active = active;
   }
 
