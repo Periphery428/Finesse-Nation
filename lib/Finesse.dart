@@ -20,8 +20,19 @@ class Finesse {
         timePosted, active);
   }
 
-  Finesse(this.eventId, this.title, this.description, this.image, this.location,
-      this.duration, this.type, this.timePosted, this.active);
+  Finesse(var eventId, var title, var description, var image, var location,
+      var duration, var type, var timePosted, var active) {
+    this.eventId = eventId;
+    this.title = title;
+    this.description = description;
+    this.image = image;
+    this.location = location;
+    this.duration = duration;
+    this.type = type;
+    this.timePosted = timePosted;
+    this.convertedImage = base64.decode(image);
+    this.active = active;
+  }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     return Finesse(
