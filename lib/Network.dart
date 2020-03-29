@@ -14,6 +14,7 @@ class Network {
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
+  static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
 
   static final token = environment['FINESSE_API_TOKEN'];
 
@@ -126,9 +127,27 @@ class Network {
   }
 
   // Forgot Password callback
-  static Future<String> recoverPassword(String name) async {
-    // TODO
-    return 'Password recovery feature not yet built. Try again later.';
+  static Future<String> recoverPassword(String email) async {
+    var emailCheck = validateEmail(email);
+    const VALID_STATUS = null;
+    if (emailCheck == VALID_STATUS) {
+      var payload = {
+        "emailId": email
+      };
+      final http.Response response = await http.post(PASSWORD_RESET_URL,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'api_token': token
+          },
+          body: json.encode(payload));
+      if (response.statusCode == 200) {
+        return "Password Reset Link sent to email";
+      } else {
+        return "Password Reset request failed";
+      }
+    } else {
+      return emailCheck;
+    }
   }
 
   // Sign up callback
