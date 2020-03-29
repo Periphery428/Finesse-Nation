@@ -17,17 +17,19 @@ class _FinesseListState extends State<BuildFinesseList> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-  Future<List<Finesse>> toFuture(var list) async {
-    return list;
-  }
+//  Future<List<Finesse>> toFuture(var list) async {
+//    return list;
+//  }
 
   void _onRefresh() async {
-    List<Finesse> list = await Network.fetchFinesses();
+//    List<Finesse> list = await Network.fetchFinesses();
     setState(() {
-      _finesses = toFuture(list);
+      _finesses = Network.fetchFinesses();
     });
 //    await Future.delayed(Duration(seconds: 2));
-    _refreshController.refreshCompleted();
+    if (_finesses != null) {
+      _refreshController.refreshCompleted();
+    }
   }
 
 //  _onLoading() async {

@@ -4,7 +4,8 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:http/http.dart' as http;
 import '.env.dart';
-import 'package:flutter_login/flutter_login.dart';
+//import 'package:flutter_login/flutter_login.dart';
+import 'login/flutter_login.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
@@ -44,7 +45,7 @@ class Network {
       print('nope');
       print(token);
       print(response.statusCode);
-      print(response.toString());
+      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -99,18 +100,25 @@ class Network {
   }
 
   static Future<dynamic> signupUser(User currUser) async {
-    var username = currUser.username.split('@')[0];
+    var atSplit = currUser.username.split('@');
+    var username = atSplit[0];
+    var dotSplit = atSplit[1].split('.');
+    var school = dotSplit[0];
     var payload = {
       "userName": username,
       "emailId": currUser.username,
-      "password": currUser.password
+      "password": currUser.password,
+      "school": school,
+      "points": 0
     };
+
     final http.Response response = await http.post(SIGNUP_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
         },
         body: json.encode(payload));
+
     return [response.statusCode, response.body];
   }
 
@@ -118,7 +126,7 @@ class Network {
   static Future<String> authUser(LoginData data) async {
     User currUser = User.userAdd(data.name, data.password);
     var resp = await Network.loginUser(currUser);
-    var status = resp[0], respBody = resp[1];
+    var status = resp[0];
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
