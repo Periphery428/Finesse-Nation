@@ -44,11 +44,11 @@ void main() {
     });
 
     test('Add Event Form Fail Test', () async {
-      await driver.tap(find.byType("TextFormField"));
+      await driver.tap(find.byValueKey('emailField'));
       await driver.enterText("a@a.com");
-      await driver.tap(find.byType("TextFormField"));
+      await driver.tap(find.byValueKey("passwordField"));
       await driver.enterText("aaaaaa");
-      await driver.tap(find.byType("AnimatedButton"));
+      await driver.tap(find.byValueKey("submitButton"));
       await delay(1000);
       String nameText = 'Integration Test Free Food';
       String descriptionText =
@@ -70,6 +70,12 @@ void main() {
     });
 
     test('Add Event UI Test', () async {
+      await driver.tap(find.byValueKey("emailField"));
+      await driver.enterText("a@a.com");
+      await driver.tap(find.byValueKey("passwordField"));
+      await driver.enterText("aaaaaa");
+      await driver.tap(find.byValueKey("submitButton"));
+      await delay(1000);
       // Build our app and trigger a frame.
       String nameText = 'Integration Test Free Food';
       String durationText = 'Integration Test Duration';

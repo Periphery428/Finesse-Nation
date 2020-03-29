@@ -31,6 +31,17 @@ class Finesse {
     this.convertedImage = base64.decode(image);
   }
 
+  static dynamic parse(var time) {
+    try {
+      DateTime res = DateTime.parse(time);
+      return res;
+    } catch (Exception) {
+      print('invalid datetime format');
+      print(time);
+      return null;
+    }
+  }
+
   factory Finesse.fromJson(Map<String, dynamic> json) {
     return Finesse(
       json['_id'],
@@ -40,7 +51,7 @@ class Finesse {
       json['location'] != null ? json['location'] : "",
       json['duration'] != null ? json['duration'] : "",
       json['type'] != null ? json['type'] : "",
-      json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
+      json['timePosted'] != null ? parse(json['timePosted']) : null,
     );
   }
 

@@ -1,13 +1,10 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
-import 'package:snappable/snappable.dart';
 
 class FinessePage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinessePage(Finesse fin) {
-    this.fin = fin;
-  }
+  FinessePage(this.fin);
 
   Widget build(BuildContext context) {
     final title = fin.getTitle();
@@ -32,11 +29,9 @@ class FinessePage extends StatelessWidget {
 
 // Create the details widget.
 class FinesseDetails extends StatefulWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinesseDetails(Finesse fin) {
-    this.fin = fin;
-  }
+  FinesseDetails(this.fin);
 
   @override
   FinesseDetailsState createState() {
@@ -199,11 +194,9 @@ class FinesseDetailsState extends State<FinesseDetails> {
 }
 
 class FullImage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FullImage(Finesse fin) {
-    this.fin = fin;
-  }
+  FullImage(this.fin);
 
   Widget build(BuildContext context) {
     return Scaffold(

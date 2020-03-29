@@ -3,8 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'LoginScreen.dart';
-import 'package:popup_box/popup_box.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 void main() => runApp(MyApp());
 
