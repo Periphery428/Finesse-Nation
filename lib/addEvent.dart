@@ -207,7 +207,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               new DropdownButton<String>(
 //                hint: Text("Select an event type"),
                 style: TextStyle(color: Colors.red),
-                items: <String>['FOOD', 'OTHER'].map((String value) {
+                items: <String>['Food', 'Other'].map((String value) {
                   return new DropdownMenuItem<String>(
                     value: value,
                     child: new Text(

@@ -28,7 +28,7 @@ void main() {
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     await delay((1000));
     DateTime currTime = new DateTime.now();
-    Duration difference = currTime.difference(finesseList.last.getTimePosted());
+    Duration difference = currTime.difference(finesseList.last.getPostedTime());
     expect(true, difference.inSeconds != 0);
     await Network.removeFinesse(finesseList.last);
   });

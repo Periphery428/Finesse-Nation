@@ -3,60 +3,69 @@ import 'dart:convert';
 
 class Finesse {
   String eventId;
-  String title;
+  String eventTitle;
   String description;
   String image;
   String location;
   String duration;
-  String type;
-  DateTime timePosted;
-  bool active;
+  String category;
+  DateTime postedTime;
+  bool isActive;
   Uint8List convertedImage;
+  String emailId;
+  String school;
 
-  static finesseAdd(
-      title, description, image, location, duration, type, timePosted,
+  static finesseAdd(title, description, image, location, duration, category,
+      timePosted,
       {bool active = true}) {
-    return Finesse(null, title, description, image, location, duration, type,
+    return Finesse(
+        null,
+        title,
+        description,
+        image,
+        location,
+        duration,
+        category,
         timePosted, active);
   }
 
   Finesse(var eventId, var title, var description, var image, var location,
-      var duration, var type, var timePosted, var active) {
+      var duration, var category, var timePosted, var active) {
     this.eventId = eventId;
-    this.title = title;
+    this.eventTitle = title;
     this.description = description;
     this.image = image;
     this.location = location;
     this.duration = duration;
-    this.type = type;
-    this.timePosted = timePosted;
+    this.category = category;
+    this.postedTime = timePosted;
     this.convertedImage = image == null ? null : base64.decode(image);
-    this.active = active;
+    this.isActive = active;
   }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
     return Finesse(
       json['_id'],
-      json['name'] != null ? json['name'] : "",
+      json['eventTitle'] != null ? json['eventTitle'] : "",
       json['description'] != null ? json['description'] : "",
       json['image'] != null ? json['image'] : "",
       json['location'] != null ? json['location'] : "",
       json['duration'] != null ? json['duration'] : "",
-      json['type'] != null ? json['type'] : "",
-      json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
+      json['category'] != null ? json['category'] : "",
+      json['postedTime'] != null ? DateTime.parse(json['postedTime']) : null,
       json['active'] != null ? json['active'] : true,
     );
   }
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["name"] = title;
+    map["eventTitle"] = eventTitle;
     map["description"] = description;
     map["image"] = image;
     map["location"] = location;
     map["duration"] = duration;
-    map["type"] = type;
-    map['timePosted'] = timePosted.toString();
+    map["category"] = category;
+    map['postedTime'] = postedTime.toString();
     map['active'] = true;
     return map;
   }
@@ -78,7 +87,7 @@ class Finesse {
   }
 
   String getTitle() {
-    return title;
+    return eventTitle;
   }
 
   String getLocation() {
@@ -93,19 +102,19 @@ class Finesse {
     return duration;
   }
 
-  String getType() {
-    return type;
+  String getCategory() {
+    return category;
   }
 
   String getId() {
     return eventId;
   }
 
-  DateTime getTimePosted() {
-    return timePosted;
+  DateTime getPostedTime() {
+    return postedTime;
   }
 
   bool getActive() {
-    return this.active;
+    return this.isActive;
   }
 }

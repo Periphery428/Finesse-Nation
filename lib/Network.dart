@@ -63,7 +63,7 @@ class Network {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
     if (typeFilter == false) {
-      filteredFinesses.removeWhere((value) => value.getType() == "OTHER");
+      filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
     }
     return filteredFinesses;
   }

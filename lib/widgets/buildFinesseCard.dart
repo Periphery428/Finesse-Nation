@@ -53,10 +53,10 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                         style: TextStyle(color: Color(0xffc47600)),
                       )
               ]),
-          trailing: fin.getTimePosted() == null
+          trailing: fin.getPostedTime() == null
               ? Text('')
               : Text(
-                  timeSince(fin.timePosted),
+            timeSince(fin.postedTime),
                   style: TextStyle(color: Color(0xffc47600)),
                 ),
         ),
