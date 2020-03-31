@@ -142,14 +142,17 @@ class Network {
       var payload = {
         "emailId": email
       };
+      print(payload);
       final http.Response response = await http.post(PASSWORD_RESET_URL,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'api_token': token
           },
           body: json.encode(payload));
+      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200) {
-        return "Password Reset Link sent to email";
+        return null;
       } else {
         return "Password Reset request failed";
       }
