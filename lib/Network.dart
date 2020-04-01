@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
-
-//import 'package:flutter_login/flutter_login.dart';
+import 'User.dart';
 import 'login/flutter_login.dart';
 
 class Network {
@@ -120,8 +118,7 @@ class Network {
 
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
-    User currUser = User(data.name, data.password, data.name);
-    Map bodyMap = currUser.toMap();
+    Map bodyMap = data.toMap();
     final http.Response resp = await http.post(LOGIN_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -132,6 +129,8 @@ class Network {
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
+    // TODO: GET the actual user data
+    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0);
     return null;
   }
 
@@ -165,17 +164,19 @@ class Network {
 
   // Sign up callback
   static Future<String> createUser(LoginData data) async {
-    User currUser = User(data.name, data.password, data.name);
-    var atSplit = currUser.userName.split('@');
+    String email = data.email;
+    String password = data.password;
+    int points = 0;
+    var atSplit = email.split('@');
     var username = atSplit[0];
     var dotSplit = atSplit[1].split('.');
     var school = dotSplit[0];
     var payload = {
       "userName": username,
-      "emailId": currUser.userName,
-      "password": currUser.password,
+      "emailId": email,
+      "password": password,
       "school": school,
-      "points": 0
+      "points": points
     };
 
     final http.Response resp = await http.post(SIGNUP_URL,
@@ -188,6 +189,8 @@ class Network {
     if (status == 400) {
       return respBody['msg'];
     }
+    // TODO: GET the actual user data
+    User.currentUser = User(email, password, username, school, points);
     return null;
   }
 

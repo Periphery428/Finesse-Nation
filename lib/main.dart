@@ -17,7 +17,7 @@ void main() async {
   runApp(MyApp());
 }
 
-User currentUser = new User("Blank", "Blank", "Blank");
+//User currentUser = new User("Blank", "Blank", "Blank");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(FontAwesomeIcons.signOutAlt),
+              key: Key('logoutButton'),
               color: Colors.white,
               onPressed: () => _goToLogin(context),
             ),

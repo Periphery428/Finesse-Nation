@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:finesse_nation/main.dart';
+import 'User.dart';
 
 class Finesse {
   String eventId;
@@ -20,7 +21,7 @@ class Finesse {
       title, description, image, location, duration, category, timePosted,
       {bool isActive = true, String school, String email}) {
     return Finesse(null, title, description, image, location, duration,
-        category, timePosted, isActive, currentUser.email, currentUser.email);
+        category, timePosted, isActive, User.currentUser.school, User.currentUser.email);
   }
 
   Finesse(
@@ -56,10 +57,10 @@ class Finesse {
         DateTime res = DateTime.parse(timeStr);
         return res;
       } catch (Exception) {
-        return null;
+        return DateTime.now();
       }
     }
-    return null;
+    return DateTime.now();
   }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {

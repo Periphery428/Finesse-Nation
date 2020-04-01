@@ -182,7 +182,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getImage() != "" ? imageSection : Container(),
               titleSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
-              fin.getActive() ? timeSection : timeSection,
+              fin.getDuration() != "" ? timeSection : Container(),
               locationSection,
             ],
           ),

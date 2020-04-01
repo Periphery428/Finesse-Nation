@@ -1,5 +1,3 @@
-import 'package:finesse_nation/Finesse.dart';
-import 'package:finesse_nation/Network.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -40,13 +38,6 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
   } catch (e) {
     return false;
   }
-}
-
-Future<Finesse> addFinesseHelper([location]) async {
-  Finesse newFinesse = Finesse.finesseAdd("Add Event unit test", "Description:",
-      null, location, "60 hours", "FOOD", new DateTime.now());
-  await Network.addFinesse(newFinesse);
-  return newFinesse;
 }
 
 Future<void> login(FlutterDriver driver,
