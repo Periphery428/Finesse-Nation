@@ -19,13 +19,13 @@ Future<Finesse> addFinesseHelper([name]) async {
       null,
       "Second floor Arc",
       "60 hours",
-      "FOOD",
+      "Food",
       new DateTime.now());
   await Network.addFinesse(newFinesse);
   return newFinesse;
 }
 
-List<Finesse> createFinesseList({String type = "FOOD", bool isActive = true}) {
+List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
   List<Finesse> finesseList = [];
 
   for (var i = 0; i < 4; i++) {

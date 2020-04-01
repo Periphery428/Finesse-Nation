@@ -52,7 +52,7 @@ class Network {
 //      print('decoded, data = $data');
       List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
-//      responseJson = await applyFilters(responseJson);
+      responseJson = await applyFilters(responseJson);
 //      print(responseJson.length);
 //      print('responsejson = $responseJson');
       return responseJson;
@@ -83,15 +83,14 @@ class Network {
   }
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
-    var id = newFinesse.getId();
-    final url = Uri.parse(DELETE_URL);
-    final request = http.Request("DELETE", url);
-    request.headers.addAll(<String, String>{
-      "Accept": "application/json",
-      "token": token,
-    });
-    request.body = jsonEncode({"_id": id});
-    final response = await request.send();
+    var jsonObject = {"eventId": newFinesse.getId()};
+    final http.Response response = await http.post(DELETE_URL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(jsonObject));
+
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while removing finesses");
@@ -102,10 +101,10 @@ class Network {
   }
 
   static Future<void> updateFinesse(Finesse newFinesse) async {
-    var jsonObject = {'_id': newFinesse.getId()};
+    var jsonObject = {"eventId": newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
-    final http.Response response = await http.put(UPDATE_URL,
+    final http.Response response = await http.post(UPDATE_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
@@ -114,7 +113,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while removing finesses");
+      throw new Exception("Error while updating finesses");
     }
     if (response.statusCode == 201) {
       // TODO
