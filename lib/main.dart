@@ -7,7 +7,6 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:finesse_nation/User.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

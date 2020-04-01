@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/widgets/buildFinesseCard.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:flutter_test/flutter_test.dart';
 import 'package:test/test.dart';
@@ -20,7 +19,7 @@ void main() {
         "Testing time posted post and fetch",
         "Description:" + now.toString(),
         "",
-        "Second floor Arc",
+        "Activities and Recreation Center",
         "60 hours",
         "Food",
         new DateTime.now());

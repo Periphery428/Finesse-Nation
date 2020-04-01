@@ -17,7 +17,7 @@ Future<Finesse> addFinesseHelper([name]) async {
       name ?? "Add Event unit test",
       "Description:" + now.toString(),
       null,
-      "Second floor Arc",
+      "Activities and Recreation Center",
       "60 hours",
       "Food",
       new DateTime.now());
@@ -33,7 +33,7 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
         "Add Event unit test",
         "Description:" + new DateTime.now().toString(),
         null,
-        "Second floor Arc",
+        "Activities and Recreation Center",
         "60 hours",
         type,
         new DateTime.now(),

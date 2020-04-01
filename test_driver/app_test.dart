@@ -147,6 +147,7 @@ void main() {
       expect(await driver.getText(find.text(locationText)), locationText);
     });
   });
+
   group('Filters ', () {
     FlutterDriver driver;
 
@@ -211,11 +212,10 @@ void main() {
       await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.getText(find.text(descriptionText));
-      await driver.getText(find.text(durationText));
+      await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
     });
-
   });
 
   group('Maps Link', () {

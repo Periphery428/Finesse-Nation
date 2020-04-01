@@ -27,7 +27,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         ListTile(
 //          isThreeLine: true,
           leading: Icon(
-            Icons.fastfood,
+            fin.getCategory() == "Food" ? Icons.fastfood : Icons.help,
             color: Color(0xffc47600),
           ),
           title: fin.getTitle() == null

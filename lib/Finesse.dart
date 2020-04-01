@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:convert';
-import 'package:finesse_nation/main.dart';
 import 'User.dart';
 
 class Finesse {
@@ -20,8 +19,18 @@ class Finesse {
   static finesseAdd(
       title, description, image, location, duration, category, timePosted,
       {bool isActive = true, String school, String email}) {
-    return Finesse(null, title, description, image, location, duration,
-        category, timePosted, isActive, User.currentUser?.school ?? 'test', User.currentUser?.email ?? 'test');
+    return Finesse(
+        null,
+        title,
+        description,
+        image,
+        location,
+        duration,
+        category,
+        timePosted,
+        isActive,
+        User.currentUser?.school ?? 'test',
+        User.currentUser?.email ?? 'test');
   }
 
   Finesse(
