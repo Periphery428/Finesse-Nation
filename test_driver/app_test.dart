@@ -8,8 +8,8 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 //Fill out the form with the necessary information.
-Future<void> addEvent(FlutterDriver driver, nameText, locationText,
-    descriptionText, durationText,
+Future<void> addEvent(
+    FlutterDriver driver, nameText, locationText, descriptionText, durationText,
     {bool takePic: false}) async {
   await driver.tap(find.byValueKey('add event'));
 
@@ -32,7 +32,6 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('submit'));
 }
 
-
 Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
     {Duration timeout = const Duration(seconds: 5)}) async {
   try {
@@ -49,7 +48,6 @@ Future<Finesse> addFinesseHelper([location]) async {
   await Network.addFinesse(newFinesse);
   return newFinesse;
 }
-
 
 Future<void> login(FlutterDriver driver,
     {email: 'test@test.com', password: 'test123', signUp: false}) async {
@@ -87,10 +85,7 @@ void main() {
 
     test('Successful registration', () async {
       String uniqueEmail =
-          DateTime
-              .now()
-              .millisecondsSinceEpoch
-              .toString() + '@test.com';
+          DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
       await login(driver, email: uniqueEmail, signUp: true);
       await driver.tap(find.byValueKey('logoutButton'));
       await login(driver, email: uniqueEmail);
@@ -112,7 +107,6 @@ void main() {
       await login(driver, email: 'invalidemail.com');
       await driver.getText(find.text(badEmail));
     });
-
   });
 
   group('Add Event', () {

@@ -99,7 +99,7 @@ void main() {
 
   test('applyFilters Test Other', () async {
     List<Finesse> finesseList =
-    createFinesseList(type: "Other", isActive: true);
+        createFinesseList(type: "Other", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
     print(newList.length + finesseList.length);
 
@@ -117,7 +117,7 @@ void main() {
 
   test('applyFilters Test Inactive', () async {
     List<Finesse> finesseList =
-    createFinesseList(type: "Food", isActive: false);
+        createFinesseList(type: "Food", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 0);
@@ -129,7 +129,7 @@ void main() {
         {"typeFilter": true, "activeFilter": true});
 
     List<Finesse> finesseList =
-    createFinesseList(type: "Other", isActive: false);
+        createFinesseList(type: "Other", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);

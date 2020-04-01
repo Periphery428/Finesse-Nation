@@ -121,7 +121,6 @@ class Network {
     }
   }
 
-
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
     User currUser = User(data.name, data.password, data.name);
@@ -138,14 +137,13 @@ class Network {
     }
     return null;
   }
+
   // Forgot Password callback
   static Future<String> recoverPassword(String email) async {
     var emailCheck = validateEmail(email);
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
-      var payload = {
-        "emailId": email
-      };
+      var payload = {"emailId": email};
       print(payload);
       final http.Response response = await http.post(PASSWORD_RESET_URL,
           headers: {
@@ -189,8 +187,7 @@ class Network {
           'api_token': token
         },
         body: json.encode(payload));
-    var status = resp.statusCode,
-        respBody = json.decode(resp.body);
+    var status = resp.statusCode, respBody = json.decode(resp.body);
     if (status == 400) {
       return respBody['msg'];
     }

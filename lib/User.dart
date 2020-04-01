@@ -9,7 +9,6 @@ class User {
 
   User(this._email, this._password, this._userName);
 
-
   User.map(dynamic obj) {
     this._email = obj["email"];
     this._password = obj["password"];

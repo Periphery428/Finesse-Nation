@@ -141,35 +141,62 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   willDisplayWidget: Row(
+                    children: <Widget>[
+                      Column(
                         children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 30),
-                                child: Text(
-                                  'Show inactive posts',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10, bottom: 30),
+                            child: Text(
+                              'Show inactive posts',
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 10),
-                                child: Text(
-                                  'Show non food posts',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 10),
-                                child: FutureBuilder<bool>(
-                                  future: _activeFilter,
+                          Padding(
+                            padding: EdgeInsets.only(right: 10, bottom: 10),
+                            child: Text(
+                              'Show non food posts',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(right: 10, bottom: 10),
+                            child: FutureBuilder<bool>(
+                              future: _activeFilter,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<bool> snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return const CircularProgressIndicator();
+                                  default:
+                                    if (snapshot.hasError) {
+                                      print(snapshot.error);
+                                      return Wrap(children: <Widget>[Text('')]);
+                                    } else {
+                                      return CustomSwitch(
+                                        key: Key("activeFilter"),
+                                        activeColor: Color(0xffff9900),
+                                        value: snapshot.data,
+                                        onChanged: (value) {
+                                          localActive = value;
+                                        },
+                                      );
+                                    }
+                                }
+                              },
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(right: 10, bottom: 10),
+                              child: FutureBuilder<bool>(
+                                  future: _typeFilter,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<bool> snapshot) {
                                     switch (snapshot.connectionState) {
@@ -182,49 +209,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                               children: <Widget>[Text('')]);
                                         } else {
                                           return CustomSwitch(
-                                            key: Key("activeFilter"),
-                                            activeColor: Color(0xffff9900),
-                                            value: snapshot.data,
-                                            onChanged: (value) {
-                                              localActive = value;
-                                            },
-                                          );
+                                              key: Key("typeFilter"),
+                                              activeColor: Color(0xffff9900),
+                                              value: snapshot.data,
+                                              onChanged: (value) {
+                                                localType = value;
+                                              });
                                         }
                                     }
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(right: 10, bottom: 10),
-                                  child: FutureBuilder<bool>(
-                                      future: _typeFilter,
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<bool> snapshot) {
-                                        switch (snapshot.connectionState) {
-                                          case ConnectionState.waiting:
-                                            return const CircularProgressIndicator();
-                                          default:
-                                            if (snapshot.hasError) {
-                                              print(snapshot.error);
-                                              return Wrap(
-                                                  children: <Widget>[Text('')]);
-                                            } else {
-                                              return CustomSwitch(
-                                                  key: Key("typeFilter"),
-                                                  activeColor:
-                                                      Color(0xffff9900),
-                                                  value: snapshot.data,
-                                                  onChanged: (value) {
-                                                    localType = value;
-                                                  });
-                                            }
-                                        }
-                                      })),
-                            ],
-                          ),
+                                  })),
                         ],
                       ),
+                    ],
+                  ),
                 );
               },
             ),
