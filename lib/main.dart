@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    _firebaseMessaging.subscribeToTopic('all');
+    //_firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
