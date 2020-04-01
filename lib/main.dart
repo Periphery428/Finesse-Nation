@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
-//import 'package:popup_box/popup_box.dart';
 import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  
   Future<bool> _goToLogin(BuildContext context) {
     return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
   }
@@ -92,6 +94,47 @@ class _MyHomePageState extends State<MyHomePage> {
         return typeFilter;
       });
     });
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  void reload() {
+    setState(() {
+      print('refreshed');
+//      Flushbar(
+//        message: 'Reloading...',
+//        duration: Duration(seconds: 3),
+//      )..show(context);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        Flushbar(
+          title: message['notification']['title'],
+          message: message['notification']['body'],
+          duration: Duration(seconds: 3),
+          mainButton: FlatButton(
+            onPressed: () => reload(),
+            child: Text(
+              'REFRESH',
+            ),
+            textColor: Colors.lightBlue,
+          ),
+        )..show(context);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions();
   }
 
   @override
