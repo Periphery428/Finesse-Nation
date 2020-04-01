@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
-import 'package:popup_box/popup_box.dart';
+//import 'package:popup_box/popup_box.dart';
+import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
@@ -100,7 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title
-          title: Text(widget.title),
+//          title: Text(widget.title),
+          title: Hero(
+            tag: 'logo',
+            child: Image.asset(
+              'images/logo.png',
+              height: 35,
+            ),
+          ),
           actions: <Widget>[
             IconButton(
               icon: const Icon(FontAwesomeIcons.signOutAlt),
@@ -111,113 +119,138 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
                   key: Key("Filter"), color: Colors.white),
               onPressed: () async {
-                await PopupBox.showPopupBox(
-                    context: context,
-                    button: MaterialButton(
-                      color: Colors.blue,
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.blue)),
-                      child: Text(
-                        'OK',
-                        key: Key("FilterOK"),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () {
-                        if (localActive != null) {
-                          _setActiveFilter(localActive);
-                        }
-                        if (localType != null) {
-                          _setTypeFilter(localType);
-                        }
+                await PopUpBox.showPopupBox(
+                  context: context,
+                  button: FlatButton(
+                    key: Key("FilterOK"),
+                    onPressed: () {
+                      if (localActive != null) {
+                        _setActiveFilter(localActive);
+                      }
+                      if (localType != null) {
+                        _setTypeFilter(localType);
+                      }
 
-                        Navigator.of(context, rootNavigator: true)
-                            .pop('dialog');
-                      },
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
+                    },
+                    child: Text(
+                      "OK",
+                      style: TextStyle(
+                        color: Color(0xffff9900),
+                      ),
                     ),
-                    willDisplayWidget: Column(children: <Widget>[
-                      Wrap(alignment: WrapAlignment.center, children: <Widget>[
-                        Text(
-                          'Filters',
-                          style: TextStyle(fontSize: 30, color: Colors.black),
-                        ),
-                      ]),
-                      Row(children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 0),
-                          child: Column(
+                  ),
+//                    button: MaterialButton(
+//                      color: Color(0xffff9900),
+////                      shape: new RoundedRectangleBorder(
+////                        borderRadius: new BorderRadius.circular(12.0),
+////                        //side: BorderSide(color: Colors.blue),
+////                      ),
+//                      child: Text(
+//                        'OK',
+//                        key: Key("FilterOK"),
+//                        style: TextStyle(
+//                          fontSize: 20,
+//                          color: Colors.grey[850],
+//                        ),
+//                      ),
+//                      onPressed: () {
+//                        if (localActive != null) {
+//                          _setActiveFilter(localActive);
+//                        }
+//                        if (localType != null) {
+//                          _setTypeFilter(localType);
+//                        }
+//
+//                        Navigator.of(context, rootNavigator: true)
+//                            .pop('dialog');
+//                      },
+                  willDisplayWidget: Row(
+                        children: <Widget>[
+                          Column(
                             children: <Widget>[
                               Padding(
-                                  padding:
-                                      EdgeInsets.only(right: 10, bottom: 30),
-                                  child: Text(
-                                    'Show inactive posts',
-                                  )),
+                                padding: EdgeInsets.only(right: 10, bottom: 30),
+                                child: Text(
+                                  'Show inactive posts',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                child: Text(
+                                  'Show non food posts',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(right: 10, bottom: 10),
+                                child: FutureBuilder<bool>(
+                                  future: _activeFilter,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<bool> snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return const CircularProgressIndicator();
+                                      default:
+                                        if (snapshot.hasError) {
+                                          print(snapshot.error);
+                                          return Wrap(
+                                              children: <Widget>[Text('')]);
+                                        } else {
+                                          return CustomSwitch(
+                                            key: Key("activeFilter"),
+                                            activeColor: Color(0xffff9900),
+                                            value: snapshot.data,
+                                            onChanged: (value) {
+                                              localActive = value;
+                                            },
+                                          );
+                                        }
+                                    }
+                                  },
+                                ),
+                              ),
                               Padding(
                                   padding:
                                       EdgeInsets.only(right: 10, bottom: 10),
-                                  child: Text(
-                                    'Show non food posts',
-                                  )),
+                                  child: FutureBuilder<bool>(
+                                      future: _typeFilter,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<bool> snapshot) {
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.waiting:
+                                            return const CircularProgressIndicator();
+                                          default:
+                                            if (snapshot.hasError) {
+                                              print(snapshot.error);
+                                              return Wrap(
+                                                  children: <Widget>[Text('')]);
+                                            } else {
+                                              return CustomSwitch(
+                                                  key: Key("typeFilter"),
+                                                  activeColor:
+                                                      Color(0xffff9900),
+                                                  value: snapshot.data,
+                                                  onChanged: (value) {
+                                                    localType = value;
+                                                  });
+                                            }
+                                        }
+                                      })),
                             ],
                           ),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 10),
-                                child: FutureBuilder<bool>(
-                                    future: _activeFilter,
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<bool> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return const CircularProgressIndicator();
-                                        default:
-                                          if (snapshot.hasError) {
-                                            print(snapshot.error);
-                                            return Wrap(
-                                                children: <Widget>[Text('')]);
-                                          } else {
-                                            return CustomSwitch(
-                                                key: Key("activeFilter"),
-                                                activeColor: Colors.pinkAccent,
-                                                value: snapshot.data,
-                                                onChanged: (value) {
-                                                  localActive = value;
-                                                });
-                                          }
-                                      }
-                                    })),
-                            Padding(
-                                padding: EdgeInsets.only(right: 10, bottom: 10),
-                                child: FutureBuilder<bool>(
-                                    future: _typeFilter,
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<bool> snapshot) {
-                                      switch (snapshot.connectionState) {
-                                        case ConnectionState.waiting:
-                                          return const CircularProgressIndicator();
-                                        default:
-                                          if (snapshot.hasError) {
-                                            print(snapshot.error);
-                                            return Wrap(
-                                                children: <Widget>[Text('')]);
-                                          } else {
-                                            return CustomSwitch(
-                                                key: Key("typeFilter"),
-                                                activeColor: Colors.pinkAccent,
-                                                value: snapshot.data,
-                                                onChanged: (value) {
-                                                  localType = value;
-                                                });
-                                          }
-                                      }
-                                    })),
-                          ],
-                        ),
-                      ])
-                    ]));
+                        ],
+                      ),
+                );
               },
             ),
             PopupMenuButton<DotMenu>(
