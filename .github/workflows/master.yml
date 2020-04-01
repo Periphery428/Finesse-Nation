@@ -22,7 +22,7 @@ jobs:
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
           FINESSE_SERVER_KEY: ${{ secrets.FINESSE_SERVER_KEY }}
       - run: flutter pub get
-      - run: flutter format lib/ test/ test_driver/
+      #      - run: flutter format lib/ test/ test_driver/
       - run: flutter test
 
 #  integration:
