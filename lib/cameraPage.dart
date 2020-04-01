@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +87,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           },
         ),
         floatingActionButton: FloatingActionButton(
+          key: Key("takepic"),
           child: Icon(
             Icons.camera_alt,
             color: Colors.grey[850],

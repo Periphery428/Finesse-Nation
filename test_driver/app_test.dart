@@ -1,3 +1,5 @@
+import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/Network.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -6,8 +8,9 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 //Fill out the form with the necessary information.
-Future<void> addEvent(FlutterDriver driver, nameText, locationText,
-    descriptionText, durationText) async {
+Future<void> addEvent(
+    FlutterDriver driver, nameText, locationText, descriptionText, durationText,
+    {bool takePic: false}) async {
   await driver.tap(find.byValueKey('add event'));
 
   await driver.tap(find.byValueKey('name'));
@@ -29,14 +32,90 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('submit'));
 }
 
+Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
+    {Duration timeout = const Duration(seconds: 5)}) async {
+  try {
+    await driver.waitFor(finder, timeout: timeout);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<Finesse> addFinesseHelper([location]) async {
+  Finesse newFinesse = Finesse.finesseAdd("Add Event unit test", "Description:",
+      null, location, "60 hours", "FOOD", new DateTime.now());
+  await Network.addFinesse(newFinesse);
+  return newFinesse;
+}
+
+Future<void> login(FlutterDriver driver,
+    {email: 'test@test.com', password: 'test123', signUp: false}) async {
+  print('logging in...');
+  await driver.tap(find.byValueKey('emailField'));
+  await driver.enterText(email);
+  await driver.tap(find.byValueKey("passwordField"));
+  await driver.enterText(password);
+  if (signUp) {
+    await driver.tap(find.byValueKey('switchButton'));
+    await driver.tap(find.byValueKey("confirmField"));
+    await driver.enterText(password);
+  }
+  await driver.tap(find.byValueKey("loginButton"));
+}
+
 void main() {
+  group('Login', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      print('setting up');
+      driver = await FlutterDriver.connect();
+    });
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Successful login', () async {
+      await login(driver);
+      await driver.tap(find.byValueKey('logoutButton'));
+    });
+
+    test('Successful registration', () async {
+      String uniqueEmail =
+          DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
+      await login(driver, email: uniqueEmail, signUp: true);
+      await driver.tap(find.byValueKey('logoutButton'));
+      await login(driver, email: uniqueEmail);
+      await driver.tap(find.byValueKey('logoutButton'));
+    });
+
+    test('Missing information', () async {
+      String badEmail = "Email can't be empty",
+          badPass = "Password must be at least 6 characters";
+
+      await login(driver, email: '', password: '');
+      await driver.getText(find.text(badEmail));
+      await driver.getText(find.text(badPass));
+    });
+
+    test('Invalid email', () async {
+      String badEmail = "Invalid email address";
+
+      await login(driver, email: 'invalidemail.com');
+      await driver.getText(find.text(badEmail));
+    });
+  });
+
   group('Add Event', () {
     FlutterDriver driver;
 
     setUpAll(() async {
+      print('setting up');
       driver = await FlutterDriver.connect();
     });
-
     tearDownAll(() async {
       if (driver != null) {
         driver.close();
@@ -44,12 +123,7 @@ void main() {
     });
 
     test('Add Event Form Fail Test', () async {
-      await driver.tap(find.byType("TextFormField"));
-      await driver.enterText("a@a.com");
-      await driver.tap(find.byType("TextFormField"));
-      await driver.enterText("aaaaaa");
-      await driver.tap(find.byType("AnimatedButton"));
-      await delay(1000);
+      await login(driver);
       String nameText = 'Integration Test Free Food';
       String descriptionText =
           'The location is a timestamp to make a unique value for the test to look for.';
@@ -64,9 +138,6 @@ void main() {
           "Please Enter a Location");
 
       await driver.tap(find.byTooltip('Back'));
-
-      expect(
-          await driver.getText(find.text("Finesse Nation")), "Finesse Nation");
     });
 
     test('Add Event UI Test', () async {
@@ -83,6 +154,43 @@ void main() {
       await delay(1000);
 
       expect(await driver.getText(find.text(locationText)), locationText);
+    });
+  });
+  group('Filters ', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Filter active', () async {
+      // Build our app and trigger a frame.
+//      var now = new DateTime.now();
+//      String location = now.toString();
+//      Finesse newFinesse = await addFinesseHelper(location);
+//
+//      await driver.getText(find.text(location));
+
+      await driver.tap(find.byValueKey("Filter"));
+      await driver.tap(find.byValueKey("activeFilter"));
+      await driver.tap(find.byValueKey("FilterOK"));
+
+//      bool found = await isPresent(find.text(location), driver);
+//
+//      expect(found, false);
+    });
+
+    test('Filter Other', () async {
+      // Build our app and trigger a frame.
+      await driver.tap(find.byValueKey("Filter"));
+      await driver.tap(find.byValueKey("typeFilter"));
+      await driver.tap(find.byValueKey("FilterOK"));
     });
   });
 

@@ -1,13 +1,10 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
-import 'package:snappable/snappable.dart';
 
 class FinessePage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinessePage(Finesse fin) {
-    this.fin = fin;
-  }
+  FinessePage(this.fin);
 
   Widget build(BuildContext context) {
     final title = fin.getTitle();
@@ -32,11 +29,9 @@ class FinessePage extends StatelessWidget {
 
 // Create the details widget.
 class FinesseDetails extends StatefulWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinesseDetails(Finesse fin) {
-    this.fin = fin;
-  }
+  FinesseDetails(this.fin);
 
   @override
   FinesseDetailsState createState() {
@@ -125,7 +120,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ongoing',
+                fin.getActive() == true ? 'Ongoing' : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                   color: Color(0xffff9900),
@@ -177,7 +172,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
-
     return ListView(
       children: [
         Card(
@@ -188,7 +182,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getImage() != "" ? imageSection : Container(),
               titleSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
-              fin.getDuration() != "" ? timeSection : Container(),
+              fin.getActive() ? timeSection : timeSection,
               locationSection,
             ],
           ),
@@ -199,11 +193,9 @@ class FinesseDetailsState extends State<FinesseDetails> {
 }
 
 class FullImage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FullImage(Finesse fin) {
-    this.fin = fin;
-  }
+  FullImage(this.fin);
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,11 +204,12 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-              tag: fin.getId(),
-              child: Image.memory(
-                fin.getConvertedImage(),
-                fit: BoxFit.cover,
-              )),
+            tag: fin.getId(),
+            child: Image.memory(
+              fin.getConvertedImage(),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );

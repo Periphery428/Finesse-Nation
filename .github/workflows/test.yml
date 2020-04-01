@@ -23,7 +23,7 @@ jobs:
       - run: flutter channel master
       - run: flutter upgrade
       - run: flutter pub get
-      - run: flutter format lib/ test/ test_driver/
+      #      - run: flutter format lib/ test/ test_driver/
       - run: flutter test
 
 #  integration:
