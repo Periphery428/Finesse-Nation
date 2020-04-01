@@ -49,27 +49,25 @@ class FinesseDetailsState extends State<FinesseDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Widget imageSection = fin.getConvertedImage() == null
-        ? Container()
-        : InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FullImage(
-                  fin,
-                ),
-              ),
-            ),
-            child: Hero(
-              tag: fin.getId(),
-              child: Image.memory(
-                fin.getConvertedImage(),
-                width: 600,
-                height: 240,
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
+    Widget imageSection = InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FullImage(
+            fin,
+          ),
+        ),
+      ),
+      child: Hero(
+        tag: fin.getId(),
+        child: Image.memory(
+          fin.getConvertedImage(),
+          width: 600,
+          height: 240,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
     Widget titleSection = Container(
       padding: const EdgeInsets.all(20),
       child: Text(
@@ -207,11 +205,12 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-              tag: fin.getId(),
-              child: Image.memory(
-                fin.getConvertedImage(),
-                fit: BoxFit.cover,
-              )),
+            tag: fin.getId(),
+            child: Image.memory(
+              fin.getConvertedImage(),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );

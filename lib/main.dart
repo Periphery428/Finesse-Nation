@@ -6,9 +6,6 @@ import 'LoginScreen.dart';
 
 void main() => runApp(MyApp());
 
-// This is the type used by the popup menu below.
-enum WhyFarther { harder, smarter, selfStarter, tradingCharter }
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -62,13 +59,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           // the App.build method, and use it to set our appbar title.
 //          title: Text(widget.title),
           title: Hero(
-              tag: 'logo',
-              child: Image.asset(
-                'images/logo.png',
-                height: 35,
-              )),
+            tag: 'logo',
+            child: Image.asset(
+              'images/logo.png',
+              height: 35,
+            ),
+          ),
           actions: <Widget>[
             IconButton(
+              key: Key('logoutButton'),
               icon: const Icon(FontAwesomeIcons.signOutAlt),
               color: Colors.white,
               onPressed: () => _goToLogin(context),

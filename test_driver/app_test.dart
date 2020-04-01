@@ -6,8 +6,9 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 //Fill out the form with the necessary information.
-Future<void> addEvent(FlutterDriver driver, nameText, locationText,
-    descriptionText, durationText) async {
+Future<void> addEvent(
+    FlutterDriver driver, nameText, locationText, descriptionText, durationText,
+    {bool takePic: false}) async {
   await driver.tap(find.byValueKey('add event'));
 
   await driver.tap(find.byValueKey('name'));
@@ -29,14 +30,74 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('submit'));
 }
 
+Future<void> login(FlutterDriver driver,
+    {email: 'test@test.com', password: 'test123', signUp: false}) async {
+  print('logging in...');
+  await driver.tap(find.byValueKey('emailField'));
+  await driver.enterText(email);
+  await driver.tap(find.byValueKey("passwordField"));
+  await driver.enterText(password);
+  if (signUp) {
+    await driver.tap(find.byValueKey('switchButton'));
+    await driver.tap(find.byValueKey("confirmField"));
+    await driver.enterText(password);
+  }
+  await driver.tap(find.byValueKey("loginButton"));
+}
+
 void main() {
+  group('Login', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      print('setting up');
+      driver = await FlutterDriver.connect();
+    });
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Successful login', () async {
+      await login(driver);
+      await driver.tap(find.byValueKey('logoutButton'));
+    });
+
+    test('Successful registration', () async {
+      String uniqueEmail =
+          DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
+      await login(driver, email: uniqueEmail, signUp: true);
+      await driver.tap(find.byValueKey('logoutButton'));
+      await login(driver, email: uniqueEmail);
+      await driver.tap(find.byValueKey('logoutButton'));
+    });
+
+    test('Missing information', () async {
+      String badEmail = "Email can't be empty",
+          badPass = "Password must be at least 6 characters";
+
+      await login(driver, email: '', password: '');
+      await driver.getText(find.text(badEmail));
+      await driver.getText(find.text(badPass));
+    });
+
+    test('Invalid email', () async {
+      String badEmail = "Invalid email address";
+
+      await login(driver, email: 'invalidemail.com');
+      await driver.getText(find.text(badEmail));
+    });
+
+  });
+
   group('Add Event', () {
     FlutterDriver driver;
 
     setUpAll(() async {
+      print('setting up');
       driver = await FlutterDriver.connect();
     });
-
     tearDownAll(() async {
       if (driver != null) {
         driver.close();
@@ -44,12 +105,7 @@ void main() {
     });
 
     test('Add Event Form Fail Test', () async {
-      await driver.tap(find.byValueKey('emailField'));
-      await driver.enterText("a@a.com");
-      await driver.tap(find.byValueKey("passwordField"));
-      await driver.enterText("aaaaaa");
-      await driver.tap(find.byValueKey("submitButton"));
-      await delay(1000);
+      await login(driver);
       String nameText = 'Integration Test Free Food';
       String descriptionText =
           'The location is a timestamp to make a unique value for the test to look for.';
@@ -64,18 +120,9 @@ void main() {
           "Please Enter a Location");
 
       await driver.tap(find.byTooltip('Back'));
-
-      expect(
-          await driver.getText(find.text("Finesse Nation")), "Finesse Nation");
     });
 
     test('Add Event UI Test', () async {
-      await driver.tap(find.byValueKey("emailField"));
-      await driver.enterText("a@a.com");
-      await driver.tap(find.byValueKey("passwordField"));
-      await driver.enterText("aaaaaa");
-      await driver.tap(find.byValueKey("submitButton"));
-      await delay(1000);
       // Build our app and trigger a frame.
       String nameText = 'Integration Test Free Food';
       String durationText = 'Integration Test Duration';

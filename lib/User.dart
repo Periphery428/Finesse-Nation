@@ -2,10 +2,6 @@ class User {
   String _email;
   String _password;
 
-  static userAdd(email, password) {
-    return User(email, password);
-  }
-
   User(this._email, this._password);
 
   User.map(dynamic obj) {

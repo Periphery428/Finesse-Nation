@@ -87,6 +87,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           },
         ),
         floatingActionButton: FloatingActionButton(
+          key: Key("takepic"),
           child: Icon(
             Icons.camera_alt,
             color: Colors.grey[850],

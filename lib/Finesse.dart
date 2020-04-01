@@ -10,6 +10,7 @@ class Finesse {
   String duration;
   String type;
   DateTime timePosted;
+  bool isActive;
   Uint8List convertedImage;
 
   static finesseAdd(
@@ -28,31 +29,37 @@ class Finesse {
     this.duration = duration;
     this.type = type;
     this.timePosted = timePosted;
-    this.convertedImage = image == null ? null : base64.decode(image);
+    this.convertedImage = base64.decode(image);
   }
 
   static dynamic parse(var time) {
-    try {
-      DateTime res = DateTime.parse(time);
-      return res;
-    } catch (Exception) {
-      print('invalid datetime format');
-      print(time);
-      return null;
+    if (time != null) {
+      try {
+        String timeStr = time.toString();
+        DateTime res = DateTime.parse(timeStr);
+        return res;
+      } catch (Exception) {
+        print('invalid datetime format');
+        print(time);
+      }
     }
+    return null;
   }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
-    return Finesse(
+//    print('creating finesse');
+    Finesse fin = Finesse(
       json['_id'],
-      json['name'] != null ? json['name'] : "",
-      json['description'] != null ? json['description'] : "",
-      json['image'] != null ? json['image'] : "",
-      json['location'] != null ? json['location'] : "",
-      json['duration'] != null ? json['duration'] : "",
-      json['type'] != null ? json['type'] : "",
-      json['timePosted'] != null ? parse(json['timePosted']) : null,
+      json['name'],
+      json['description'] ?? "",
+      json['image'] ?? "",
+      json['location'],
+      json['duration']?.toString() ?? "",
+      json['type'],
+      parse(json['timePosted']),
     );
+//    print('created finesse = ${fin.getTitle()}');
+    return fin;
   }
 
   Map toMap() {

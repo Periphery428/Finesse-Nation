@@ -74,22 +74,19 @@ void main() {
     await Network.removeFinesse(finesseList.last);
   });
 
+  test('Validate good email', () async {
+    String goodEmail = 'hello@world.com';
+    var result = Network.validateEmail(goodEmail);
+    expect(result, null);
+
+  });
+
   test('Validate bad email', () async {
     var failEmail = 'Invalid email address';
 
     String badEmail = 'Finesse';
     var result = Network.validateEmail(badEmail);
-    expect(result, equals(failEmail));
-  });
-
-  test('Validate good email', () async {
-    String goodEmail = 'hello@world.com';
-    var result = Network.validateEmail(goodEmail);
-    expect(result, equals(null));
-
-    String goodEmail2 = 'email234test@testemail.com';
-    result = Network.validateEmail(goodEmail2);
-    expect(result, equals(null));
+    expect(result, failEmail);
   });
 
   test('Validating empty email', () async {
@@ -97,18 +94,28 @@ void main() {
 
     String badEmail = '';
     var result = Network.validateEmail(badEmail);
-    expect(result, equals(failEmail));
+    expect(result, failEmail);
   });
 
-  test('Validating password', () async {
+  test('Validating good password', () async {
+    String goodPassword = 'longpassword';
+    var result = Network.validatePassword(goodPassword);
+    expect(result, null);
+  });
+
+  test('Validating bad password', () async {
     var failPassword = 'Password must be at least 6 characters';
 
     String badPassword = 'short';
     var result = Network.validatePassword(badPassword);
-    expect(result, equals(failPassword));
+    expect(result, failPassword);
+  });
 
-    String goodPassword = 'longer';
-    result = Network.validatePassword(goodPassword);
-    expect(result, equals(null));
+  test('Validating empty password', () async {
+    var failPassword = 'Password must be at least 6 characters';
+
+    String badPassword = '';
+    var result = Network.validatePassword(badPassword);
+    expect(result, failPassword);
   });
 }

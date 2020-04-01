@@ -237,6 +237,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               Material(
                 child: InkWell(
+                  key: Key("cameraButton"),
                   onTap: () {
                     navigateAndDisplaySelection(context);
                   },
@@ -275,7 +276,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           String imageString;
                           if (image ==
                               "images/photo_camera_black_288x288.png") {
-                            imageString = null;
+                            imageString = '';
                           } else {
                             File imageFile = new File(image);
                             imageString =

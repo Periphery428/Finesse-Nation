@@ -37,10 +37,18 @@ class Network {
 
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
+//    print('finished getting');
+//    print(response.statusCode);
+//    print(response.body.length);
+//    print('body = ${response.body}');
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var responseJson =
+//      print('decoding');
+      /*List<Map<dynamic,dynamic>>*/ var data = json.decode(response.body);
+//      print('decoded, data = $data');
+      List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
+//      print(responseJson.length);
+//      print('responsejson = $responseJson');
       return responseJson;
     } else {
       print('nope');
@@ -89,45 +97,51 @@ class Network {
     }
   }
 
-  static Future<dynamic> loginUser(User currUser) async {
+//  static Future<dynamic> loginUser(User currUser) async {
+//    Map bodyMap = currUser.toMap();
+//    final http.Response response = await http.post(LOGIN_URL,
+//        headers: {
+//          'Content-Type': 'application/json; charset=UTF-8',
+//          'api_token': token
+//        },
+//        body: json.encode(bodyMap));
+//    return [response.statusCode, response.body];
+//  }
+
+//  static Future<dynamic> signupUser(User currUser) async {
+//    var atSplit = currUser.username.split('@');
+//    var username = atSplit[0];
+//    var dotSplit = atSplit[1].split('.');
+//    var school = dotSplit[0];
+//    var payload = {
+//      "userName": username,
+//      "emailId": currUser.username,
+//      "password": currUser.password,
+//      "school": school,
+//      "points": 0
+//    };
+//
+//    final http.Response response = await http.post(SIGNUP_URL,
+//        headers: {
+//          'Content-Type': 'application/json; charset=UTF-8',
+//          'api_token': token
+//        },
+//        body: json.encode(payload));
+//
+//    return [response.statusCode, response.body];
+//  }
+
+  // Sign in callback
+  static Future<String> authUser(LoginData data) async {
+    User currUser = User(data.name, data.password);
     Map bodyMap = currUser.toMap();
-    final http.Response response = await http.post(LOGIN_URL,
+    final http.Response resp = await http.post(LOGIN_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
         },
         body: json.encode(bodyMap));
-    return [response.statusCode, response.body];
-  }
-
-  static Future<dynamic> signupUser(User currUser) async {
-    var atSplit = currUser.username.split('@');
-    var username = atSplit[0];
-    var dotSplit = atSplit[1].split('.');
-    var school = dotSplit[0];
-    var payload = {
-      "userName": username,
-      "emailId": currUser.username,
-      "password": currUser.password,
-      "school": school,
-      "points": 0
-    };
-
-    final http.Response response = await http.post(SIGNUP_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(payload));
-
-    return [response.statusCode, response.body];
-  }
-
-  // Sign in callback
-  static Future<String> authUser(LoginData data) async {
-    User currUser = User.userAdd(data.name, data.password);
-    var resp = await Network.loginUser(currUser);
-    var status = resp[0];
+    var status = resp.statusCode;
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
@@ -149,8 +163,11 @@ class Network {
           },
           body: json.encode(payload));
       if (response.statusCode == 200) {
-        return "Password Reset Link sent to email";
+        return null;
       } else {
+        print(response.statusCode);
+        print(response.body);
+        print(token);
         return "Password Reset request failed";
       }
     } else {
@@ -160,9 +177,26 @@ class Network {
 
   // Sign up callback
   static Future<String> createUser(LoginData data) async {
-    User newUser = User.userAdd(data.name, data.password);
-    var resp = await Network.signupUser(newUser);
-    var status = resp[0], respBody = json.decode(resp[1]);
+    User currUser = User(data.name, data.password);
+    var atSplit = currUser.username.split('@');
+    var username = atSplit[0];
+    var dotSplit = atSplit[1].split('.');
+    var school = dotSplit[0];
+    var payload = {
+      "userName": username,
+      "emailId": currUser.username,
+      "password": currUser.password,
+      "school": school,
+      "points": 0
+    };
+
+    final http.Response resp = await http.post(SIGNUP_URL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(payload));
+    var status = resp.statusCode, respBody = json.decode(resp.body);
     if (status == 400) {
       return respBody['msg'];
     }
