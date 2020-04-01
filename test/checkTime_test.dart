@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/widgets/buildFinesseCard.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:flutter_test/flutter_test.dart';
 import 'package:test/test.dart';
 
 Future<void> delay([int milliseconds = 250]) async {
@@ -9,10 +12,12 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 void main() {
+  SharedPreferences.setMockInitialValues({});
+
   test('Testing time posted post and fetch', () async {
     var now = new DateTime.now();
     Finesse newFinesse = Finesse.finesseAdd(
-        "Add Event unit test",
+        "Testing time posted post and fetch",
         "Description:" + now.toString(),
         "",
         "Second floor Arc",
@@ -23,7 +28,7 @@ void main() {
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     await delay((1000));
     DateTime currTime = new DateTime.now();
-    Duration difference = currTime.difference(finesseList.last.getTimePosted());
+    Duration difference = currTime.difference(finesseList.last.getPostedTime());
     expect(true, difference.inSeconds != 0);
     await Network.removeFinesse(finesseList.last);
   });

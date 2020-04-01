@@ -20,8 +20,10 @@ jobs:
       - run: dart tool/env.dart
         env:
           FINESSE_API_TOKEN: ${{ secrets.FINESSE_API_TOKEN }}
+      - run: flutter channel master
+      - run: flutter upgrade
       - run: flutter pub get
-      - run: flutter format lib/ test/ test_driver/
+      #      - run: flutter format lib/ test/ test_driver/
       - run: flutter test
 
 #  integration:

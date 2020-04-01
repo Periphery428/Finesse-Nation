@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
-    color: Colors.white,
+    color: Colors.grey[850],
     child: InkWell(
       onTap: () => {
         Navigator.push(
@@ -13,22 +13,32 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
         )
       },
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        fin.getImage() == ""
-            ? Container()
-            : Image.memory(
-                fin.getConvertedImage(),
-                width: 600,
-                height: 240,
-                fit: BoxFit.cover,
-              ),
+        Hero(
+          tag: fin.getId(),
+          child: fin.getImage() == ""
+              ? Container()
+              : Image.memory(
+                  fin.getConvertedImage(),
+                  width: 600,
+                  height: 240,
+                  fit: BoxFit.cover,
+                ),
+        ),
         ListTile(
 //          isThreeLine: true,
-          leading: Icon(Icons.fastfood),
+          leading: Icon(
+            Icons.fastfood,
+            color: Color(0xffc47600),
+          ),
           title: fin.getTitle() == null
               ? Text("Null")
               : Text(
                   fin.getTitle(),
                   key: Key("title"),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xffff9900),
+                  ),
                 ),
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,11 +46,19 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
 //                fin.getDescription() == null
 //                    ? Text("Null")
 //                    : Text(fin.getDescription()),
-                fin.getLocation() == null ? Text("") : Text(fin.getLocation())
+                fin.getLocation() == null
+                    ? Text("")
+                    : Text(
+                        fin.getLocation(),
+                        style: TextStyle(color: Color(0xffc47600)),
+                      )
               ]),
-          trailing: fin.getTimePosted() == null
+          trailing: fin.getPostedTime() == null
               ? Text('')
-              : Text(timeSince(fin.timePosted)),
+              : Text(
+                  timeSince(fin.postedTime),
+                  style: TextStyle(color: Color(0xffc47600)),
+                ),
         ),
       ]),
     ),
