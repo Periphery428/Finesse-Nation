@@ -56,9 +56,7 @@ class Finesse {
         DateTime res = DateTime.parse(timeStr);
         return res;
       } catch (Exception) {
-        ;
-//        print('invalid datetime format');
-//        print(time);
+        return null;
       }
     }
     return null;
