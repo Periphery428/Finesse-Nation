@@ -4003,6 +4003,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------------
 camera
+url_launcher_platform_interface
 
 // Copyright 2017 The Chromium Authors. All rights reserved.
 //
@@ -12771,6 +12772,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 --------------------------------------------------------------------------------
 shared_preferences
 shared_preferences_platform_interface
+url_launcher
 
 // Copyright 2017 The Chromium Authors. All rights reserved.
 //
@@ -12801,6 +12803,8 @@ shared_preferences_platform_interface
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------------
 shared_preferences_web
+url_launcher_macos
+url_launcher_web
 
 // Copyright 2019 The Chromium Authors. All rights reserved.
 //
