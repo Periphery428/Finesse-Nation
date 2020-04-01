@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
-import 'package:flutter_login/flutter_login.dart';
+
+//import 'package:flutter_login/flutter_login.dart';
+import 'login/flutter_login.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
@@ -16,6 +19,7 @@ class Network {
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
+  static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
 
   static final token = environment['FINESSE_API_TOKEN'];
 
@@ -37,17 +41,26 @@ class Network {
 
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
+//    print('finished getting');
+//    print(response.statusCode);
+//    print(response.body.length);
+//    print('body = ${response.body}');
     if (response.statusCode == 200) {
+//      print('decoding');
+      /*List<Map<dynamic,dynamic>>*/
       var data = json.decode(response.body);
-      var responseJson =
+//      print('decoded, data = $data');
+      List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
-      responseJson = await applyFilters(responseJson);
+//      responseJson = await applyFilters(responseJson);
+//      print(responseJson.length);
+//      print('responsejson = $responseJson');
       return responseJson;
     } else {
       print('nope');
       print(token);
       print(response.statusCode);
-      print(response.toString());
+      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -71,12 +84,14 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var id = newFinesse.getId();
-    final http.Response response = await http.delete(DELETE_URL + "/$id",
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        });
-
+    final url = Uri.parse(DELETE_URL);
+    final request = http.Request("DELETE", url);
+    request.headers.addAll(<String, String>{
+      "Accept": "application/json",
+      "token": token,
+    });
+    request.body = jsonEncode({"_id": id});
+    final response = await request.send();
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while removing finesses");
@@ -87,7 +102,7 @@ class Network {
   }
 
   static Future<void> updateFinesse(Finesse newFinesse) async {
-    var jsonObject = {"eventId": newFinesse.getId()};
+    var jsonObject = {'_id': newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
     final http.Response response = await http.put(UPDATE_URL,
@@ -106,57 +121,76 @@ class Network {
     }
   }
 
-  static Future<dynamic> loginUser(User currUser) async {
+
+  // Sign in callback
+  static Future<String> authUser(LoginData data) async {
+    User currUser = User(data.name, data.password, data.name);
     Map bodyMap = currUser.toMap();
-    final http.Response response = await http.post(LOGIN_URL,
+    final http.Response resp = await http.post(LOGIN_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
         },
         body: json.encode(bodyMap));
-    return [response.statusCode, response.body];
+    var status = resp.statusCode;
+    if (status == 400) {
+      return 'Username or password is incorrect.';
+    }
+    return null;
+  }
+  // Forgot Password callback
+  static Future<String> recoverPassword(String email) async {
+    var emailCheck = validateEmail(email);
+    const VALID_STATUS = null;
+    if (emailCheck == VALID_STATUS) {
+      var payload = {
+        "emailId": email
+      };
+      print(payload);
+      final http.Response response = await http.post(PASSWORD_RESET_URL,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'api_token': token
+          },
+          body: json.encode(payload));
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 200) {
+        return null;
+      } else {
+        print(response.statusCode);
+        print(response.body);
+        print(token);
+        return "Password Reset request failed";
+      }
+    } else {
+      return emailCheck;
+    }
   }
 
-  static Future<dynamic> signupUser(User currUser) async {
-    var username = currUser.userName.split('@')[0];
+  // Sign up callback
+  static Future<String> createUser(LoginData data) async {
+    User currUser = User(data.name, data.password, data.name);
+    var atSplit = currUser.userName.split('@');
+    var username = atSplit[0];
+    var dotSplit = atSplit[1].split('.');
+    var school = dotSplit[0];
     var payload = {
       "userName": username,
       "emailId": currUser.userName,
-      "password": currUser.password
+      "password": currUser.password,
+      "school": school,
+      "points": 0
     };
-    final http.Response response = await http.post(SIGNUP_URL,
+
+    final http.Response resp = await http.post(SIGNUP_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
         },
         body: json.encode(payload));
-    currentUser = currUser;
-    return [response.statusCode, response.body];
-  }
-
-  // Sign in callback
-  static Future<String> authUser(LoginData data) async {
-    User currUser = User.userAdd(data.name, data.password);
-    var resp = await Network.loginUser(currUser);
-    var status = resp[0], respBody = resp[1];
-    if (status == 400) {
-      return 'Username or password is incorrect.';
-    }
-    currentUser = currUser;
-    return null;
-  }
-
-  // Forgot Password callback
-  static Future<String> recoverPassword(String name) async {
-    // TODO
-    return 'Password recovery feature not yet built. Try again later.';
-  }
-
-  // Sign up callback
-  static Future<String> createUser(LoginData data) async {
-    User newUser = User.userAdd(data.name, data.password);
-    var resp = await Network.signupUser(newUser);
-    var status = resp[0], respBody = json.decode(resp[1]);
+    var status = resp.statusCode,
+        respBody = json.decode(resp.body);
     if (status == 400) {
       return respBody['msg'];
     }

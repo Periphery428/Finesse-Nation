@@ -31,7 +31,7 @@ class Finesse {
       var location,
       var duration,
       var category,
-      var timePosted,
+      var postedTime,
       var isActive,
       var school,
       var emailId) {
@@ -42,27 +42,45 @@ class Finesse {
     this.location = location;
     this.duration = duration;
     this.category = category;
-    this.postedTime = timePosted;
+    this.postedTime = postedTime;
     this.convertedImage = image == null ? null : base64.decode(image);
     this.isActive = isActive;
     this.school = school;
     this.emailId = emailId;
   }
 
+  static dynamic parse(var time) {
+    if (time != null) {
+      try {
+        String timeStr = time.toString();
+        DateTime res = DateTime.parse(timeStr);
+        return res;
+      } catch (Exception) {
+        ;
+//        print('invalid datetime format');
+//        print(time);
+      }
+    }
+    return null;
+  }
+
   factory Finesse.fromJson(Map<String, dynamic> json) {
-    return Finesse(
+//    print('creating finesse');
+    Finesse fin = Finesse(
       json['_id'],
-      json['eventTitle'] != null ? json['eventTitle'] : "",
-      json['description'] != null ? json['description'] : "",
-      json['image'] != null ? json['image'] : "",
-      json['location'] != null ? json['location'] : "",
-      json['duration'] != null ? json['duration'] : "",
-      json['category'] != null ? json['category'] : "",
-      json['postedTime'] != null ? DateTime.parse(json['postedTime']) : null,
-      json['isActive'] != null ? json['isActive'] : true,
-      json['school'] != null ? json['school'] : "",
-      json['emailId'] != null ? json['emailId'] : "",
+      json['eventTitle'] ?? "",
+      json['description'] ?? "",
+      json['image'] ?? "",
+      json['location'] ?? "",
+      json['duration'] ?? "",
+      json['category'] ?? "",
+      parse(json['postedTime']) ?? DateTime.now(),
+      json['isActive'] ?? true,
+      json['school'] ?? "",
+      json['emailId'] ?? "",
     );
+//    print('created finesse = ${fin.getTitle()}');
+    return fin;
   }
 
   Map toMap() {

@@ -140,31 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-//                    button: MaterialButton(
-//                      color: Color(0xffff9900),
-////                      shape: new RoundedRectangleBorder(
-////                        borderRadius: new BorderRadius.circular(12.0),
-////                        //side: BorderSide(color: Colors.blue),
-////                      ),
-//                      child: Text(
-//                        'OK',
-//                        key: Key("FilterOK"),
-//                        style: TextStyle(
-//                          fontSize: 20,
-//                          color: Colors.grey[850],
-//                        ),
-//                      ),
-//                      onPressed: () {
-//                        if (localActive != null) {
-//                          _setActiveFilter(localActive);
-//                        }
-//                        if (localType != null) {
-//                          _setTypeFilter(localType);
-//                        }
-//
-//                        Navigator.of(context, rootNavigator: true)
-//                            .pop('dialog');
-//                      },
                   willDisplayWidget: Row(
                         children: <Widget>[
                           Column(
