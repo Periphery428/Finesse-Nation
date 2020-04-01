@@ -98,7 +98,8 @@ void main() {
   });
 
   test('applyFilters Test Other', () async {
-    List<Finesse> finesseList = createFinesseList(type: "OTHER", isActive: true);
+    List<Finesse> finesseList =
+        createFinesseList(type: "OTHER", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
     print(newList.length + finesseList.length);
 
@@ -115,7 +116,8 @@ void main() {
   });
 
   test('applyFilters Test Inactive', () async {
-    List<Finesse> finesseList = createFinesseList(type: "FOOD", isActive: false);
+    List<Finesse> finesseList =
+        createFinesseList(type: "FOOD", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 0);
@@ -126,7 +128,8 @@ void main() {
     SharedPreferences.setMockInitialValues(
         {"typeFilter": true, "activeFilter": true});
 
-    List<Finesse> finesseList = createFinesseList(type: "OTHER", isActive: false);
+    List<Finesse> finesseList =
+        createFinesseList(type: "OTHER", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);

@@ -23,8 +23,18 @@ class Finesse {
         category, timePosted, isActive, currentUser.email, currentUser.email);
   }
 
-  Finesse(var eventId, var title, var description, var image, var location,
-      var duration, var category, var timePosted, var isActive, var school, var emailId) {
+  Finesse(
+      var eventId,
+      var title,
+      var description,
+      var image,
+      var location,
+      var duration,
+      var category,
+      var timePosted,
+      var isActive,
+      var school,
+      var emailId) {
     this.eventId = eventId;
     this.eventTitle = title;
     this.description = description;
@@ -50,9 +60,8 @@ class Finesse {
       json['category'] != null ? json['category'] : "",
       json['postedTime'] != null ? DateTime.parse(json['postedTime']) : null,
       json['isActive'] != null ? json['isActive'] : true,
-      json['school']!= null ? json['school'] : "",
-      json['emailId']!= null ? json['emailId'] : "",
-
+      json['school'] != null ? json['school'] : "",
+      json['emailId'] != null ? json['emailId'] : "",
     );
   }
 

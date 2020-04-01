@@ -71,7 +71,7 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var id = newFinesse.getId();
-    final http.Response response = await http.delete(DELETE_URL+"/$id",
+    final http.Response response = await http.delete(DELETE_URL + "/$id",
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
@@ -118,7 +118,6 @@ class Network {
   }
 
   static Future<dynamic> signupUser(User currUser) async {
-
     var username = currUser.userName.split('@')[0];
     var payload = {
       "userName": username,

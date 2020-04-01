@@ -16,7 +16,7 @@ void main() async {
   runApp(MyApp());
 }
 
-User currentUser = new User("Blank","Blank", "Blank");
+User currentUser = new User("Blank", "Blank", "Blank");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
