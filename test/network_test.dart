@@ -25,7 +25,7 @@ Future<Finesse> addFinesseHelper([name]) async {
   return newFinesse;
 }
 
-List<Finesse> createFinesseList({String type = "FOOD", bool active = true}) {
+List<Finesse> createFinesseList({String type = "FOOD", bool isActive = true}) {
   List<Finesse> finesseList = [];
 
   for (var i = 0; i < 4; i++) {
@@ -37,7 +37,7 @@ List<Finesse> createFinesseList({String type = "FOOD", bool active = true}) {
         "60 hours",
         type,
         new DateTime.now(),
-        active: active));
+        isActive: isActive));
   }
   return finesseList;
 }
@@ -98,7 +98,7 @@ void main() {
   });
 
   test('applyFilters Test Other', () async {
-    List<Finesse> finesseList = createFinesseList(type: "OTHER", active: true);
+    List<Finesse> finesseList = createFinesseList(type: "OTHER", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
     print(newList.length + finesseList.length);
 
@@ -107,7 +107,7 @@ void main() {
   });
 
   test('applyFilters Test No Filter', () async {
-    List<Finesse> finesseList = createFinesseList(type: "FOOD", active: true);
+    List<Finesse> finesseList = createFinesseList(type: "FOOD", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);
@@ -115,7 +115,7 @@ void main() {
   });
 
   test('applyFilters Test Inactive', () async {
-    List<Finesse> finesseList = createFinesseList(type: "FOOD", active: false);
+    List<Finesse> finesseList = createFinesseList(type: "FOOD", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 0);
@@ -126,7 +126,7 @@ void main() {
     SharedPreferences.setMockInitialValues(
         {"typeFilter": true, "activeFilter": true});
 
-    List<Finesse> finesseList = createFinesseList(type: "OTHER", active: false);
+    List<Finesse> finesseList = createFinesseList(type: "OTHER", isActive: false);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);

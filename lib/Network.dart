@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
@@ -69,13 +70,12 @@ class Network {
   }
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
-    var jsonObject = {"eventId": newFinesse.getId()};
-    final http.Response response = await http.post(DELETE_URL,
+    var id = newFinesse.getId();
+    final http.Response response = await http.delete(DELETE_URL+"/$id",
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
-        },
-        body: json.encode(jsonObject));
+        });
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -90,7 +90,7 @@ class Network {
     var jsonObject = {"eventId": newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
-    final http.Response response = await http.post(UPDATE_URL,
+    final http.Response response = await http.put(UPDATE_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
@@ -118,10 +118,11 @@ class Network {
   }
 
   static Future<dynamic> signupUser(User currUser) async {
-    var username = currUser.username.split('@')[0];
+
+    var username = currUser.userName.split('@')[0];
     var payload = {
       "userName": username,
-      "emailId": currUser.username,
+      "emailId": currUser.userName,
       "password": currUser.password
     };
     final http.Response response = await http.post(SIGNUP_URL,
@@ -130,6 +131,7 @@ class Network {
           'api_token': token
         },
         body: json.encode(payload));
+    currentUser = currUser;
     return [response.statusCode, response.body];
   }
 
@@ -141,6 +143,7 @@ class Network {
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
+    currentUser = currUser;
     return null;
   }
 

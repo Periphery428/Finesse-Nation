@@ -6,14 +6,17 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:finesse_nation/User.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
-  _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
+  _prefs.getBool('typeFilter') ?? _prefs.setBool('typeFilter', true);
   runApp(MyApp());
 }
+
+User currentUser = new User("Blank","Blank", "Blank");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }

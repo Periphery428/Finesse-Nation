@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:finesse_nation/main.dart';
 
 class Finesse {
   String eventId;
@@ -15,22 +16,15 @@ class Finesse {
   String emailId;
   String school;
 
-  static finesseAdd(title, description, image, location, duration, category,
-      timePosted,
-      {bool active = true}) {
-    return Finesse(
-        null,
-        title,
-        description,
-        image,
-        location,
-        duration,
-        category,
-        timePosted, active);
+  static finesseAdd(
+      title, description, image, location, duration, category, timePosted,
+      {bool isActive = true, String school, String email}) {
+    return Finesse(null, title, description, image, location, duration,
+        category, timePosted, isActive, currentUser.email, currentUser.email);
   }
 
   Finesse(var eventId, var title, var description, var image, var location,
-      var duration, var category, var timePosted, var active) {
+      var duration, var category, var timePosted, var isActive, var school, var emailId) {
     this.eventId = eventId;
     this.eventTitle = title;
     this.description = description;
@@ -40,7 +34,9 @@ class Finesse {
     this.category = category;
     this.postedTime = timePosted;
     this.convertedImage = image == null ? null : base64.decode(image);
-    this.isActive = active;
+    this.isActive = isActive;
+    this.school = school;
+    this.emailId = emailId;
   }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
@@ -53,7 +49,10 @@ class Finesse {
       json['duration'] != null ? json['duration'] : "",
       json['category'] != null ? json['category'] : "",
       json['postedTime'] != null ? DateTime.parse(json['postedTime']) : null,
-      json['active'] != null ? json['active'] : true,
+      json['isActive'] != null ? json['isActive'] : true,
+      json['school']!= null ? json['school'] : "",
+      json['emailId']!= null ? json['emailId'] : "",
+
     );
   }
 
@@ -66,7 +65,9 @@ class Finesse {
     map["duration"] = duration;
     map["category"] = category;
     map['postedTime'] = postedTime.toString();
-    map['active'] = true;
+    map['isActive'] = true;
+    map['school'] = school;
+    map['emailId'] = emailId;
     return map;
   }
 
