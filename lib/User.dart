@@ -9,13 +9,13 @@ class User {
 
   User(this._email, this._password, this._userName, this._school, this._points);
 
-  String get email => _email;
+  String get email => _email ?? 'test@test.com';
 
-  String get userName => _userName;
+  String get userName => _userName ?? 'test';
 
-  String get password => _password;
+  String get password => _password ?? 'test123';
 
-  String get school => _school;
+  String get school => _school ?? 'test';
 
-  int get points => _points;
+  int get points => _points ?? '0';
 }

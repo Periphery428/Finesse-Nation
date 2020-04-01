@@ -21,7 +21,7 @@ class Finesse {
       title, description, image, location, duration, category, timePosted,
       {bool isActive = true, String school, String email}) {
     return Finesse(null, title, description, image, location, duration,
-        category, timePosted, isActive, User.currentUser.school, User.currentUser.email);
+        category, timePosted, isActive, User.currentUser?.school ?? 'test', User.currentUser?.email ?? 'test');
   }
 
   Finesse(
