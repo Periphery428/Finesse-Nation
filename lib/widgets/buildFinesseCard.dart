@@ -79,33 +79,30 @@ String timeSince(DateTime timePosted) {
         if (seconds < 0) {
           return "";
         } else {
-          if(seconds == 1){
+          if (seconds == 1) {
             return seconds.toString() + "second ago";
-          }else{
+          } else {
             return seconds.toString() + " seconds ago";
           }
         }
       } else {
-        if(minutes == 1){
+        if (minutes == 1) {
           return minutes.toString() + "minute ago";
-        }
-        else{
+        } else {
           return minutes.toString() + " minutes ago";
         }
       }
     } else {
-      if(hours == 1){
+      if (hours == 1) {
         return hours.toString() + " hour ago";
-      }
-      else{
+      } else {
         return hours.toString() + " hours ago";
       }
     }
   } else {
-    if(days == 1){
+    if (days == 1) {
       return days.toString() + " day ago";
-    }
-    else{
+    } else {
       return days.toString() + " days ago";
     }
   }

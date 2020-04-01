@@ -48,7 +48,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   Future<bool> _goToLogin(BuildContext context) {
     return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
   }
@@ -60,17 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool localActive;
   bool localType;
-
-  @override
-  void initState() {
-    super.initState();
-    _activeFilter = _prefs.then((SharedPreferences prefs) {
-      return (prefs.getBool('activeFilter') ?? true);
-    });
-    _typeFilter = _prefs.then((SharedPreferences prefs) {
-      return (prefs.getBool('typeFilter') ?? true);
-    });
-  }
 
   Future<void> _setActiveFilter(val) async {
     final SharedPreferences prefs = await _prefs;
@@ -94,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return typeFilter;
       });
     });
+  }
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -110,6 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _activeFilter = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getBool('activeFilter') ?? true);
+    });
+    _typeFilter = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getBool('typeFilter') ?? true);
+    });
     _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
