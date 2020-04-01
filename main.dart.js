@@ -16121,9 +16121,13 @@ p=L.aT(L.anf(a.x),o,o,o,o,o,o,o,A.bj(o,o,new P.i(n),o,o,o,o,o,o,o,o,o,o,o,o,o,!0
 return V.NX(R.ib(!1,!0,T.ds(H.b([l,new Q.CI(t,s,r,p,o)],q),C.ac,C.a1,C.cM),o,!0,o,o,o,o,o,o,o,o,o,new L.a5C(b,a),o),m,o)},
 anf:function(a){var t=P.bo(0,Date.now()-a.a).a,s=C.f.cn(t,1e6),r=C.f.cn(t,6e7),q=C.f.cn(t,36e8),p=C.f.cn(t,864e8)
 if(p<1)if(q<1)if(r<1)if(s<0)return""
+else if(s===1)return C.f.i(s)+"second ago"
 else return C.f.i(s)+" seconds ago"
+else if(r===1)return C.f.i(r)+"minute ago"
 else return C.f.i(r)+" minutes ago"
+else if(q===1)return C.f.i(q)+" hour ago"
 else return C.f.i(q)+" hours ago"
+else if(p===1)return C.f.i(p)+" day ago"
 else return C.f.i(p)+" days ago"},
 a5C:function a5C(a,b){this.a=a
 this.b=b},
