@@ -157,7 +157,6 @@ class Network {
           'Authorization': 'key=$serverKey',
         },
       );
-}
 
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
