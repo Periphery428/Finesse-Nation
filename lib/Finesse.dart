@@ -1,48 +1,117 @@
 import 'dart:typed_data';
 import 'dart:convert';
+import 'User.dart';
 
 class Finesse {
   String eventId;
-  final String title;
-  final String description;
-  final String image;
-  final String location;
-  final String duration;
-  final String type;
-  final DateTime timePosted;
+  String eventTitle;
+  String description;
+  String image;
+  String location;
+  String duration;
+  String category;
+  DateTime postedTime;
+  bool isActive;
+  Uint8List convertedImage;
+  String emailId;
+  String school;
 
   static finesseAdd(
-      title, description, image, location, duration, type, timePosted) {
+      title, description, image, location, duration, category, timePosted,
+      {bool isActive = true, String school, String email}) {
     return Finesse(
-        null, title, description, image, location, duration, type, timePosted);
+        null,
+        title,
+        description,
+        image,
+        location,
+        duration,
+        category,
+        timePosted,
+        isActive,
+        User.currentUser?.school ?? 'test',
+        User.currentUser?.email ?? 'test');
   }
 
-  Finesse(this.eventId, this.title, this.description, this.image, this.location,
-      this.duration, this.type, this.timePosted);
+  Finesse(
+      var eventId,
+      var title,
+      var description,
+      var image,
+      var location,
+      var duration,
+      var category,
+      var postedTime,
+      var isActive,
+      var school,
+      var emailId) {
+    this.eventId = eventId;
+    this.eventTitle = title;
+    this.description = description;
+    this.image = image;
+    this.location = location;
+    this.duration = duration;
+    this.category = category;
+    this.postedTime = postedTime;
+    this.convertedImage = image == null ? null : base64.decode(image);
+    this.isActive = isActive;
+    this.school = school;
+    this.emailId = emailId;
+  }
+
+  static dynamic parse(var time) {
+    if (time != null) {
+      try {
+        String timeStr = time.toString();
+        DateTime res = DateTime.parse(timeStr);
+        return res;
+      } catch (Exception) {
+        return DateTime.now();
+      }
+    }
+    return DateTime.now();
+  }
 
   factory Finesse.fromJson(Map<String, dynamic> json) {
-    return Finesse(
+//    print('creating finesse');
+    Finesse fin = Finesse(
       json['_id'],
-      json['name'] != null ? json['name'] : "",
-      json['description'] != null ? json['description'] : "",
-      json['image'] != null ? json['image'] : "",
-      json['location'] != null ? json['location'] : "",
-      json['duration'] != null ? json['duration'] : "",
-      json['type'] != null ? json['type'] : "",
-      json['timePosted'] != null ? DateTime.parse(json['timePosted']) : null,
+      json['eventTitle'] ?? "",
+      json['description'] ?? "",
+      json['image'] ?? "",
+      json['location'] ?? "",
+      json['duration'] ?? "",
+      json['category'] ?? "",
+      parse(json['postedTime']) ?? DateTime.now(),
+      json['isActive'] ?? true,
+      json['school'] ?? "",
+      json['emailId'] ?? "",
     );
+//    print('created finesse = ${fin.getTitle()}');
+    return fin;
   }
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["name"] = title;
+    map["eventTitle"] = eventTitle;
     map["description"] = description;
     map["image"] = image;
     map["location"] = location;
     map["duration"] = duration;
-    map["type"] = type;
-    map['timePosted'] = timePosted.toString();
+    map["category"] = category;
+    map['postedTime'] = postedTime.toString();
+    map['isActive'] = true;
+    map['school'] = school;
+    map['emailId'] = emailId;
     return map;
+  }
+
+  void setId(id) {
+    this.eventId = id;
+  }
+
+  void setDescription(desc) {
+    this.description = desc;
   }
 
   String getImage() {
@@ -50,11 +119,11 @@ class Finesse {
   }
 
   Uint8List getConvertedImage() {
-    return base64.decode(image);
+    return convertedImage;
   }
 
   String getTitle() {
-    return title;
+    return eventTitle;
   }
 
   String getLocation() {
@@ -69,15 +138,19 @@ class Finesse {
     return duration;
   }
 
-  String getType() {
-    return type;
+  String getCategory() {
+    return category;
   }
 
   String getId() {
     return eventId;
   }
 
-  DateTime getTimePosted() {
-    return timePosted;
+  DateTime getPostedTime() {
+    return postedTime;
+  }
+
+  bool getActive() {
+    return this.isActive;
   }
 }

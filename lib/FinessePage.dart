@@ -1,13 +1,11 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
-import 'package:snappable/snappable.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FinessePage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinessePage(Finesse fin) {
-    this.fin = fin;
-  }
+  FinessePage(this.fin);
 
   Widget build(BuildContext context) {
     final title = fin.getTitle();
@@ -17,25 +15,24 @@ class FinessePage extends StatelessWidget {
         title: Text(title),
       ),
       body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.lightBlue, Colors.pink],
-            ),
-          ),
+//          decoration: BoxDecoration(
+//            gradient: LinearGradient(
+//              begin: Alignment.topLeft,
+//              end: Alignment.bottomRight,
+//              colors: [Colors.lightBlue, Colors.pink],
+//            ),
+//          ),
           child: FinesseDetails(fin)),
+      backgroundColor: Colors.black,
     );
   }
 }
 
 // Create the details widget.
 class FinesseDetails extends StatefulWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FinesseDetails(Finesse fin) {
-    this.fin = fin;
-  }
+  FinesseDetails(this.fin);
 
   @override
   FinesseDetailsState createState() {
@@ -62,11 +59,14 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
         ),
       ),
-      child: Image.memory(
-        fin.getConvertedImage(),
-        width: 600,
-        height: 240,
-        fit: BoxFit.cover,
+      child: Hero(
+        tag: fin.getId(),
+        child: Image.memory(
+          fin.getConvertedImage(),
+          width: 600,
+          height: 240,
+          fit: BoxFit.cover,
+        ),
       ),
     );
     Widget titleSection = Container(
@@ -76,6 +76,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
+          color: Color(0xffff9900),
         ),
       ),
     );
@@ -88,7 +89,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.info,
-              color: Colors.grey,
+              color: Color(0xffc47600),
               size: 24.0,
             ),
           ),
@@ -97,6 +98,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getDescription(),
               style: TextStyle(
                 fontSize: 16,
+                color: Color(0xffff9900),
               ),
             ),
           ),
@@ -111,7 +113,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.calendar_today,
-              color: Colors.grey,
+              color: Color(0xffc47600),
               size: 24.0,
             ),
           ),
@@ -119,16 +121,17 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ongoing',
+                fin.getActive() == true ? 'Ongoing' : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
+                  color: Color(0xffff9900),
                 ),
               ),
               Text(
-                fin.getDuration(),
+                "Duration: ${fin.getDuration()}",
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.grey,
+                  color: Color(0xffc47600),
                 ),
               ),
             ],
@@ -144,18 +147,24 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.place,
-              color: Colors.grey,
+              color: Color(0xffc47600),
               size: 24.0,
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                fin.getLocation(),
-                style: TextStyle(
-                  fontSize: 16,
+              InkWell(
+                child: Text(
+                  fin.getLocation(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xffff9900),
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
+                onTap: () => launch(
+                    'https://www.google.com/maps/search/${fin.getLocation()}'),
               ),
 //              Text(
 //                'Room 1331' /*fin.getDuration()*/,
@@ -169,39 +178,30 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
-    Widget rezero = Snappable(
-      snapOnTap: true,
-      child: Image.asset(
-        'images/rem.png',
-        scale: 4,
-      ),
-    );
     return ListView(
       children: [
         Card(
+          color: Colors.grey[850],
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               fin.getImage() != "" ? imageSection : Container(),
               titleSection,
+              locationSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
               fin.getDuration() != "" ? timeSection : Container(),
-              locationSection,
             ],
           ),
         ),
-        rezero,
       ],
     );
   }
 }
 
 class FullImage extends StatelessWidget {
-  Finesse fin;
+  final Finesse fin;
 
-  FullImage(Finesse fin) {
-    this.fin = fin;
-  }
+  FullImage(this.fin);
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,9 +209,12 @@ class FullImage extends StatelessWidget {
       body: InkWell(
         onTap: () => Navigator.pop(context),
         child: Center(
-          child: Image.memory(
-            fin.getConvertedImage(),
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: fin.getId(),
+            child: Image.memory(
+              fin.getConvertedImage(),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
