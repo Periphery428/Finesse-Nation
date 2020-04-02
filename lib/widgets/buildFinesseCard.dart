@@ -79,16 +79,17 @@ String timeSince(DateTime timePosted) {
         if (seconds < 0) {
           return "";
         } else {
-          if (seconds == 1) {
-            return seconds.toString() + "second ago";
-          } else {
+          if(seconds == 1){
+            return seconds.toString() + " second ago";
+          }else{
             return seconds.toString() + " seconds ago";
           }
         }
       } else {
-        if (minutes == 1) {
-          return minutes.toString() + "minute ago";
-        } else {
+        if(minutes == 1){
+          return minutes.toString() + " minute ago";
+        }
+        else{
           return minutes.toString() + " minutes ago";
         }
       }
