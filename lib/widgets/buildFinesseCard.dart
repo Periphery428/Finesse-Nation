@@ -94,18 +94,16 @@ String timeSince(DateTime timePosted) {
         }
       }
     } else {
-      if(hours == 1){
+      if (hours == 1) {
         return hours.toString() + " hour ago";
-      }
-      else{
+      } else {
         return hours.toString() + " hours ago";
       }
     }
   } else {
-    if(days == 1){
+    if (days == 1) {
       return days.toString() + " day ago";
-    }
-    else{
+    } else {
       return days.toString() + " days ago";
     }
   }

@@ -3,6 +3,7 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:meta/meta.dart';
 import '.env.dart';
 import 'User.dart';
 import 'login/flutter_login.dart';
@@ -18,6 +19,7 @@ class Network {
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
 
   static final token = environment['FINESSE_API_TOKEN'];
+  static final serverKey = environment['FINESSE_SERVER_KEY'];
 
   static Future<void> addFinesse(Finesse newFinesse) async {
     Map bodyMap = newFinesse.toMap();
@@ -115,6 +117,46 @@ class Network {
       // TODO
     }
   }
+
+  static Future<void> sendToAll({
+    @required String title,
+    @required String body,
+  }) =>
+      sendToTopic(title: title, body: body, topic: 'all');
+
+  static Future<void> sendToTopic(
+          {@required String title,
+          @required String body,
+          @required String topic}) =>
+      sendTo(title: title, body: body, fcmToken: '/topics/$topic');
+
+  static Future<void> sendTo({
+    @required String title,
+    @required String body,
+    @required String fcmToken,
+  }) =>
+      http.post(
+        'https://fcm.googleapis.com/fcm/send',
+        body: json.encode({
+          'notification': {
+            'body': '$body',
+            'title': '$title',
+            'image':
+                'https://vignette.wikia.nocookie.net/rezero/images/0/02/Rem_Anime.png',
+          },
+          'priority': 'high',
+          'data': {
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'id': '1',
+            'status': 'done',
+          },
+          'to': '$fcmToken',
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverKey',
+        },
+      );
 
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
