@@ -19,6 +19,7 @@ class Finesse {
   static finesseAdd(
       title, description, image, location, duration, category, timePosted,
       {bool isActive = true, String school, String email}) {
+
     return Finesse(
         null,
         title,

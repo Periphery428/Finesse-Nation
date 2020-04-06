@@ -17,5 +17,5 @@ class User {
 
   String get school => _school ?? 'test';
 
-  int get points => _points ?? '0';
+  int get points => _points ?? 0;
 }

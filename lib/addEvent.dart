@@ -103,11 +103,6 @@ class MyCustomFormState extends State<MyCustomForm> {
         size: 100,
         color: Color(0xffFF9900),
       );
-//      render = Image.asset(
-//        image,
-//        color: Color(0xffFF9900),
-//        height: 100,
-//      );
     } else {
       render = Image.file(
         File(image),
@@ -293,11 +288,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          //FirebaseMessaging().unsubscribeFromTopic('all');
+                          FirebaseMessaging().unsubscribeFromTopic('all');
                           await Network.sendToAll(
                               title: newFinesse.getTitle(),
                               body: newFinesse.getLocation());
-                          //FirebaseMessaging().subscribeToTopic('all');
+                          FirebaseMessaging().subscribeToTopic('all');
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
                           Navigator.pushReplacement(
