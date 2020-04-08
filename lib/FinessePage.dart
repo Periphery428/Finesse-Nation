@@ -127,9 +127,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Color(0xffff9900),
                 ),
               ),
-
               Text(
-                fin.getDuration() == "" ?  "" :"Duration: ${fin.getDuration()}",
+                fin.getDuration() == "" ? "" : "Duration: ${fin.getDuration()}",
                 style: TextStyle(
                   fontSize: 15,
                   color: Color(0xffc47600),

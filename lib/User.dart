@@ -8,7 +8,8 @@ class User {
 
   static User currentUser;
 
-  User(this._email, this._password, this._userName, this._school, this._points, this._notifications);
+  User(this._email, this._password, this._userName, this._school, this._points,
+      this._notifications);
 
   String get email => _email ?? 'test@test.com';
 
@@ -22,8 +23,7 @@ class User {
 
   bool get notifications => _notifications ?? true;
 
-  void setNotifications(var notif){
+  void setNotifications(var notif) {
     _notifications = notif;
   }
-
 }
