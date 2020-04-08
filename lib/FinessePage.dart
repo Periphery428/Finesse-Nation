@@ -127,8 +127,9 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Color(0xffff9900),
                 ),
               ),
+
               Text(
-                "Duration: ${fin.getDuration()}",
+                fin.getDuration() == "" ?  "" :"Duration: ${fin.getDuration()}",
                 style: TextStyle(
                   fontSize: 15,
                   color: Color(0xffc47600),
@@ -139,6 +140,34 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
+    Widget userSection = Container(
+      padding: const EdgeInsets.only(left: 20, bottom: 20),
+      child: Row(
+        children: [
+          Text(
+            "Posted by: ",
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xffff9900),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                fin.getEmailId(),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xffff9900),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
     Widget locationSection = Container(
       padding: const EdgeInsets.only(left: 20, bottom: 20),
       child: Row(
@@ -166,13 +195,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 onTap: () => launch(
                     'https://www.google.com/maps/search/${fin.getLocation()}'),
               ),
-//              Text(
-//                'Room 1331' /*fin.getDuration()*/,
-//                style: TextStyle(
-//                  fontSize: 15,
-//                  color: Colors.grey,
-//                ),
-//              ),
             ],
           ),
         ],
@@ -189,7 +211,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
               titleSection,
               locationSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
-              fin.getDuration() != "" ? timeSection : Container(),
+              timeSection,
+              userSection,
             ],
           ),
         ),

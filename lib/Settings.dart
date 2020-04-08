@@ -6,7 +6,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
-import 'package:finesse_nation/cameraPage.dart';
+import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Settings extends StatelessWidget {
@@ -30,7 +30,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  var toggle = false;
+  var toggle = User.currentUser.notifications;
 
   @override
   SettingsPageState createState() {
@@ -44,33 +44,47 @@ class SettingsPageState extends State<SettingsPage> {
     } else {
       FirebaseMessaging().unsubscribeFromTopic('all');
     }
+    Network.changeNotifications(toggle);
+
     print("Send Opt out request");
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: <Widget>[
-      Column(children: <Widget>[
+    return Column(children: <Widget>[
+      Row(children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(right: 10, bottom: 10),
+          padding: EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
           child: Text(
             'Notifications',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: TextStyle(color: Colors.white, fontSize: 30),
           ),
         ),
+        new Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Column(children: <Widget>[
+              Padding(
+                padding:
+                    EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
+                child: CustomSwitch(
+                    key: Key("Notification Toggle"),
+                    activeColor: Color(0xffff9900),
+                    value: toggle,
+                    onChanged: (value) {
+                      toggle = !toggle;
+                    }),
+              ),
+            ]),
+          ),
+        )
       ]),
-      Column(children: <Widget>[
-        CustomSwitch(
-            key: Key("Not Toggle"),
-            activeColor: Color(0xffff9900),
-            value: toggle,
-            onChanged: (value) {
-              toggle = !toggle;
-            })
-      ]),
+      Expanded(
+        child: Column(
+          children: <Widget>[Divider(color: Colors.black)],
+        ),
+      )
     ]);
   }
 }

@@ -17,6 +17,7 @@ class Network {
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
+  static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -172,12 +173,13 @@ class Network {
       return 'Username or password is incorrect.';
     }
     // TODO: GET the actual user data
-    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0);
+    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0, true);
     return null;
   }
 
   // Forgot Password callback
   static Future<String> recoverPassword(String email) async {
+    email = email.trim();
     var emailCheck = validateEmail(email);
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
@@ -207,6 +209,7 @@ class Network {
   // Sign up callback
   static Future<String> createUser(LoginData data) async {
     String email = data.email;
+    email = email.trim();
     String password = data.password;
     int points = 0;
     var atSplit = email.split('@');
@@ -232,7 +235,7 @@ class Network {
       return respBody['msg'];
     }
     // TODO: GET the actual user data
-    User.currentUser = User(email, password, username, school, points);
+    User.currentUser = User(email, password, username, school, points, true);
     return null;
   }
 
@@ -254,5 +257,27 @@ class Network {
     return password.length < 6
         ? 'Password must be at least 6 characters'
         : null;
+  }
+
+  static Future<String> changeNotifications(toggle) async {
+    var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
+    print(payload);
+    final http.Response response = await http.post(NOTIFICATION_TOGGLE_URL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
+        },
+        body: json.encode(payload));
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 200) {
+      User.currentUser.setNotifications(toggle);
+      return null;
+    } else {
+      print(response.statusCode);
+      print(response.body);
+      print(token);
+      return "Notification change request failed";
+    }
   }
 }

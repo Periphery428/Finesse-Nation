@@ -267,34 +267,33 @@ class _MyHomePageState extends State<MyHomePage> {
             PopupMenuButton<DotMenu>(
               onSelected: (DotMenu result) {
                 setState(() {
-              switch(result) {
-                case DotMenu.settings:
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Settings()),
-                    );
+                  switch (result) {
+                    case DotMenu.settings:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                    case DotMenu.about:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                    case DotMenu.contact:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
                   }
-                  break;
-                case DotMenu.about:
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Settings()),
-                    );
-                  }
-                  break;
-                case DotMenu.contact:
-                  {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Settings()),
-                    );
-                  }
-                  break;
-              }
-
-    });
+                });
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
                 const PopupMenuItem<DotMenu>(
