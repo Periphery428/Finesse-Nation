@@ -22,14 +22,18 @@ class Network {
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
+  static Future<http.Response> postData(var url, var data) async {
+    return await http.post(url,
+        headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'api_token': token
+        },
+        body: json.encode(data));
+  }
+
   static Future<void> addFinesse(Finesse newFinesse) async {
     Map bodyMap = newFinesse.toMap();
-    final http.Response response = await http.post(ADD_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(bodyMap));
+    http.Response response = await postData(ADD_URL, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
@@ -48,12 +52,9 @@ class Network {
 //      print('decoding');
       /*List<Map<dynamic,dynamic>>*/
       var data = json.decode(response.body);
-//      print('decoded, data = $data');
       List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
       responseJson = await applyFilters(responseJson);
-//      print(responseJson.length);
-//      print('responsejson = $responseJson');
       return responseJson;
     } else {
       print('nope');
@@ -70,8 +71,8 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-    print(activeFilter);
-    print(typeFilter);
+//    print(activeFilter);
+//    print(typeFilter);
     if (activeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
@@ -83,6 +84,7 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
+
     final http.Response response = await http.post(DELETE_URL,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -103,12 +105,7 @@ class Network {
     var jsonObject = {"eventId": newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
-    final http.Response response = await http.post(UPDATE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(bodyMap));
+    http.Response response = await postData(UPDATE_URL, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -162,13 +159,9 @@ class Network {
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
     Map bodyMap = data.toMap();
-    final http.Response resp = await http.post(LOGIN_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(bodyMap));
-    var status = resp.statusCode;
+    http.Response response = await postData(LOGIN_URL, bodyMap);
+
+    var status = response.statusCode;
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
@@ -185,12 +178,7 @@ class Network {
     if (emailCheck == VALID_STATUS) {
       var payload = {"emailId": email};
       print(payload);
-      final http.Response response = await http.post(PASSWORD_RESET_URL,
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'api_token': token
-          },
-          body: json.encode(payload));
+      http.Response response = await postData(PASSWORD_RESET_URL, payload);
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 200) {
@@ -223,14 +211,9 @@ class Network {
       "school": school,
       "points": points
     };
+    http.Response response = await postData(SIGNUP_URL, payload);
 
-    final http.Response resp = await http.post(SIGNUP_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(payload));
-    var status = resp.statusCode, respBody = json.decode(resp.body);
+    var status = response.statusCode, respBody = json.decode(response.body);
     if (status == 400) {
       return respBody['msg'];
     }
@@ -262,12 +245,7 @@ class Network {
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     print(payload);
-    final http.Response response = await http.post(NOTIFICATION_TOGGLE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(payload));
+    http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
