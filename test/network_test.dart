@@ -7,6 +7,8 @@
 import 'dart:async';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
+import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
@@ -42,10 +44,18 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
   return finesseList;
 }
 
+void createTestUser(){
+  LoginData data = new LoginData(email: "test1@test.edu", password: "123456");
+  var ret = Network.createUser(data);
+  User.currentUser = User('test1@test.edu', '123456', 'TBD', 'TBD', 0, true);
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues(
       {"typeFilter": false, "activeFilter": false});
+
+  createTestUser();
 
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
@@ -178,5 +188,19 @@ void main() {
     String badPassword = '';
     var result = Network.validatePassword(badPassword);
     expect(result, failPassword);
+  });
+
+  test('Changing Notifications ON', () async {
+    bool toggle = true;
+    var result = await Network.changeNotifications(toggle);
+    expect(result, null);
+    expect(User.currentUser.notifications, toggle);
+  });
+
+  test('Changing Notifications OFF', () async {
+    bool toggle = false;
+    var result = await Network.changeNotifications(toggle);
+    expect(result, null);
+    expect(User.currentUser.notifications, toggle);
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
+import 'package:finesse_nation/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
@@ -17,7 +18,7 @@ void main() async {
   runApp(MyApp());
 }
 
-//User currentUser = new User("Blank", "Blank", "Blank");
+//User currentUser = new User("Test", "Test", "Test");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
@@ -105,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    //_firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -266,7 +267,32 @@ class _MyHomePageState extends State<MyHomePage> {
             PopupMenuButton<DotMenu>(
               onSelected: (DotMenu result) {
                 setState(() {
-                  print(result);
+                  switch (result) {
+                    case DotMenu.settings:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                    case DotMenu.about:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                    case DotMenu.contact:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                  }
                 });
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[

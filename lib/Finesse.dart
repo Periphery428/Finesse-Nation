@@ -153,4 +153,8 @@ class Finesse {
   bool getActive() {
     return this.isActive;
   }
+
+  String getEmailId() {
+    return this.emailId;
+  }
 }
