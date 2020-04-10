@@ -18,6 +18,8 @@ class Network {
   static const SIGNUP_URL = DOMAIN + 'user/signup';
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
+  static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
+
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -25,8 +27,8 @@ class Network {
   static Future<http.Response> postData(var url, var data) async {
     return await http.post(url,
         headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'api_token': token
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
         },
         body: json.encode(data));
   }
@@ -44,13 +46,8 @@ class Network {
 
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
-//    print('finished getting');
-//    print(response.statusCode);
-//    print(response.body.length);
-//    print('body = ${response.body}');
+
     if (response.statusCode == 200) {
-//      print('decoding');
-      /*List<Map<dynamic,dynamic>>*/
       var data = json.decode(response.body);
       List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
@@ -71,8 +68,6 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-//    print(activeFilter);
-//    print(typeFilter);
     if (activeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
@@ -166,7 +161,8 @@ class Network {
       return 'Username or password is incorrect.';
     }
     // TODO: GET the actual user data
-    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0, true);
+    User.currentUser = User(data.email, 'none', 'none', 'none', 0, true);
+    await Network.updateCurrentUser();
     return null;
   }
 
@@ -217,8 +213,8 @@ class Network {
     if (status == 400) {
       return respBody['msg'];
     }
-    // TODO: GET the actual user data
-    User.currentUser = User(email, password, username, school, points, true);
+    User.currentUser = User(data.email, 'none', 'none', 'none', 0, true);
+    await Network.updateCurrentUser();
     return null;
   }
 
@@ -256,6 +252,23 @@ class Network {
       print(response.body);
       print(token);
       return "Notification change request failed";
+    }
+  }
+
+  static Future<void> updateCurrentUser() async {
+    var payload = {"emailId": User.currentUser.email};
+    final response = await http.post(
+        GET_CURRENT_USER_URL, headers: {'api_token': token},
+        body: json.encode(payload));
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      User.currentUser = User.fromJson(data);
+    } else {
+      print(token);
+      print(response.statusCode);
+      print(response.body);
+      throw Exception('Failed to get current user');
     }
   }
 }
