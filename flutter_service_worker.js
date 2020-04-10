@@ -24,7 +24,7 @@ const RESOURCES = {
 "assets/images/rem.png": "cbb0da3c829b27defb2bf3504eac6ee8",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/FontManifest.json": "9b7cd598c2610c799474ef4aa9b5777b",
-"main.dart.js": "47a0dbcc9257d04a3877cb4c8fb118a0",
+"main.dart.js": "975b29ec844ac6024ea3ee01d3946fc6",
 "index.html": "f4e9d07268c4959f6f64e425712ec2e1"
 };
 
