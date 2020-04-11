@@ -116,11 +116,8 @@ class Network {
     }
   }
 
-  static Future<void> sendToAll({
-    @required String title,
-    @required String body,
-    @required String fcmToken,
-  }) =>
+  static Future<void> sendToAll(
+          {@required String title, @required String body}) =>
       http.post(
         'https://fcm.googleapis.com/fcm/send',
         body: json.encode({

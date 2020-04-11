@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:finesse_nation/Finesse.dart';
-import 'package:camera/camera.dart';
-import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'User.dart';
@@ -34,7 +29,6 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage> {
   var toggle = User.currentUser.notifications;
 
-  @override
   SettingsPageState createState() {
     return SettingsPageState();
   }

@@ -4,7 +4,6 @@ import 'package:finesse_nation/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

@@ -46,7 +46,7 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
 
 void createTestUser() {
   LoginData data = new LoginData(email: "test1@test.edu", password: "123456");
-  var ret = Network.createUser(data);
+  Network.createUser(data);
   User.currentUser = User('test1@test.edu', '123456', 'TBD', 'TBD', 0, true);
 }
 
