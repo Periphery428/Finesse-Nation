@@ -64,7 +64,7 @@ class SettingsPageState extends State<SettingsPage> {
                   EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
               child: Text(
                 'Notifications',
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
             Expanded(
