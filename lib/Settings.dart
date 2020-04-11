@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:finesse_nation/Finesse.dart';
-import 'package:camera/camera.dart';
-import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'User.dart';
+import 'LoginScreen.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -43,7 +40,6 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage> {
   var toggle = User.currentUser.notifications;
 
-  @override
   SettingsPageState createState() {
     return SettingsPageState();
   }
@@ -56,39 +52,92 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Row(children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
-          child: Text(
-            'Notifications',
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Padding(
+              padding:
+                  EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
+              child: Text(
+                'Notifications',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                          right: 15, bottom: 10, top: 10, left: 10),
+                      child: CustomSwitch(
+                          key: Key("Notification Toggle"),
+                          activeColor: Color(0xffff9900),
+                          value: toggle,
+                          onChanged: (value) {
+                            toggle = !toggle;
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
-        new Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Column(children: <Widget>[
-              Padding(
+        Divider(color: Colors.black),
+        Row(
+          children: <Widget>[
+            Padding(
                 padding:
                     EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
-                child: CustomSwitch(
-                    key: Key("Notification Toggle"),
-                    activeColor: Color(0xffff9900),
-                    value: toggle,
-                    onChanged: (value) {
-                      toggle = !toggle;
-                    }),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Account',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      User.currentUser.email,
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ],
+                )),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                          right: 15, bottom: 10, top: 10, left: 10),
+                      child: RaisedButton(
+                        key: Key('logoutButton'),
+                        color: Color(0xffFF9900),
+                        child: Text(
+                          'LOGOUT',
+                          style: TextStyle(color: Colors.grey[850]),
+                        ),
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    LoginScreen()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ]),
-          ),
-        )
-      ]),
-      Expanded(
-        child: Column(
-          children: <Widget>[Divider(color: Colors.black)],
+            )
+          ],
         ),
-      )
-    ]);
+        Divider(color: Colors.black),
+      ],
+    );
   }
 }

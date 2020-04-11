@@ -4,7 +4,6 @@ import 'package:finesse_nation/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -49,9 +48,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<bool> _goToLogin(BuildContext context) {
-    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
-  }
+//  Future<bool> _goToLogin(BuildContext context) {
+//    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
+//  }
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -147,13 +146,14 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 35,
             ),
           ),
+          centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(FontAwesomeIcons.signOutAlt),
-              key: Key('logoutButton'),
-              color: Colors.white,
-              onPressed: () => _goToLogin(context),
-            ),
+//            IconButton(
+//              icon: const Icon(FontAwesomeIcons.signOutAlt),
+//              key: Key('logoutButton'),
+//              color: Colors.white,
+//              onPressed: () => _goToLogin(context),
+//            ),
             IconButton(
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
                   key: Key("Filter"), color: Colors.white),
@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             PopupMenuButton<DotMenu>(
-              key: Key("DotMenu"),
+              key: Key("dropdownButton"),
               onSelected: (DotMenu result) {
                 setState(() {
                   switch (result) {
@@ -298,6 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
                 const PopupMenuItem<DotMenu>(
+                  key: Key("settingsButton"),
                   value: DotMenu.settings,
                   child: Text('Settings'),
                 ),

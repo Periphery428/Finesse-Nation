@@ -6,7 +6,7 @@ class User {
   int _points;
   bool _notifications;
 
-  static User currentUser;
+  static User currentUser = User(null, null, null, null, 0, true);
 
   User(this._email, this._password, this._userName, this._school, this._points,
       this._notifications);

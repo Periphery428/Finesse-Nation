@@ -42,7 +42,6 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
 
 Future<void> login(FlutterDriver driver,
     {email: 'test@test.com', password: 'test123', signUp: false}) async {
-  print('logging in...');
   await driver.tap(find.byValueKey('emailField'));
   await driver.enterText(email);
   await driver.tap(find.byValueKey("passwordField"));
@@ -55,12 +54,17 @@ Future<void> login(FlutterDriver driver,
   await driver.tap(find.byValueKey("loginButton"));
 }
 
+Future<void> logout(FlutterDriver driver) async {
+  await driver.tap(find.byValueKey("dropdownButton"));
+  await driver.tap(find.byValueKey("settingsButton"));
+  await driver.tap(find.byValueKey("logoutButton"));
+}
+
 void main() {
   group('Login', () {
     FlutterDriver driver;
 
     setUpAll(() async {
-      print('setting up');
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -71,16 +75,16 @@ void main() {
 
     test('Successful login', () async {
       await login(driver);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
     });
 
     test('Successful registration', () async {
       String uniqueEmail =
           DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
       await login(driver, email: uniqueEmail, signUp: true);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
       await login(driver, email: uniqueEmail);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
     });
 
     test('Missing information', () async {
@@ -104,7 +108,6 @@ void main() {
     FlutterDriver driver;
 
     setUpAll(() async {
-      print('setting up');
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -137,7 +140,7 @@ void main() {
       String durationText = 'Integration Test Duration';
       String descriptionText =
           'The location is a timestamp to make a unique value for the test to look for.';
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String locationText = 'Location: ' + now.toString();
 
       await addEvent(
@@ -189,11 +192,11 @@ void main() {
 
     test('Settings Page ', () async {
       // Build our app and trigger a frame.
-      await driver.tap(find.byValueKey("DotMenu"));
+      await driver.tap(find.byValueKey("dropdownButton"));
       await driver.tap(find.text("Settings"));
       await driver.tap(find.byValueKey("Notification Toggle"));
       await driver.tap(find.pageBack());
-      await driver.tap(find.byValueKey("DotMenu"));
+      await driver.tap(find.byValueKey("dropdownButton"));
       await driver.tap(find.text("Settings"));
       await driver.tap(find.byValueKey("Notification Toggle"));
       await driver.tap(find.pageBack());
@@ -218,10 +221,12 @@ void main() {
       String nameText = 'View Info Integration Test Free Food';
       String durationText = 'Integration Test Duration';
       String descriptionText = 'View Info description';
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String locationText = 'Location: ' + now.toString();
       await addEvent(
           driver, nameText, locationText, descriptionText, durationText);
+      await delay(1000);
+      await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
@@ -247,13 +252,15 @@ void main() {
 
     test('View Map Test', () async {
       // Build our app and trigger a frame.
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String nameText = 'Maps Test ${now.toString()}';
       String durationText = 'Integration Test Duration';
       String descriptionText = 'View Info description';
       String locationText = 'Siebel Center';
       await addEvent(
           driver, nameText, locationText, descriptionText, durationText);
+      await delay(1000);
+      await driver.tap(find.text(nameText));
       await delay(1000);
       await driver.tap(find.text(nameText));
       await delay(1000);

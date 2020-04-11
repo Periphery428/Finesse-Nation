@@ -54,10 +54,10 @@ class Network {
       responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
-      print('nope');
-      print(token);
-      print(response.statusCode);
-      print(response.body);
+//      print('nope');
+//      print(token);
+//      print(response.statusCode);
+//      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -111,23 +111,8 @@ class Network {
     }
   }
 
-  static Future<void> sendToAll({
-    @required String title,
-    @required String body,
-  }) =>
-      sendToTopic(title: title, body: body, topic: 'all');
-
-  static Future<void> sendToTopic(
-          {@required String title,
-          @required String body,
-          @required String topic}) =>
-      sendTo(title: title, body: body, fcmToken: '/topics/$topic');
-
-  static Future<void> sendTo({
-    @required String title,
-    @required String body,
-    @required String fcmToken,
-  }) =>
+  static Future<void> sendToAll(
+          {@required String title, @required String body}) =>
       http.post(
         'https://fcm.googleapis.com/fcm/send',
         body: json.encode({
@@ -143,7 +128,7 @@ class Network {
             'id': '1',
             'status': 'done',
           },
-          'to': '$fcmToken',
+          'to': '/topics/all',
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -171,16 +156,16 @@ class Network {
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
       var payload = {"emailId": email};
-      print(payload);
+//      print(payload);
       http.Response response = await postData(PASSWORD_RESET_URL, payload);
-      print(response.statusCode);
-      print(response.body);
+//      print(response.statusCode);
+//      print(response.body);
       if (response.statusCode == 200) {
         return null;
       } else {
-        print(response.statusCode);
-        print(response.body);
-        print(token);
+//        print(response.statusCode);
+//        print(response.body);
+//        print(token);
         return "Password Reset request failed";
       }
     } else {
@@ -193,17 +178,9 @@ class Network {
     String email = data.email;
     email = email.trim();
     String password = data.password;
-    int points = 0;
-    var atSplit = email.split('@');
-    var username = atSplit[0];
-    var dotSplit = atSplit[1].split('.');
-    var school = dotSplit[0];
     var payload = {
-      "userName": username,
       "emailId": email,
       "password": password,
-      "school": school,
-      "points": points
     };
     http.Response response = await postData(SIGNUP_URL, payload);
 
@@ -211,7 +188,6 @@ class Network {
     if (status == 400) {
       return respBody['msg'];
     }
-
     await Network.updateCurrentUser(email: data.email);
     return null;
   }
@@ -238,17 +214,17 @@ class Network {
 
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
-    print(payload);
+//    print(payload);
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
-    print(response.statusCode);
-    print(response.body);
+//    print(response.statusCode);
+//    print(response.body);
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
       return null;
     } else {
-      print(response.statusCode);
-      print(response.body);
-      print(token);
+//      print(response.statusCode);
+//      print(response.body);
+//      print(token);
       return "Notification change request failed";
     }
   }
