@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meta/meta.dart';
@@ -156,16 +157,10 @@ class Network {
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
       var payload = {"emailId": email};
-//      print(payload);
       http.Response response = await postData(PASSWORD_RESET_URL, payload);
-//      print(response.statusCode);
-//      print(response.body);
       if (response.statusCode == 200) {
         return null;
       } else {
-//        print(response.statusCode);
-//        print(response.body);
-//        print(token);
         return "Password Reset request failed";
       }
     } else {
@@ -214,18 +209,13 @@ class Network {
 
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
-//    print(payload);
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
-//    print(response.statusCode);
-//    print(response.body);
+
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
       return null;
     } else {
-//      print(response.statusCode);
-//      print(response.body);
-//      print(token);
-      return "Notification change request failed";
+      throw Exception('Notification change request failed');
     }
   }
 
@@ -237,11 +227,8 @@ class Network {
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       User.currentUser = User.fromJson(data);
-      Notifications.notificationsSet(User.currentUser.notifications);
+      await Notifications.notificationsSet(User.currentUser.notifications);
     } else {
-      print(token);
-      print(response.statusCode);
-      print(response.body);
       throw Exception('Failed to get current user');
     }
   }

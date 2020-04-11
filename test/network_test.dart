@@ -47,8 +47,10 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
 void createTestUser() async {
   String emailString = "test1@test.edu";
   LoginData data = new LoginData(email: emailString, password: "123456");
-  var ret = await Network.createUser(data);
-  await Network.updateCurrentUser(email: emailString);
+  var res = await Network.createUser(data);
+  if (res != null) {
+    await Network.updateCurrentUser(email: emailString);
+  }
 }
 
 void main() {
