@@ -114,7 +114,7 @@ void main() {
     List<Finesse> finesseList =
         createFinesseList(type: "Other", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-    print(newList.length + finesseList.length);
+//    print(newList.length + finesseList.length);
 
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
