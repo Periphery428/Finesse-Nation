@@ -80,13 +80,7 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
-
-    final http.Response response = await http.post(DELETE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(jsonObject));
+    http.Response response = await postData(DELETE_URL, jsonObject);
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
