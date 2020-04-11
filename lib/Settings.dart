@@ -47,7 +47,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    if (toggle != initialToggle){
+    if (toggle != initialToggle) {
       Notifications.notificationsSet(toggle);
     }
     super.dispose();
