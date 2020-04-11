@@ -119,18 +119,6 @@ class Network {
   static Future<void> sendToAll({
     @required String title,
     @required String body,
-  }) =>
-      sendToTopic(title: title, body: body, topic: 'all');
-
-  static Future<void> sendToTopic(
-          {@required String title,
-          @required String body,
-          @required String topic}) =>
-      sendTo(title: title, body: body, fcmToken: '/topics/$topic');
-
-  static Future<void> sendTo({
-    @required String title,
-    @required String body,
     @required String fcmToken,
   }) =>
       http.post(
@@ -148,7 +136,7 @@ class Network {
             'id': '1',
             'status': 'done',
           },
-          'to': '$fcmToken',
+          'to': '/topics/all',
         }),
         headers: {
           'Content-Type': 'application/json',
