@@ -44,10 +44,11 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
   return finesseList;
 }
 
-void createTestUser() {
-  LoginData data = new LoginData(email: "test1@test.edu", password: "123456");
-  var ret = Network.createUser(data);
-  User.currentUser = User('test1@test.edu', '123456', 'TBD', 'TBD', 0, true);
+void createTestUser() async {
+  String emailString = "test1@test.edu";
+  LoginData data = new LoginData(email: emailString, password: "123456");
+  var ret = await Network.createUser(data);
+  await Network.updateCurrentUser(email: emailString);
 }
 
 void main() {
@@ -205,9 +206,9 @@ void main() {
   });
 
   test('Getting Current User Data', () async {
-    User.currentUser =
-        User(User.currentUser.email, "none", "none", "none", 0, false);
+    User.currentUser = User("test1@test.edu", "none", "none", "none", 0, false);
     await Network.updateCurrentUser();
-    expect(User.currentUser.password, "123456");
+    expect(User.currentUser.points, 0);
+    expect(User.currentUser.password, isNot("none"));
   });
 }

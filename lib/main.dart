@@ -265,6 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             PopupMenuButton<DotMenu>(
+              key: Key("DotMenu"),
               onSelected: (DotMenu result) {
                 setState(() {
                   switch (result) {

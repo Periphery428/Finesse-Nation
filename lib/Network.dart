@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/Settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meta/meta.dart';
@@ -19,7 +20,6 @@ class Network {
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
-
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -160,9 +160,7 @@ class Network {
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
-    // TODO: GET the actual user data
-    User.currentUser = User(data.email, 'none', 'none', 'none', 0, true);
-    await Network.updateCurrentUser();
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
@@ -213,8 +211,8 @@ class Network {
     if (status == 400) {
       return respBody['msg'];
     }
-    User.currentUser = User(data.email, 'none', 'none', 'none', 0, true);
-    await Network.updateCurrentUser();
+
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
@@ -255,15 +253,15 @@ class Network {
     }
   }
 
-  static Future<void> updateCurrentUser() async {
-    var payload = {"emailId": User.currentUser.email};
-    final response = await http.post(
-        GET_CURRENT_USER_URL, headers: {'api_token': token},
-        body: json.encode(payload));
+  static Future<void> updateCurrentUser({String email}) async {
+    email = email ?? User.currentUser.email;
+    var payload = {"emailId": email};
+    http.Response response = await postData(GET_CURRENT_USER_URL, payload);
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       User.currentUser = User.fromJson(data);
+      Notifications.notificationsSet(User.currentUser.notifications);
     } else {
       print(token);
       print(response.statusCode);

@@ -24,6 +24,17 @@ class Settings extends StatelessWidget {
   }
 }
 
+class Notifications {
+  static notificationsSet(toggle) {
+    if (toggle) {
+      FirebaseMessaging().subscribeToTopic('all');
+    } else {
+      FirebaseMessaging().unsubscribeFromTopic('all');
+    }
+    Network.changeNotifications(toggle);
+  }
+}
+
 class SettingsPage extends StatefulWidget {
   @override
   SettingsPageState createState() => SettingsPageState();
@@ -39,14 +50,7 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    if (toggle) {
-      FirebaseMessaging().subscribeToTopic('all');
-    } else {
-      FirebaseMessaging().unsubscribeFromTopic('all');
-    }
-    Network.changeNotifications(toggle);
-
-    print("Send Opt out request");
+    Notifications.notificationsSet(toggle);
     super.dispose();
   }
 
@@ -58,7 +62,7 @@ class SettingsPageState extends State<SettingsPage> {
           padding: EdgeInsets.only(right: 15, bottom: 10, top: 10, left: 10),
           child: Text(
             'Notifications',
-            style: TextStyle(color: Colors.white, fontSize: 30),
+            style: TextStyle(color: Colors.white, fontSize: 15),
           ),
         ),
         new Expanded(

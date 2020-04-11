@@ -162,27 +162,41 @@ void main() {
     });
 
     test('Filter active', () async {
-      // Build our app and trigger a frame.
-//      var now = new DateTime.now();
-//      String location = now.toString();
-//      Finesse newFinesse = await addFinesseHelper(location);
-//
-//      await driver.getText(find.text(location));
-
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("activeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
-
-//      bool found = await isPresent(find.text(location), driver);
-//
-//      expect(found, false);
     });
 
     test('Filter Other', () async {
-      // Build our app and trigger a frame.
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("typeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
+    });
+  });
+
+  group('Settings Page', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Settings Page ', () async {
+      // Build our app and trigger a frame.
+      await driver.tap(find.byValueKey("DotMenu"));
+      await driver.tap(find.text("Settings"));
+      await driver.tap(find.byValueKey("Notification Toggle"));
+      await driver.tap(find.pageBack());
+      await driver.tap(find.byValueKey("DotMenu"));
+      await driver.tap(find.text("Settings"));
+      await driver.tap(find.byValueKey("Notification Toggle"));
+      await driver.tap(find.pageBack());
     });
   });
 
