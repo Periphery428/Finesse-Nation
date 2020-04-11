@@ -30,7 +30,6 @@ void main() {
     Duration difference = currTime.difference(finesseList.last.getPostedTime());
     expect(true, difference.inSeconds != 0);
     await Network.removeFinesse(finesseList.last);
-    await Network.removeFinesse(finesseList.last);
   });
 
   test('Testing timeSince hours', () async {

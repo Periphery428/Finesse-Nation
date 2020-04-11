@@ -38,6 +38,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
+  var initialToggle = User.currentUser.notifications;
   var toggle = User.currentUser.notifications;
 
   SettingsPageState createState() {
@@ -46,7 +47,9 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    Notifications.notificationsSet(toggle);
+    if (toggle != initialToggle){
+      Notifications.notificationsSet(toggle);
+    }
     super.dispose();
   }
 

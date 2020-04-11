@@ -279,18 +279,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       break;
                     case DotMenu.about:
                       {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Settings()),
-                        );
+//                        Navigator.push(
+//                          context,
+//                          MaterialPageRoute(builder: (context) => Settings()),
+//                        );
                       }
                       break;
                     case DotMenu.contact:
                       {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Settings()),
-                        );
+//                        Navigator.push(
+//                          context,
+//                          MaterialPageRoute(builder: (context) => Settings()),
+//                        );
                       }
                       break;
                   }
