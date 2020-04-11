@@ -2,6 +2,9 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
+enum DotMenu {markEnded}
+
 class FinessePage extends StatelessWidget {
   final Finesse fin;
 
@@ -13,6 +16,19 @@ class FinessePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: <Widget>[
+          PopupMenuButton<DotMenu>(
+            onSelected: (DotMenu result) {
+              print(fin.eventTitle + " was marked");
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
+              const PopupMenuItem<DotMenu>(
+                value: DotMenu.markEnded,
+                child: Text('Mark as ended'),
+              ),
+            ],
+          )
+        ],
       ),
       body: Container(
 //          decoration: BoxDecoration(
@@ -243,3 +259,8 @@ class FullImage extends StatelessWidget {
     );
   }
 }
+
+markAsEnded(Finesse fin){
+
+}
+
