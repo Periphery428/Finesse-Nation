@@ -144,17 +144,17 @@ class __HeaderState extends State<_Header> {
 
     Widget logo = displayLogo
         ? GestureDetector(
-      child: Image.asset(
-        widget.logoPath,
-        filterQuality: FilterQuality.high,
-        height: logoHeight,
-      ),
-      onTap: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => MyHomePage(title: 'Finesse Nation'),
-        ));
-      },
-    )
+            child: Image.asset(
+              widget.logoPath,
+              filterQuality: FilterQuality.high,
+              height: logoHeight,
+            ),
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => MyHomePage(title: 'Finesse Nation'),
+              ));
+            },
+          )
         : NullWidget();
 
     if (widget.logoTag != null) {

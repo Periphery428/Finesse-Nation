@@ -25,8 +25,8 @@ class Network {
   static Future<http.Response> postData(var url, var data) async {
     return await http.post(url,
         headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'api_token': token
+          'Content-Type': 'application/json; charset=UTF-8',
+          'api_token': token
         },
         body: json.encode(data));
   }
