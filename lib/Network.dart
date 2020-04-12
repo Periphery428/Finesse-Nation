@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meta/meta.dart';
@@ -18,6 +20,7 @@ class Network {
   static const SIGNUP_URL = DOMAIN + 'user/signup';
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
+  static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -44,13 +47,8 @@ class Network {
 
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
-//    print('finished getting');
-//    print(response.statusCode);
-//    print(response.body.length);
-//    print('body = ${response.body}');
+
     if (response.statusCode == 200) {
-//      print('decoding');
-      /*List<Map<dynamic,dynamic>>*/
       var data = json.decode(response.body);
       List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
@@ -71,8 +69,6 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-//    print(activeFilter);
-//    print(typeFilter);
     if (activeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getActive() == false);
     }
@@ -84,13 +80,7 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
-
-    final http.Response response = await http.post(DELETE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(jsonObject));
+    http.Response response = await postData(DELETE_URL, jsonObject);
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -150,8 +140,7 @@ class Network {
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
-    // TODO: GET the actual user data
-    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0, true);
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
@@ -162,16 +151,10 @@ class Network {
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
       var payload = {"emailId": email};
-//      print(payload);
       http.Response response = await postData(PASSWORD_RESET_URL, payload);
-//      print(response.statusCode);
-//      print(response.body);
       if (response.statusCode == 200) {
         return null;
       } else {
-//        print(response.statusCode);
-//        print(response.body);
-//        print(token);
         return "Password Reset request failed";
       }
     } else {
@@ -194,8 +177,7 @@ class Network {
     if (status == 400) {
       return respBody['msg'];
     }
-    // TODO: GET the actual user data
-    //User.currentUser = User(email, password, username, school, points, true);
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
@@ -221,18 +203,27 @@ class Network {
 
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
-//    print(payload);
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
-//    print(response.statusCode);
-//    print(response.body);
+
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
       return null;
     } else {
-//      print(response.statusCode);
-//      print(response.body);
-//      print(token);
-      return "Notification change request failed";
+      throw Exception('Notification change request failed');
+    }
+  }
+
+  static Future<void> updateCurrentUser({String email}) async {
+    email = email ?? User.currentUser.email;
+    var payload = {"emailId": email};
+    http.Response response = await postData(GET_CURRENT_USER_URL, payload);
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      User.currentUser = User.fromJson(data);
+      await Notifications.notificationsSet(User.currentUser.notifications);
+    } else {
+      throw Exception('Failed to get current user');
     }
   }
 }

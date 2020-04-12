@@ -127,13 +127,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Color(0xffff9900),
                 ),
               ),
-              Text(
-                fin.getDuration() == "" ? "" : "Duration: ${fin.getDuration()}",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color(0xffc47600),
-                ),
-              ),
+              fin.getDuration() != ""
+                  ? Text("Duration: ${fin.getDuration()}",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xffc47600),
+                      ))
+                  : Container(),
             ],
           ),
         ],
@@ -144,6 +144,14 @@ class FinesseDetailsState extends State<FinesseDetails> {
       padding: const EdgeInsets.only(left: 20, bottom: 20),
       child: Row(
         children: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.account_circle,
+              color: Color(0xffc47600),
+              size: 24.0,
+            ),
+          ),
           Text(
             "Posted by: ",
             style: TextStyle(

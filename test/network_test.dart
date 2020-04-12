@@ -44,10 +44,13 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
   return finesseList;
 }
 
-void createTestUser() {
-  LoginData data = new LoginData(email: "test1@test.edu", password: "123456");
-  Network.createUser(data);
-  User.currentUser = User('test1@test.edu', '123456', 'TBD', 'TBD', 0, true);
+void createTestUser() async {
+  String emailString = "test1@test.edu";
+  LoginData data = new LoginData(email: emailString, password: "123456");
+  var res = await Network.createUser(data);
+  if (res != null) {
+    await Network.updateCurrentUser(email: emailString);
+  }
 }
 
 void main() {
@@ -111,7 +114,7 @@ void main() {
     List<Finesse> finesseList =
         createFinesseList(type: "Other", isActive: true);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-    print(newList.length + finesseList.length);
+//    print(newList.length + finesseList.length);
 
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
@@ -202,5 +205,12 @@ void main() {
     var result = await Network.changeNotifications(toggle);
     expect(result, null);
     expect(User.currentUser.notifications, toggle);
+  });
+
+  test('Getting Current User Data', () async {
+    User.currentUser = User("test1@test.edu", "none", "none", "none", 0, false);
+    await Network.updateCurrentUser();
+    expect(User.currentUser.points, 0);
+    expect(User.currentUser.password, isNot("none"));
   });
 }

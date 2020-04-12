@@ -7,16 +7,37 @@ Website: https://periphery428.github.io/Finesse-Nation
 
 Developed in Android Studio using the Flutter framework
 
-## Instructions to Edit
-Download Flutter here https://flutter.dev/docs/get-started/install
-
-```git clone https://github.com/Periphery428/Finesse-Nation.git```
-
-Open the project in Android Studio
-
-### Setup Token
+## Setup Token
 
 You must set the environment variable ```FINESSE_NATION_TOKEN``` with the secret token.
 
 You must run the file tool/env.dart. This will then generate the file, .env.dart into the lib folder, needed to successfully use the token.
+
+## Setup Google Services
+You must have the Google Service file into the Finesse Nation/android/app for the app to run.
+
+## Instructions to Edit and Run
+Download Flutter here https://flutter.dev/docs/get-started/install
+
+```
+git clone https://github.com/Periphery428/Finesse-Nation.git
+```
+
+Open the project in Android Studio
+
+Launch AVD manager to setup and run an emulator (We used pixel 2 most of the time)
+
+Then click the run button in Android studio.
+
+## Running Tests
+
+Run Unit Tests
+```
+flutter test
+```
+
+Run Integration Tests (You must have the emulator open first for this to work.)
+```
+flutter drive --target=test_driver/app.dart
+```
 

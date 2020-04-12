@@ -13,11 +13,14 @@ Future<void> delay([int milliseconds = 250]) async {
 void main() {
   SharedPreferences.setMockInitialValues({});
 
-  test('Testing time posted post and fetch', () async {
+  test('Testing timestamp posting', () async {
+//    await delay(3000);
     var now = new DateTime.now();
+    String description = "Description:" + now.toString();
+    String title = "Testing time posted post and fetch";
     Finesse newFinesse = Finesse.finesseAdd(
-        "Testing time posted post and fetch",
-        "Description:" + now.toString(),
+        title,
+        description,
         "",
         "Activities and Recreation Center",
         "60 hours",
@@ -25,11 +28,12 @@ void main() {
         new DateTime.now());
     await Network.addFinesse(newFinesse);
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
-    await delay((1000));
+    await delay(1000);
     DateTime currTime = new DateTime.now();
     Duration difference = currTime.difference(finesseList.last.getPostedTime());
     expect(true, difference.inSeconds != 0);
-    await Network.removeFinesse(finesseList.last);
+//    expect(finesseList.last.getTitle(), title);
+//    expect(finesseList.last.getDescription(), description);
     await Network.removeFinesse(finesseList.last);
   });
 
