@@ -1,7 +1,8 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/Network.dart';
 
 enum DotMenu {markEnded}
 
@@ -269,6 +270,11 @@ class FullImage extends StatelessWidget {
 }
 
 markAsEnded(Finesse fin){
-  print("Finesse " + fin.eventTitle + " was marked");
+  List activeList = fin.getActive();
+  print(activeList);
+  activeList.add(User.currentUser.email);
+  print(activeList);
+  fin.setActive(activeList);
+  Network.updateFinesse(fin);
 }
 

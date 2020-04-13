@@ -100,7 +100,7 @@ class Finesse {
     map["duration"] = duration;
     map["category"] = category;
     map['postedTime'] = postedTime.toString();
-    map['isActive'] = isActive.toString();
+    map['isActive'] = isActive;
     map['school'] = school;
     map['emailId'] = emailId;
     return map;
@@ -112,6 +112,10 @@ class Finesse {
 
   void setDescription(desc) {
     this.description = desc;
+  }
+
+  void setActive(activeList) {
+    this.isActive = activeList;
   }
 
   String getImage() {

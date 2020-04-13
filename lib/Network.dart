@@ -71,6 +71,9 @@ class Network {
 
     if (activeFilter == false) {
       filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
+      filteredFinesses.removeWhere(
+              (fin) => fin.getActive().contains(User.currentUser.email));
+      filteredFinesses.removeWhere((fin) => fin.getActive().contains(fin.emailId));
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
