@@ -19,7 +19,7 @@ class FinessePage extends StatelessWidget {
         actions: <Widget>[
           PopupMenuButton<DotMenu>(
             onSelected: (DotMenu result) {
-              print(fin.eventTitle + " was marked");
+              markAsEnded(fin);
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
               const PopupMenuItem<DotMenu>(
@@ -269,6 +269,6 @@ class FullImage extends StatelessWidget {
 }
 
 markAsEnded(Finesse fin){
-
+  print("Finesse " + fin.eventTitle + " was marked");
 }
 

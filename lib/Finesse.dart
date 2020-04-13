@@ -11,14 +11,14 @@ class Finesse {
   String duration;
   String category;
   DateTime postedTime;
-  bool isActive;
+  List isActive;
   Uint8List convertedImage;
   String emailId;
   String school;
 
   static finesseAdd(
       title, description, image, location, duration, category, timePosted,
-      {bool isActive = true, String school, String email}) {
+      {List isActive, String school, String email}) {
     return Finesse(
         null,
         title,
@@ -83,7 +83,7 @@ class Finesse {
       json['duration'] ?? "",
       json['category'] ?? "",
       parse(json['postedTime']) ?? DateTime.now(),
-      json['isActive'] ?? true,
+      json['isActive'] ?? [],
       json['school'] ?? "",
       json['emailId'] ?? "",
     );
@@ -100,7 +100,7 @@ class Finesse {
     map["duration"] = duration;
     map["category"] = category;
     map['postedTime'] = postedTime.toString();
-    map['isActive'] = true;
+    map['isActive'] = isActive.toString();
     map['school'] = school;
     map['emailId'] = emailId;
     return map;
@@ -150,7 +150,7 @@ class Finesse {
     return postedTime;
   }
 
-  bool getActive() {
+  List getActive() {
     return this.isActive;
   }
 
