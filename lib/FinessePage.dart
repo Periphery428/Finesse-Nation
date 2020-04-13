@@ -276,5 +276,6 @@ markAsEnded(Finesse fin){
   print(activeList);
   fin.setActive(activeList);
   Network.updateFinesse(fin);
+
 }
 

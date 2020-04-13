@@ -101,6 +101,7 @@ class Finesse {
     map["category"] = category;
     map['postedTime'] = postedTime.toString();
     map['isActive'] = isActive;
+
     map['school'] = school;
     map['emailId'] = emailId;
     return map;
