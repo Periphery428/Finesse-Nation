@@ -74,7 +74,7 @@ class Network {
 //    print(activeFilter);
 //    print(typeFilter);
     if (activeFilter == false) {
-      filteredFinesses.removeWhere((value) => value.getActive() == false);
+      filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
@@ -244,10 +244,10 @@ class Network {
 
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
-    print(payload);
+//    print(payload);
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
-    print(response.statusCode);
-    print(response.body);
+//    print(response.statusCode);
+//    print(response.body);
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
       return null;

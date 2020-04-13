@@ -27,7 +27,7 @@ Future<Finesse> addFinesseHelper([name]) async {
   return newFinesse;
 }
 
-List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
+List<Finesse> createFinesseList({String type = "Food", List isActive}) {
   List<Finesse> finesseList = [];
 
   for (var i = 0; i < 4; i++) {
@@ -44,7 +44,7 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
   return finesseList;
 }
 
-void createTestUser(){
+void createTestUser() {
   LoginData data = new LoginData(email: "test1@test.edu", password: "123456");
   var ret = Network.createUser(data);
   User.currentUser = User('test1@test.edu', '123456', 'TBD', 'TBD', 0, true);
@@ -108,17 +108,14 @@ void main() {
   });
 
   test('applyFilters Test Other', () async {
-    List<Finesse> finesseList =
-        createFinesseList(type: "Other", isActive: true);
+    List<Finesse> finesseList = createFinesseList(type: "Other", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-    print(newList.length + finesseList.length);
-
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
 
   test('applyFilters Test No Filter', () async {
-    List<Finesse> finesseList = createFinesseList(type: "Food", isActive: true);
+    List<Finesse> finesseList = createFinesseList(type: "Food", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);
@@ -126,10 +123,9 @@ void main() {
   });
 
   test('applyFilters Test Inactive', () async {
-    List<Finesse> finesseList =
-        createFinesseList(type: "Food", isActive: false);
+    List<Finesse> finesseList = createFinesseList(
+        type: "Food", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
@@ -138,8 +134,8 @@ void main() {
     SharedPreferences.setMockInitialValues(
         {"typeFilter": true, "activeFilter": true});
 
-    List<Finesse> finesseList =
-        createFinesseList(type: "Other", isActive: false);
+    List<Finesse> finesseList = createFinesseList(
+        type: "Other", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);
