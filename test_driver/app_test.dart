@@ -226,10 +226,11 @@ void main() {
       await addEvent(
           driver, nameText, locationText, descriptionText, durationText);
       await delay(1000);
+//      await driver.tap(find.text(locationText));
+//      await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
-      await driver.tap(find.text(locationText));
-      await delay(1000);
+//      await delay(1000);
       await driver.getText(find.text(descriptionText));
       await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
@@ -262,10 +263,11 @@ void main() {
       await delay(1000);
       await driver.tap(find.text(nameText));
       await delay(1000);
-      await driver.tap(find.text(nameText));
+      await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
+
     });
   });
 }
