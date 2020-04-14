@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
+
 Future<Finesse> addFinesseHelper([name]) async {
   var now = new DateTime.now();
   Finesse newFinesse = Finesse.finesseAdd(
@@ -58,7 +59,7 @@ void main() {
   SharedPreferences.setMockInitialValues(
       {"typeFilter": false, "activeFilter": false});
 
-  createTestUser();
+//  createTestUser();
 
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');

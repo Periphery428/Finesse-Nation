@@ -138,7 +138,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getActive() == true ? 'Ongoing' : 'Inactive',
+                fin.getActive().length < 3 ? 'Ongoing' : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                   color: Color(0xffff9900),
