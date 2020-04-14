@@ -21,6 +21,7 @@ class Network {
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
+  static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -106,30 +107,31 @@ class Network {
     }
   }
 
-  static Future<void> sendToAll(
-          {@required String title, @required String body}) =>
-      http.post(
-        'https://fcm.googleapis.com/fcm/send',
-        body: json.encode({
-          'notification': {
-            'body': '$body',
-            'title': '$title',
-            'image':
-                'https://vignette.wikia.nocookie.net/rezero/images/0/02/Rem_Anime.png',
-          },
-          'priority': 'high',
-          'data': {
-            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'id': '1',
-            'status': 'done',
-          },
-          'to': '/topics/all',
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'key=$serverKey',
-        },
-      );
+  static Future<void> sendToAll(String title, String body) {
+    final content = {
+      'notification': {
+        'body': '$body',
+        'title': '$title',
+        'image':
+            'https://i.imgur.com/rw4rJt2.png',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+      },
+      'to': '/topics/all',
+    };
+    return http.post(
+      SEND_NOTIFICATION_URL,
+      body: json.encode(content),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverKey',
+      },
+    );
+  }
 
   // Sign in callback
   static Future<String> authUser(LoginData data) async {

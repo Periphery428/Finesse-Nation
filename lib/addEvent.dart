@@ -290,8 +290,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           await Network.addFinesse(newFinesse);
                           FirebaseMessaging().unsubscribeFromTopic('all');
                           await Network.sendToAll(
-                              title: newFinesse.getTitle(),
-                              body: newFinesse.getLocation());
+                              newFinesse.getTitle(), newFinesse.getLocation());
                           FirebaseMessaging().subscribeToTopic('all');
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));

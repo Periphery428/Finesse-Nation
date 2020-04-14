@@ -8,6 +8,7 @@ import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,10 +90,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void reload() {
     setState(() {
       print('refreshed');
-//      Flushbar(
-//        message: 'Reloading...',
-//        duration: Duration(seconds: 3),
-//      )..show(context);
+      Fluttertoast.showToast(
+          msg: "Refreshing...",
+          toastLength: Toast.LENGTH_LONG,
+          backgroundColor: Color(0xff2e3032),
+          textColor: Color(0xffff9900),
+      );
     });
   }
 
@@ -118,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               'REFRESH',
             ),
-            textColor: Colors.lightBlue,
+            textColor: Color(0xffff9900),
           ),
         )..show(context);
       },
