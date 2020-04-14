@@ -91,10 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       print('refreshed');
       Fluttertoast.showToast(
-          msg: "Refreshing...",
-          toastLength: Toast.LENGTH_LONG,
-          backgroundColor: Color(0xff2e3032),
-          textColor: Color(0xffff9900),
+        msg: "Refreshing...",
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Color(0xff2e3032),
+        textColor: Color(0xffff9900),
       );
     });
   }

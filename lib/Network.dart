@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Settings.dart';
-import 'package:finesse_nation/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:meta/meta.dart';
 import '.env.dart';
 import 'User.dart';
 import 'login/flutter_login.dart';
@@ -107,13 +105,12 @@ class Network {
     }
   }
 
-  static Future<void> sendToAll(String title, String body) {
+  static Future<dynamic> sendToAll(String title, String body) {
     final content = {
       'notification': {
         'body': '$body',
         'title': '$title',
-        'image':
-            'https://i.imgur.com/rw4rJt2.png',
+        'image': 'https://i.imgur.com/rw4rJt2.png',
       },
       'priority': 'high',
       'data': {
