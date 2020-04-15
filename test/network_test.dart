@@ -13,7 +13,6 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
-
 Future<Finesse> addFinesseHelper([name]) async {
   var now = new DateTime.now();
   Finesse newFinesse = Finesse.finesseAdd(
@@ -248,7 +247,8 @@ void main() {
   });
 
   test('Getting Current User Data', () async {
-    User.currentUser = User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
+    User.currentUser =
+        User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
     await Network.updateCurrentUser();
     expect(User.currentUser.points, 0);
     expect(User.currentUser.email, CURRENT_USER_EMAIL);
@@ -256,7 +256,14 @@ void main() {
   });
 
   test('Send Garbage to the Update Current User Function', () async {
-    expect(() async => await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"), throwsA(Exception));
+    var exceptionText = "";
+    try{
+      await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu");
+    }
+    on Exception catch(text){
+      exceptionText = '$text';
+    }
+    expect(exceptionText, "Exception: Failed to get current user");
   });
 
   test('Send Push Notification', () async {

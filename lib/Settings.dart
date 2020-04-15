@@ -22,11 +22,15 @@ class Settings extends StatelessWidget {
 }
 
 class Notifications {
-  static notificationsSet(toggle) {
+  static void notificationsSet(toggle) {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    if(User.currentUser.email.contains('@test.com')  || User.currentUser.email.contains('@test.edu') ){
+      return;
+    }
     if (toggle) {
-      FirebaseMessaging().subscribeToTopic('all');
+      _firebaseMessaging.subscribeToTopic('all');
     } else {
-      FirebaseMessaging().unsubscribeFromTopic('all');
+      _firebaseMessaging.unsubscribeFromTopic('all');
     }
     Network.changeNotifications(toggle);
   }
