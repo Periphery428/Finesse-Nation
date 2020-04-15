@@ -269,9 +269,6 @@ void main() {
       await delay(5000);
       await markAsEnded(driver, locationText);
     });
-
-
-
   });
 
   group('Maps Link', () {

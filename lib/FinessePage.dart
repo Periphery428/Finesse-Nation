@@ -5,7 +5,7 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-enum DotMenu {markEnded}
+enum DotMenu { markEnded }
 
 class FinessePage extends StatelessWidget {
   final Finesse fin;
@@ -141,13 +141,18 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getActive().length < 3 && !fin.isActive.contains(fin.getEmailId()) ? 'Ongoing' : 'Inactive',
+                fin.getActive().length < 3 &&
+                        !fin.isActive.contains(fin.getEmailId())
+                    ? 'Ongoing'
+                    : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                   color: Color(0xffff9900),
                 ),
               ),
-              fin.getDuration() != "" && (fin.getActive().length >= 3 || fin.isActive.contains(fin.getEmailId()))
+              fin.getDuration() != "" &&
+                      (fin.getActive().length >= 3 ||
+                          fin.isActive.contains(fin.getEmailId()))
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
@@ -272,9 +277,9 @@ class FullImage extends StatelessWidget {
   }
 }
 
-markAsEnded(Finesse fin){
+markAsEnded(Finesse fin) {
   List activeList = fin.getActive();
-  if(activeList.contains(User.currentUser.email)){
+  if (activeList.contains(User.currentUser.email)) {
     Fluttertoast.showToast(
       msg: "Already marked as expired",
       toastLength: Toast.LENGTH_LONG,
@@ -294,4 +299,3 @@ markAsEnded(Finesse fin){
     textColor: Color(0xffff9900),
   );
 }
-

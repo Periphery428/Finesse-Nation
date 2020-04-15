@@ -24,7 +24,8 @@ class Settings extends StatelessWidget {
 class Notifications {
   static void notificationsSet(toggle) {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-    if(User.currentUser.email.contains('@test.com')  || User.currentUser.email.contains('@test.edu') ){
+    if (User.currentUser.email.contains('@test.com') ||
+        User.currentUser.email.contains('@test.edu')) {
       return;
     }
     if (toggle) {

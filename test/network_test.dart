@@ -257,10 +257,9 @@ void main() {
 
   test('Send Garbage to the Update Current User Function', () async {
     var exceptionText = "";
-    try{
+    try {
       await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu");
-    }
-    on Exception catch(text){
+    } on Exception catch (text) {
       exceptionText = '$text';
     }
     expect(exceptionText, "Exception: Failed to get current user");
