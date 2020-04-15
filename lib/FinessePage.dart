@@ -141,13 +141,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getActive().length < 3 ? 'Ongoing' : 'Inactive',
+                fin.getActive().length < 3 && !fin.isActive.contains(fin.getEmailId()) ? 'Ongoing' : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                   color: Color(0xffff9900),
                 ),
               ),
-              fin.getDuration() != ""
+              fin.getDuration() != "" && (fin.getActive().length >= 3 || fin.isActive.contains(fin.getEmailId()))
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
@@ -274,11 +274,24 @@ class FullImage extends StatelessWidget {
 
 markAsEnded(Finesse fin){
   List activeList = fin.getActive();
-  print(activeList);
+  if(activeList.contains(User.currentUser.email)){
+    Fluttertoast.showToast(
+      msg: "Already marked as expired",
+      toastLength: Toast.LENGTH_LONG,
+      backgroundColor: Color(0xff2e3032),
+      textColor: Color(0xffff9900),
+    );
+
+    return;
+  }
   activeList.add(User.currentUser.email);
-  print(activeList);
   fin.setActive(activeList);
   Network.updateFinesse(fin);
-
+  Fluttertoast.showToast(
+    msg: "Marked as expired",
+    toastLength: Toast.LENGTH_LONG,
+    backgroundColor: Color(0xff2e3032),
+    textColor: Color(0xffff9900),
+  );
 }
 
