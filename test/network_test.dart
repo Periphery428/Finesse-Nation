@@ -45,15 +45,15 @@ List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
 }
 
 void createTestUser() async {
-  String emailString = "test1@test.edu";
-  LoginData data = new LoginData(email: emailString, password: "123456");
+  LoginData data = new LoginData(email: CURRENT_USER_EMAIL, password: "123456");
   var res = await Network.createUser(data);
   if (res != null) {
-    await Network.updateCurrentUser(email: emailString);
+    await Network.updateCurrentUser(email: CURRENT_USER_EMAIL);
   }
 }
 
 const VALID_EMAIL = 'test@test.com';
+const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 
@@ -251,10 +251,15 @@ void main() {
   });
 
   test('Getting Current User Data', () async {
-    User.currentUser = User("test1@test.edu", "none", "none", "none", 0, false);
+    User.currentUser = User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
     await Network.updateCurrentUser();
     expect(User.currentUser.points, 0);
+    expect(User.currentUser.email, CURRENT_USER_EMAIL);
     expect(User.currentUser.password, isNot("none"));
+  });
+
+  test('Send Garbage to the Update Current User Function', () async {
+    expect(() async => await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"), throwsA(Exception));
   });
 
   test('Send Push Notification', () async {

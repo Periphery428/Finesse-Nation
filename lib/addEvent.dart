@@ -292,7 +292,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           FirebaseMessaging().unsubscribeFromTopic('all');
                           await Network.sendToAll(
                               newFinesse.getTitle(), newFinesse.getLocation());
-                          if(User.currentUser.notifications){
+                          if (User.currentUser.notifications) {
                             FirebaseMessaging().subscribeToTopic('all');
                           }
                           Navigator.removeRouteBelow(
