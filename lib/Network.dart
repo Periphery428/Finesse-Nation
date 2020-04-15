@@ -69,7 +69,11 @@ class Network {
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
     if (activeFilter == false) {
-      filteredFinesses.removeWhere((value) => value.getActive() == false);
+      filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
+      filteredFinesses.removeWhere(
+          (fin) => fin.getActive().contains(User.currentUser.email));
+      filteredFinesses
+          .removeWhere((fin) => fin.getActive().contains(fin.emailId));
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
@@ -203,7 +207,6 @@ class Network {
   static Future<String> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
-
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
       return null;

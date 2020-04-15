@@ -27,7 +27,7 @@ Future<Finesse> addFinesseHelper([name]) async {
   return newFinesse;
 }
 
-List<Finesse> createFinesseList({String type = "Food", bool isActive = true}) {
+List<Finesse> createFinesseList({String type = "Food", List isActive}) {
   List<Finesse> finesseList = [];
 
   for (var i = 0; i < 4; i++) {
@@ -87,7 +87,7 @@ void main() {
   SharedPreferences.setMockInitialValues(
       {"typeFilter": false, "activeFilter": false});
 
-  createTestUser();
+//  createTestUser();
 
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
@@ -140,17 +140,14 @@ void main() {
   });
 
   test('applyFilters Test Other', () async {
-    List<Finesse> finesseList =
-        createFinesseList(type: "Other", isActive: true);
+    List<Finesse> finesseList = createFinesseList(type: "Other", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-//    print(newList.length + finesseList.length);
-
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
 
   test('applyFilters Test No Filter', () async {
-    List<Finesse> finesseList = createFinesseList(type: "Food", isActive: true);
+    List<Finesse> finesseList = createFinesseList(type: "Food", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);
@@ -158,10 +155,9 @@ void main() {
   });
 
   test('applyFilters Test Inactive', () async {
-    List<Finesse> finesseList =
-        createFinesseList(type: "Food", isActive: false);
+    List<Finesse> finesseList = createFinesseList(
+        type: "Food", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
-
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
@@ -170,8 +166,8 @@ void main() {
     SharedPreferences.setMockInitialValues(
         {"typeFilter": true, "activeFilter": true});
 
-    List<Finesse> finesseList =
-        createFinesseList(type: "Other", isActive: false);
+    List<Finesse> finesseList = createFinesseList(
+        type: "Other", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
 
     expect(newList.length, 4);
@@ -251,7 +247,8 @@ void main() {
   });
 
   test('Getting Current User Data', () async {
-    User.currentUser = User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
+    User.currentUser =
+        User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
     await Network.updateCurrentUser();
     expect(User.currentUser.points, 0);
     expect(User.currentUser.email, CURRENT_USER_EMAIL);
@@ -259,7 +256,13 @@ void main() {
   });
 
   test('Send Garbage to the Update Current User Function', () async {
-    expect(() async => await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"), throwsA(Exception));
+    var exceptionText = "";
+    try {
+      await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu");
+    } on Exception catch (text) {
+      exceptionText = '$text';
+    }
+    expect(exceptionText, "Exception: Failed to get current user");
   });
 
   test('Send Push Notification', () async {

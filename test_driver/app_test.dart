@@ -60,6 +60,13 @@ Future<void> logout(FlutterDriver driver) async {
   await driver.tap(find.byValueKey("logoutButton"));
 }
 
+Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
+  await driver.tap(find.text(locationText));
+  await driver.tap(find.byValueKey("threeDotButton"));
+  await driver.tap(find.byValueKey("markAsEndedButton"));
+  await driver.tap(find.pageBack());
+}
+
 void main() {
   group('Login', () {
     FlutterDriver driver;
@@ -148,6 +155,8 @@ void main() {
       await delay(1000);
 
       expect(await driver.getText(find.text(locationText)), locationText);
+      await delay(1000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -228,12 +237,37 @@ void main() {
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
-      await driver.tap(find.text(locationText));
-      await delay(1000);
       await driver.getText(find.text(descriptionText));
-      await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
+      await delay(5000);
+      await markAsEnded(driver, locationText);
+    });
+  });
+
+  group('Mark as Expired', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Add test then mark as expired', () async {
+      String nameText = 'View Info Integration Test Free Food';
+      String durationText = 'Mark as Expired Integration Test';
+      String descriptionText = 'View Info description';
+      var now = DateTime.now();
+      String locationText = 'Location: ' + now.toString();
+      await addEvent(
+          driver, nameText, locationText, descriptionText, durationText);
+      await delay(5000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -262,7 +296,11 @@ void main() {
       await delay(1000);
       await driver.tap(find.text(nameText));
       await delay(1000);
-      await driver.tap(find.text(nameText));
+      await driver.tap(find.byValueKey("threeDotButton"));
+      await delay(1000);
+      await driver.tap(find.byValueKey("markAsEndedButton"));
+      await delay(1000);
+      await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
