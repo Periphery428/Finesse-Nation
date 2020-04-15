@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum DotMenu {markEnded}
 
@@ -19,11 +20,13 @@ class FinessePage extends StatelessWidget {
         title: Text(title),
         actions: <Widget>[
           PopupMenuButton<DotMenu>(
+            key: Key("threeDotButton"),
             onSelected: (DotMenu result) {
               markAsEnded(fin);
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
               const PopupMenuItem<DotMenu>(
+                key: Key("markAsEndedButton"),
                 value: DotMenu.markEnded,
                 child: Text('Mark as ended'),
               ),

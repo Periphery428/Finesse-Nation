@@ -60,6 +60,13 @@ Future<void> logout(FlutterDriver driver) async {
   await driver.tap(find.byValueKey("logoutButton"));
 }
 
+Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
+  await driver.tap(find.text(locationText));
+  await driver.tap(find.byValueKey("threeDotButton"));
+  await driver.tap(find.byValueKey("markAsEndedButton"));
+  await driver.tap(find.pageBack());
+}
+
 void main() {
   group('Login', () {
     FlutterDriver driver;
@@ -148,6 +155,8 @@ void main() {
       await delay(1000);
 
       expect(await driver.getText(find.text(locationText)), locationText);
+      await delay(1000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -235,6 +244,8 @@ void main() {
       await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
+      await delay(5000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -263,11 +274,14 @@ void main() {
       await delay(1000);
       await driver.tap(find.text(nameText));
       await delay(1000);
-      await driver.tap(find.text(locationText));
+      await driver.tap(find.byValueKey("threeDotButton"));
+      await delay(1000);
+      await driver.tap(find.byValueKey("markAsEndedButton"));
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
-
+      await driver.tap(find.text(locationText));
+      await delay(1000);
     });
   });
 }
