@@ -46,12 +46,41 @@ List<Finesse> createFinesseList({String type = "Food", List isActive}) {
 }
 
 void createTestUser() async {
-  String emailString = "test1@test.edu";
-  LoginData data = new LoginData(email: emailString, password: "123456");
+  LoginData data = new LoginData(email: CURRENT_USER_EMAIL, password: "123456");
   var res = await Network.createUser(data);
   if (res != null) {
-    await Network.updateCurrentUser(email: emailString);
+    await Network.updateCurrentUser(email: CURRENT_USER_EMAIL);
   }
+}
+
+const VALID_EMAIL = 'test@test.com';
+const CURRENT_USER_EMAIL = "test1@test.edu";
+const VALID_PASSWORD = 'test123';
+const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
+
+Future<void> login(
+    {String email: VALID_EMAIL,
+    String password: VALID_PASSWORD,
+    var expected}) async {
+  LoginData data = LoginData(email: email, password: password);
+  var actual = await Network.authUser(data);
+  expect(actual, expected);
+}
+
+Future<void> signup({String email, String password, var expected}) async {
+  LoginData data = LoginData(email: email, password: password);
+  var actual = await Network.createUser(data);
+  expect(actual, expected);
+}
+
+void validateEmail(String email, var expected) {
+  var result = Network.validateEmail(email);
+  expect(result, expected);
+}
+
+void validatePassword(String password, var expected) {
+  var result = Network.validatePassword(password);
+  expect(result, expected);
 }
 
 void main() {
@@ -147,47 +176,61 @@ void main() {
   });
 
   test('Validate good email', () async {
-    String goodEmail = 'hello@world.edu';
-    var result = Network.validateEmail(goodEmail);
-    expect(result, null);
+    validateEmail('hello@world.edu', null);
   });
 
   test('Validate bad email', () async {
-    var failEmail = 'Invalid email address';
-
-    String badEmail = 'Finesse';
-    var result = Network.validateEmail(badEmail);
-    expect(result, failEmail);
+    validateEmail('Finesse', 'Invalid email address');
   });
 
   test('Validating empty email', () async {
-    var failEmail = 'Email can\'t be empty';
-
-    String badEmail = '';
-    var result = Network.validateEmail(badEmail);
-    expect(result, failEmail);
+    validateEmail('', 'Email can\'t be empty');
   });
 
   test('Validating good password', () async {
-    String goodPassword = 'longpassword';
-    var result = Network.validatePassword(goodPassword);
-    expect(result, null);
+    validatePassword('longpassword', null);
   });
 
   test('Validating bad password', () async {
-    var failPassword = 'Password must be at least 6 characters';
-
-    String badPassword = 'short';
-    var result = Network.validatePassword(badPassword);
-    expect(result, failPassword);
+    validatePassword('short', 'Password must be at least 6 characters');
   });
 
   test('Validating empty password', () async {
-    var failPassword = 'Password must be at least 6 characters';
+    validatePassword('', 'Password must be at least 6 characters');
+  });
 
-    String badPassword = '';
-    var result = Network.validatePassword(badPassword);
-    expect(result, failPassword);
+  test('Correct Login', () async {
+    await login(expected: null);
+  });
+
+  test('Incorrect Password', () async {
+    await login(password: 'test1234', expected: INVALID_LOGIN_MSG);
+  });
+
+  test('Incorrect Email', () async {
+    await login(email: 'test@test.org', expected: INVALID_LOGIN_MSG);
+  });
+
+  test('Incorrect Login', () async {
+    await login(
+        email: 'test@test.org',
+        password: 'test1234',
+        expected: INVALID_LOGIN_MSG);
+  });
+
+  test('Correct Signup', () async {
+    String email =
+        DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
+    String password = VALID_PASSWORD;
+    await signup(email: email, password: password, expected: null);
+    await login(email: email, password: password, expected: null);
+  });
+
+  test('Incorrect Signup', () async {
+    String email = VALID_EMAIL; // Already exists
+    String password = VALID_PASSWORD;
+    await signup(
+        email: email, password: password, expected: 'User already exists');
   });
 
   test('Changing Notifications ON', () async {
@@ -205,9 +248,19 @@ void main() {
   });
 
   test('Getting Current User Data', () async {
-    User.currentUser = User("test1@test.edu", "none", "none", "none", 0, false);
+    User.currentUser = User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
     await Network.updateCurrentUser();
     expect(User.currentUser.points, 0);
+    expect(User.currentUser.email, CURRENT_USER_EMAIL);
     expect(User.currentUser.password, isNot("none"));
+  });
+
+  test('Send Garbage to the Update Current User Function', () async {
+    expect(() async => await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"), throwsA(Exception));
+  });
+
+  test('Send Push Notification', () async {
+    var response = await Network.sendToAll('test', 'test');
+    expect(response.statusCode, 200);
   });
 }

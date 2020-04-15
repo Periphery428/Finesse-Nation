@@ -5,6 +5,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
+import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/cameraPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -290,9 +291,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                           await Network.addFinesse(newFinesse);
                           FirebaseMessaging().unsubscribeFromTopic('all');
                           await Network.sendToAll(
-                              title: newFinesse.getTitle(),
-                              body: newFinesse.getLocation());
-                          FirebaseMessaging().subscribeToTopic('all');
+                              newFinesse.getTitle(), newFinesse.getLocation());
+                          if (User.currentUser.notifications) {
+                            FirebaseMessaging().subscribeToTopic('all');
+                          }
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
                           Navigator.pushReplacement(
