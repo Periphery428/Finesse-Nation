@@ -23,6 +23,7 @@ export 'src/models/login_data.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
 import 'src/constants.dart';
+import '../main.dart';
 
 class _AnimationTimeDilationDropdown extends StatelessWidget {
   _AnimationTimeDilationDropdown({
@@ -142,10 +143,17 @@ class __HeaderState extends State<_Header> {
     final displayLogo = widget.logoPath != null && logoHeight >= kMinLogoHeight;
 
     Widget logo = displayLogo
-        ? Image.asset(
-            widget.logoPath,
-            filterQuality: FilterQuality.high,
-            height: logoHeight,
+        ? GestureDetector(
+            child: Image.asset(
+              widget.logoPath,
+              filterQuality: FilterQuality.high,
+              height: logoHeight,
+            ),
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => MyHomePage(title: 'Finesse Nation'),
+              ));
+            },
           )
         : NullWidget();
 

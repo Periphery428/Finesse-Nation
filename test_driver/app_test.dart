@@ -42,7 +42,6 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
 
 Future<void> login(FlutterDriver driver,
     {email: 'test@test.com', password: 'test123', signUp: false}) async {
-  print('logging in...');
   await driver.tap(find.byValueKey('emailField'));
   await driver.enterText(email);
   await driver.tap(find.byValueKey("passwordField"));
@@ -55,12 +54,24 @@ Future<void> login(FlutterDriver driver,
   await driver.tap(find.byValueKey("loginButton"));
 }
 
+Future<void> logout(FlutterDriver driver) async {
+  await driver.tap(find.byValueKey("dropdownButton"));
+  await driver.tap(find.byValueKey("settingsButton"));
+  await driver.tap(find.byValueKey("logoutButton"));
+}
+
+Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
+  await driver.tap(find.text(locationText));
+  await driver.tap(find.byValueKey("threeDotButton"));
+  await driver.tap(find.byValueKey("markAsEndedButton"));
+  await driver.tap(find.pageBack());
+}
+
 void main() {
   group('Login', () {
     FlutterDriver driver;
 
     setUpAll(() async {
-      print('setting up');
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -71,16 +82,16 @@ void main() {
 
     test('Successful login', () async {
       await login(driver);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
     });
 
     test('Successful registration', () async {
       String uniqueEmail =
           DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
       await login(driver, email: uniqueEmail, signUp: true);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
       await login(driver, email: uniqueEmail);
-      await driver.tap(find.byValueKey('logoutButton'));
+      await logout(driver);
     });
 
     test('Missing information', () async {
@@ -104,7 +115,6 @@ void main() {
     FlutterDriver driver;
 
     setUpAll(() async {
-      print('setting up');
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -137,7 +147,7 @@ void main() {
       String durationText = 'Integration Test Duration';
       String descriptionText =
           'The location is a timestamp to make a unique value for the test to look for.';
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String locationText = 'Location: ' + now.toString();
 
       await addEvent(
@@ -145,6 +155,8 @@ void main() {
       await delay(1000);
 
       expect(await driver.getText(find.text(locationText)), locationText);
+      await delay(1000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -162,27 +174,41 @@ void main() {
     });
 
     test('Filter active', () async {
-      // Build our app and trigger a frame.
-//      var now = new DateTime.now();
-//      String location = now.toString();
-//      Finesse newFinesse = await addFinesseHelper(location);
-//
-//      await driver.getText(find.text(location));
-
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("activeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
-
-//      bool found = await isPresent(find.text(location), driver);
-//
-//      expect(found, false);
     });
 
     test('Filter Other', () async {
-      // Build our app and trigger a frame.
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("typeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
+    });
+  });
+
+  group('Settings Page', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Settings Page ', () async {
+      // Build our app and trigger a frame.
+      await driver.tap(find.byValueKey("dropdownButton"));
+      await driver.tap(find.text("Settings"));
+      await driver.tap(find.byValueKey("Notification Toggle"));
+      await driver.tap(find.pageBack());
+      await driver.tap(find.byValueKey("dropdownButton"));
+      await driver.tap(find.text("Settings"));
+      await driver.tap(find.byValueKey("Notification Toggle"));
+      await driver.tap(find.pageBack());
     });
   });
 
@@ -204,7 +230,7 @@ void main() {
       String nameText = 'View Info Integration Test Free Food';
       String durationText = 'Integration Test Duration';
       String descriptionText = 'View Info description';
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String locationText = 'Location: ' + now.toString();
       await addEvent(
           driver, nameText, locationText, descriptionText, durationText);
@@ -212,9 +238,36 @@ void main() {
       await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.getText(find.text(descriptionText));
-      await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
+      await delay(5000);
+      await markAsEnded(driver, locationText);
+    });
+  });
+
+  group('Mark as Expired', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Add test then mark as expired', () async {
+      String nameText = 'View Info Integration Test Free Food';
+      String durationText = 'Mark as Expired Integration Test';
+      String descriptionText = 'View Info description';
+      var now = DateTime.now();
+      String locationText = 'Location: ' + now.toString();
+      await addEvent(
+          driver, nameText, locationText, descriptionText, durationText);
+      await delay(5000);
+      await markAsEnded(driver, locationText);
     });
   });
 
@@ -233,7 +286,7 @@ void main() {
 
     test('View Map Test', () async {
       // Build our app and trigger a frame.
-      var now = new DateTime.now();
+      var now = DateTime.now();
       String nameText = 'Maps Test ${now.toString()}';
       String durationText = 'Integration Test Duration';
       String descriptionText = 'View Info description';
@@ -242,6 +295,12 @@ void main() {
           driver, nameText, locationText, descriptionText, durationText);
       await delay(1000);
       await driver.tap(find.text(nameText));
+      await delay(1000);
+      await driver.tap(find.byValueKey("threeDotButton"));
+      await delay(1000);
+      await driver.tap(find.byValueKey("markAsEndedButton"));
+      await delay(1000);
+      await driver.tap(find.text(locationText));
       await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);

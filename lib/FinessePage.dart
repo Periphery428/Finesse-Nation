@@ -1,6 +1,11 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/Network.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+enum DotMenu { markEnded }
 
 class FinessePage extends StatelessWidget {
   final Finesse fin;
@@ -13,6 +18,21 @@ class FinessePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: <Widget>[
+          PopupMenuButton<DotMenu>(
+            key: Key("threeDotButton"),
+            onSelected: (DotMenu result) {
+              markAsEnded(fin);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
+              const PopupMenuItem<DotMenu>(
+                key: Key("markAsEndedButton"),
+                value: DotMenu.markEnded,
+                child: Text('Mark as ended'),
+              ),
+            ],
+          )
+        ],
       ),
       body: Container(
 //          decoration: BoxDecoration(
@@ -121,17 +141,57 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getActive() == true ? 'Ongoing' : 'Inactive',
+                fin.getActive().length < 3 &&
+                        !fin.isActive.contains(fin.getEmailId())
+                    ? 'Ongoing'
+                    : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
                   color: Color(0xffff9900),
                 ),
               ),
+              fin.getDuration() != "" &&
+                      (fin.getActive().length >= 3 ||
+                          fin.isActive.contains(fin.getEmailId()))
+                  ? Text("Duration: ${fin.getDuration()}",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xffc47600),
+                      ))
+                  : Container(),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    Widget userSection = Container(
+      padding: const EdgeInsets.only(left: 20, bottom: 20),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.account_circle,
+              color: Color(0xffc47600),
+              size: 24.0,
+            ),
+          ),
+          Text(
+            "Posted by: ",
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xffff9900),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                "Duration: ${fin.getDuration()}",
+                fin.getEmailId(),
                 style: TextStyle(
-                  fontSize: 15,
-                  color: Color(0xffc47600),
+                  fontSize: 16,
+                  color: Color(0xffff9900),
                 ),
               ),
             ],
@@ -139,6 +199,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
     Widget locationSection = Container(
       padding: const EdgeInsets.only(left: 20, bottom: 20),
       child: Row(
@@ -166,13 +227,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 onTap: () => launch(
                     'https://www.google.com/maps/search/${fin.getLocation()}'),
               ),
-//              Text(
-//                'Room 1331' /*fin.getDuration()*/,
-//                style: TextStyle(
-//                  fontSize: 15,
-//                  color: Colors.grey,
-//                ),
-//              ),
             ],
           ),
         ],
@@ -189,7 +243,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
               titleSection,
               locationSection,
               fin.getDescription() != "" ? descriptionSection : Container(),
-              fin.getDuration() != "" ? timeSection : Container(),
+              timeSection,
+              userSection,
             ],
           ),
         ),
@@ -220,4 +275,27 @@ class FullImage extends StatelessWidget {
       ),
     );
   }
+}
+
+markAsEnded(Finesse fin) {
+  List activeList = fin.getActive();
+  if (activeList.contains(User.currentUser.email)) {
+    Fluttertoast.showToast(
+      msg: "Already marked as expired",
+      toastLength: Toast.LENGTH_LONG,
+      backgroundColor: Color(0xff2e3032),
+      textColor: Color(0xffff9900),
+    );
+
+    return;
+  }
+  activeList.add(User.currentUser.email);
+  fin.setActive(activeList);
+  Network.updateFinesse(fin);
+  Fluttertoast.showToast(
+    msg: "Marked as expired",
+    toastLength: Toast.LENGTH_LONG,
+    backgroundColor: Color(0xff2e3032),
+    textColor: Color(0xffff9900),
+  );
 }

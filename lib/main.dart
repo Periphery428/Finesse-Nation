@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/addEvent.dart';
+import 'package:finesse_nation/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ void main() async {
   runApp(MyApp());
 }
 
-//User currentUser = new User("Blank", "Blank", "Blank");
+//User currentUser = new User("Test", "Test", "Test");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
@@ -48,9 +49,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<bool> _goToLogin(BuildContext context) {
-    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
-  }
+//  Future<bool> _goToLogin(BuildContext context) {
+//    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
+//  }
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -89,10 +90,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void reload() {
     setState(() {
       print('refreshed');
-//      Flushbar(
-//        message: 'Reloading...',
-//        duration: Duration(seconds: 3),
-//      )..show(context);
+      Fluttertoast.showToast(
+        msg: "Refreshing...",
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Color(0xff2e3032),
+        textColor: Color(0xffff9900),
+      );
     });
   }
 
@@ -105,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    //_firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.subscribeToTopic('all');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -118,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               'REFRESH',
             ),
-            textColor: Colors.lightBlue,
+            textColor: Color(0xffff9900),
           ),
         )..show(context);
       },
@@ -146,13 +149,14 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 35,
             ),
           ),
+          centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(FontAwesomeIcons.signOutAlt),
-              key: Key('logoutButton'),
-              color: Colors.white,
-              onPressed: () => _goToLogin(context),
-            ),
+//            IconButton(
+//              icon: const Icon(FontAwesomeIcons.signOutAlt),
+//              key: Key('logoutButton'),
+//              color: Colors.white,
+//              onPressed: () => _goToLogin(context),
+//            ),
             IconButton(
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
                   key: Key("Filter"), color: Colors.white),
@@ -264,13 +268,40 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             PopupMenuButton<DotMenu>(
+              key: Key("dropdownButton"),
               onSelected: (DotMenu result) {
                 setState(() {
-                  print(result);
+                  switch (result) {
+                    case DotMenu.settings:
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Settings()),
+                        );
+                      }
+                      break;
+                    case DotMenu.about:
+                      {
+//                        Navigator.push(
+//                          context,
+//                          MaterialPageRoute(builder: (context) => Settings()),
+//                        );
+                      }
+                      break;
+                    case DotMenu.contact:
+                      {
+//                        Navigator.push(
+//                          context,
+//                          MaterialPageRoute(builder: (context) => Settings()),
+//                        );
+                      }
+                      break;
+                  }
                 });
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
                 const PopupMenuItem<DotMenu>(
+                  key: Key("settingsButton"),
                   value: DotMenu.settings,
                   child: Text('Settings'),
                 ),

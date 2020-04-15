@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
+import 'package:finesse_nation/Settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:meta/meta.dart';
 import '.env.dart';
 import 'User.dart';
 import 'login/flutter_login.dart';
@@ -17,18 +17,25 @@ class Network {
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
+  static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
+  static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
+  static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
 
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
-  static Future<void> addFinesse(Finesse newFinesse) async {
-    Map bodyMap = newFinesse.toMap();
-    final http.Response response = await http.post(ADD_URL,
+  static Future<http.Response> postData(var url, var data) async {
+    return await http.post(url,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'api_token': token
         },
-        body: json.encode(bodyMap));
+        body: json.encode(data));
+  }
+
+  static Future<void> addFinesse(Finesse newFinesse) async {
+    Map bodyMap = newFinesse.toMap();
+    http.Response response = await postData(ADD_URL, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
@@ -39,26 +46,18 @@ class Network {
 
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
-//    print('finished getting');
-//    print(response.statusCode);
-//    print(response.body.length);
-//    print('body = ${response.body}');
+
     if (response.statusCode == 200) {
-//      print('decoding');
-      /*List<Map<dynamic,dynamic>>*/
       var data = json.decode(response.body);
-//      print('decoded, data = $data');
       List<Finesse> responseJson =
           data.map<Finesse>((json) => Finesse.fromJson(json)).toList();
       responseJson = await applyFilters(responseJson);
-//      print(responseJson.length);
-//      print('responsejson = $responseJson');
       return responseJson;
     } else {
-      print('nope');
-      print(token);
-      print(response.statusCode);
-      print(response.body);
+//      print('nope');
+//      print(token);
+//      print(response.statusCode);
+//      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -69,10 +68,12 @@ class Network {
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
     List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
 
-    print(activeFilter);
-    print(typeFilter);
     if (activeFilter == false) {
-      filteredFinesses.removeWhere((value) => value.getActive() == false);
+      filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
+      filteredFinesses.removeWhere(
+          (fin) => fin.getActive().contains(User.currentUser.email));
+      filteredFinesses
+          .removeWhere((fin) => fin.getActive().contains(fin.emailId));
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
@@ -82,12 +83,7 @@ class Network {
 
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
-    final http.Response response = await http.post(DELETE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(jsonObject));
+    http.Response response = await postData(DELETE_URL, jsonObject);
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -102,12 +98,7 @@ class Network {
     var jsonObject = {"eventId": newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
-    final http.Response response = await http.post(UPDATE_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(bodyMap));
+    http.Response response = await postData(UPDATE_URL, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -118,85 +109,55 @@ class Network {
     }
   }
 
-  static Future<void> sendToAll({
-    @required String title,
-    @required String body,
-  }) =>
-      sendToTopic(title: title, body: body, topic: 'all');
-
-  static Future<void> sendToTopic(
-          {@required String title,
-          @required String body,
-          @required String topic}) =>
-      sendTo(title: title, body: body, fcmToken: '/topics/$topic');
-
-  static Future<void> sendTo({
-    @required String title,
-    @required String body,
-    @required String fcmToken,
-  }) =>
-      http.post(
-        'https://fcm.googleapis.com/fcm/send',
-        body: json.encode({
-          'notification': {
-            'body': '$body',
-            'title': '$title',
-            'image':
-                'https://vignette.wikia.nocookie.net/rezero/images/0/02/Rem_Anime.png',
-          },
-          'priority': 'high',
-          'data': {
-            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'id': '1',
-            'status': 'done',
-          },
-          'to': '$fcmToken',
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'key=$serverKey',
-        },
-      );
+  static Future<dynamic> sendToAll(String title, String body) {
+    final content = {
+      'notification': {
+        'body': '$body',
+        'title': '$title',
+        'image': 'https://i.imgur.com/rw4rJt2.png',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+      },
+      'to': '/topics/all',
+    };
+    return http.post(
+      SEND_NOTIFICATION_URL,
+      body: json.encode(content),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverKey',
+      },
+    );
+  }
 
   // Sign in callback
   static Future<String> authUser(LoginData data) async {
     Map bodyMap = data.toMap();
-    final http.Response resp = await http.post(LOGIN_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(bodyMap));
-    var status = resp.statusCode;
+    http.Response response = await postData(LOGIN_URL, bodyMap);
+
+    var status = response.statusCode;
     if (status == 400) {
       return 'Username or password is incorrect.';
     }
-    // TODO: GET the actual user data
-    User.currentUser = User(data.email, data.password, 'TBD', 'TBD', 0);
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
   // Forgot Password callback
   static Future<String> recoverPassword(String email) async {
+    email = email.trim();
     var emailCheck = validateEmail(email);
     const VALID_STATUS = null;
     if (emailCheck == VALID_STATUS) {
       var payload = {"emailId": email};
-      print(payload);
-      final http.Response response = await http.post(PASSWORD_RESET_URL,
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'api_token': token
-          },
-          body: json.encode(payload));
-      print(response.statusCode);
-      print(response.body);
+      http.Response response = await postData(PASSWORD_RESET_URL, payload);
       if (response.statusCode == 200) {
         return null;
       } else {
-        print(response.statusCode);
-        print(response.body);
-        print(token);
         return "Password Reset request failed";
       }
     } else {
@@ -207,32 +168,19 @@ class Network {
   // Sign up callback
   static Future<String> createUser(LoginData data) async {
     String email = data.email;
+    email = email.trim();
     String password = data.password;
-    int points = 0;
-    var atSplit = email.split('@');
-    var username = atSplit[0];
-    var dotSplit = atSplit[1].split('.');
-    var school = dotSplit[0];
     var payload = {
-      "userName": username,
       "emailId": email,
       "password": password,
-      "school": school,
-      "points": points
     };
+    http.Response response = await postData(SIGNUP_URL, payload);
 
-    final http.Response resp = await http.post(SIGNUP_URL,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'api_token': token
-        },
-        body: json.encode(payload));
-    var status = resp.statusCode, respBody = json.decode(resp.body);
+    var status = response.statusCode, respBody = json.decode(response.body);
     if (status == 400) {
       return respBody['msg'];
     }
-    // TODO: GET the actual user data
-    User.currentUser = User(email, password, username, school, points);
+    await Network.updateCurrentUser(email: data.email);
     return null;
   }
 
@@ -254,5 +202,30 @@ class Network {
     return password.length < 6
         ? 'Password must be at least 6 characters'
         : null;
+  }
+
+  static Future<String> changeNotifications(toggle) async {
+    var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
+    http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
+    if (response.statusCode == 200) {
+      User.currentUser.setNotifications(toggle);
+      return null;
+    } else {
+      throw Exception('Notification change request failed');
+    }
+  }
+
+  static Future<void> updateCurrentUser({String email}) async {
+    email = email ?? User.currentUser.email;
+    var payload = {"emailId": email};
+    http.Response response = await postData(GET_CURRENT_USER_URL, payload);
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      User.currentUser = User.fromJson(data);
+      await Notifications.notificationsSet(User.currentUser.notifications);
+    } else {
+      throw Exception('Failed to get current user');
+    }
   }
 }
