@@ -235,18 +235,43 @@ void main() {
       await addEvent(
           driver, nameText, locationText, descriptionText, durationText);
       await delay(1000);
-//      await driver.tap(find.text(locationText));
-//      await delay(1000);
       await driver.tap(find.text(locationText));
       await delay(1000);
-//      await delay(1000);
       await driver.getText(find.text(descriptionText));
-      await driver.getText(find.text('Duration: ' + durationText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
       await delay(5000);
       await markAsEnded(driver, locationText);
     });
+  });
+
+  group('Mark as Expired', () {
+    FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('Add test then mark as expired', () async {
+      String nameText = 'View Info Integration Test Free Food';
+      String durationText = 'Mark as Expired Integration Test';
+      String descriptionText = 'View Info description';
+      var now = DateTime.now();
+      String locationText = 'Location: ' + now.toString();
+      await addEvent(
+          driver, nameText, locationText, descriptionText, durationText);
+      await delay(5000);
+      await markAsEnded(driver, locationText);
+    });
+
+
+
   });
 
   group('Maps Link', () {
