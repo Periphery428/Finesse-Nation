@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:finesse_nation/addEvent.dart';
-import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/Pages/addEvent.dart';
+import 'package:finesse_nation/Pages/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
-import 'widgets/PopUpBox.dart';
+import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'LoginScreen.dart';
+import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';

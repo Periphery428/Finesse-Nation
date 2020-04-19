@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/Pages/Settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
-import 'User.dart';
-import 'login/flutter_login.dart';
+import 'package:finesse_nation/login/flutter_login.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';

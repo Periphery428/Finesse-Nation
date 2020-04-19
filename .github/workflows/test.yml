@@ -26,7 +26,13 @@ jobs:
       - run: flutter pub get
       #      - run: flutter format lib/ test/ test_driver/
       - run: flutter test
+      - run: flutter pub run tool/remove_coverage.dart -f coverage/lcov.info -r "lib\widgets\\","lib\login\\","lib\Pages\\",".env.dart","main.dart"
 
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "coverage/lcov.info"
 #  integration:
 #    name: Integration Tests
 #    runs-on: macos-latest

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-//import 'package:flutter_login/flutter_login.dart';
-import 'login/flutter_login.dart';
-import 'main.dart';
-import 'Network.dart';
+import 'package:finesse_nation/login/flutter_login.dart';
+import 'package:finesse_nation/main.dart';
+import 'package:finesse_nation/Network.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class LoginScreen extends StatelessWidget {
