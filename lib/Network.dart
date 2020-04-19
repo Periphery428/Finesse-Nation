@@ -20,7 +20,7 @@ class Network {
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
   static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
-
+  static const ALL_TOPIC = 'test';
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
@@ -109,7 +109,7 @@ class Network {
     }
   }
 
-  static Future<dynamic> sendToAll(String title, String body) {
+  static Future<dynamic> sendToAll(String title, String body, String id, {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
         'body': '$body',
@@ -121,8 +121,9 @@ class Network {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'id': '1',
         'status': 'done',
+        'event_id': '$id',
       },
-      'to': '/topics/all',
+      'to': '/topics/$topic',
     };
     return http.post(
       SEND_NOTIFICATION_URL,
