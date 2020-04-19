@@ -1,5 +1,5 @@
 import 'package:finesse_nation/Finesse.dart';
-import 'file:///C:/Users/rjbec/OneDrive/Documents/Git/Finesse-Nation/lib/Pages/FinessePage.dart';
+import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/material.dart';
 
 Card buildFinesseCard(Finesse fin, BuildContext context) {
