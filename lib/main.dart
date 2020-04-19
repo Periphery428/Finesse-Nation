@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,7 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
         print("onResume: $message");
       },
     );
-    _firebaseMessaging.requestNotificationPermissions();
+    if (!kIsWeb) {
+      _firebaseMessaging.requestNotificationPermissions();
+    }
   }
 
   @override
