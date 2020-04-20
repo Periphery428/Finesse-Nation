@@ -28,7 +28,7 @@ class FinessePage extends StatelessWidget {
               const PopupMenuItem<DotMenu>(
                 key: Key("markAsEndedButton"),
                 value: DotMenu.markEnded,
-                child: Text('Mark as ended'),
+                child: Text('Mark as expired'),
               ),
             ],
           )

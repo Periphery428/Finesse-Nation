@@ -3,8 +3,7 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'User.dart';
-import 'LoginScreen.dart';
+import 'package:finesse_nation/Pages/LoginScreen.dart';
 
 class Settings extends StatelessWidget {
   @override

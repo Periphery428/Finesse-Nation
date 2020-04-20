@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'dart:convert';
-import 'User.dart';
+import 'package:finesse_nation/User.dart';
 
 class Finesse {
   String eventId;
