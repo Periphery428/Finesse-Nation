@@ -9,7 +9,6 @@ import 'Comment.dart';
 import 'widgets/buildFinesseCard.dart';
 
 enum DotMenu { markEnded }
-final Random _rng = Random();
 bool _commentIsEmpty;
 List<Comment> mainComments;
 

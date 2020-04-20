@@ -281,10 +281,6 @@ void main() {
 
   test('Get Comments', () async {
     String eventId = '5e9d1159c87f740017d29d93';
-    var comments = await Network.getComments(eventId);
-    print(comments[0].comment +
-            comments[0].emailId +
-            comments[0].postedTime?.toString() ??
-        'NO DATE');
+    await Network.getComments(eventId);
   });
 }
