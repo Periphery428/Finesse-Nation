@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 import 'dart:async';
+import 'package:finesse_nation/Comment.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/User.dart';
@@ -269,5 +270,21 @@ void main() {
     var response =
         await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
+  });
+
+  test('Add comments', () async {
+    Comment comment =
+        Comment('hello world', 'a@a.com', DateTime.now().toString());
+    String eventId = '5e9d1159c87f740017d29d93';
+    await Network.addComment(comment, eventId);
+  });
+
+  test('Get Comments', () async {
+    String eventId = '5e9d1159c87f740017d29d93';
+    var comments = await Network.getComments(eventId);
+    print(comments[0].comment +
+            comments[0].emailId +
+            comments[0].postedTime?.toString() ??
+        'NO DATE');
   });
 }

@@ -7,12 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
 import 'User.dart';
 import 'login/flutter_login.dart';
+import 'Comment.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
   static const DELETE_URL = DOMAIN + 'food/deleteEvent';
   static const ADD_URL = DOMAIN + 'food/addEvent';
   static const GET_URL = DOMAIN + 'food/getEvents';
+  static const ADD_COMMENT_URL = DOMAIN + 'comment';
+  static const GET_COMMENT_URL = DOMAIN + 'comment/';
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
@@ -54,10 +57,6 @@ class Network {
       responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
-//      print('nope');
-//      print(token);
-//      print(response.statusCode);
-//      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -228,6 +227,32 @@ class Network {
       await Notifications.notificationsSet(User.currentUser.notifications);
     } else {
       throw Exception('Failed to get current user');
+    }
+  }
+
+  static Future<void> addComment(Comment comment, String eventId) async {
+    Map bodyMap = comment.toMap();
+    bodyMap['eventId'] = eventId;
+    http.Response response = await postData(ADD_COMMENT_URL, bodyMap);
+
+    final int statusCode = response.statusCode;
+    if (statusCode != 200 && statusCode != 201) {
+      throw new Exception(
+          "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
+    }
+  }
+
+  static Future<List<Comment>> getComments(String eventId) async {
+    final response = await http
+        .get(GET_COMMENT_URL + eventId, headers: {'api_token': token});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      List<Comment> comments =
+          data.map<Comment>((json) => Comment.fromJson(json)).toList();
+      return comments;
+    } else {
+      throw Exception('Failed to load finesses');
     }
   }
 }

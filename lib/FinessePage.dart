@@ -5,10 +5,13 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
+import 'Comment.dart';
+import 'widgets/buildFinesseCard.dart';
 
 enum DotMenu { markEnded }
 final Random _rng = Random();
 bool _commentIsEmpty;
+List<Comment> mainComments;
 
 class FinessePage extends StatelessWidget {
   final Finesse fin;
@@ -67,15 +70,28 @@ class FinesseDetails extends StatefulWidget {
 // Create a corresponding State class.
 class FinesseDetailsState extends State<FinesseDetails> {
   Finesse fin;
-  List<String> comments = [];
+  Future<List<Comment>> comments;
   final TextEditingController _controller = TextEditingController();
 
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
+    this.comments = Network.getComments(fin.getId());
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: comments,
+      builder: (context, snapshot) {
+        return snapshot.data != null
+            ? mainCard(snapshot.data, context)
+            : Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget mainCard(List<Comment> comments, BuildContext context) {
+    mainComments = comments;
     Widget imageSection = InkWell(
       onTap: () => Navigator.push(
         context,
@@ -254,7 +270,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             ),
           ),
           Text(
-            '${comments.length}',
+            '${mainComments.length}',
             style: TextStyle(
               fontSize: 15,
               color: Color(0xffc47600),
@@ -268,6 +284,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
       controller: _controller,
       autovalidate: true,
       validator: (comment) {
+//        if (comment.isEmpty) {
+//          return 'Comment cannot be empty';
+//        }
+//        return null;
         bool isEmpty = comment.isEmpty;
         if (isEmpty != _commentIsEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -285,7 +305,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Icon(
             Icons.account_circle,
-            color: Colors.blue,
+            color: randColor(User.currentUser.email),
             size: 50,
           ),
         ),
@@ -302,24 +322,25 @@ class FinesseDetailsState extends State<FinesseDetails> {
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
-                    setState(() {
-                      String comment = _controller.value.text;
-                      comments.add(comment);
-                      _controller.clear();
-                    });
+                    String comment = _controller.value.text;
+                    Comment newComment = Comment.post(comment);
+                    setState(() => mainComments.add(newComment));
+                    Network.addComment(newComment, fin.getId());
+                    _controller.clear();
                   }),
       ),
       style: TextStyle(color: Colors.grey[100]),
       onFieldSubmitted: (comment) {
-        setState(() => {comments.add(comment)});
-        _controller.clear();
+        if (comment.isNotEmpty) {
+          Comment newComment = Comment.post(comment);
+          setState(() => mainComments.add(newComment));
+          Network.addComment(newComment, fin.getId());
+          _controller.clear();
+        }
       },
     );
 
-    Widget getCommentView(String comment) {
-      int min = 0xff000000;
-      int max = 0xffffffff;
-      int val = min + _rng.nextInt(max - min + 1);
+    Widget getCommentView(Comment comment) {
       Widget commentView = Column(
         children: [
           Row(
@@ -329,7 +350,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Icon(
                   Icons.account_circle,
-                  color: Color(val),
+                  color: randColor(comment.emailId),
                   size: 50,
                 ),
               ),
@@ -342,13 +363,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
                       child: Row(
                         children: [
                           Text(
-                            "User Name",
+                            comment.emailId,
                             style: TextStyle(
                               color: Color(0xffff9900),
                             ),
                           ),
                           Text(
-                            " · 1 hour ago",
+                            " · ${timeSince(comment.postedTime)}",
                             style: TextStyle(
                               color: Color(0xffc47600),
                             ),
@@ -357,7 +378,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                       ),
                     ),
                     Text(
-                      comment,
+                      comment.comment,
                       style: TextStyle(
                         color: Colors.grey[100],
                       ),
@@ -376,7 +397,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
     }
 
     List<Widget> commentsView =
-        comments.map((comment) => getCommentView(comment)).toList();
+        mainComments.map((comment) => getCommentView(comment)).toList();
 
     Widget viewCommentSection = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,6 +434,14 @@ class FinesseDetailsState extends State<FinesseDetails> {
 //        ),
       ],
     );
+  }
+
+  Color randColor(String email) {
+    int min = 0xff000000;
+    int max = 0xffffffff;
+    int seed = email.codeUnits.fold(0, (i, j) => i + j);
+    int val = min + Random(seed).nextInt(max - min + 1);
+    return Color(val);
   }
 }
 
