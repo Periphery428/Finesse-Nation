@@ -53,7 +53,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<bool> _activeFilter;

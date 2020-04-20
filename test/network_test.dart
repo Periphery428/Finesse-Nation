@@ -266,7 +266,8 @@ void main() {
   });
 
   test('Send Push Notification', () async {
-    var response = await Network.sendToAll('test', 'test', '-1', topic: 'tests');
+    var response =
+        await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
   });
 }

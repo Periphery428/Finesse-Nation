@@ -109,7 +109,8 @@ class Network {
     }
   }
 
-  static Future<dynamic> sendToAll(String title, String body, String id, {String topic: ALL_TOPIC}) {
+  static Future<dynamic> sendToAll(String title, String body, String id,
+      {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
         'body': '$body',

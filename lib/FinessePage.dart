@@ -4,8 +4,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
 
 enum DotMenu { markEnded }
+final Random _rng = Random();
+bool _commentIsEmpty;
 
 class FinessePage extends StatelessWidget {
   final Finesse fin;
@@ -13,6 +16,7 @@ class FinessePage extends StatelessWidget {
   FinessePage(this.fin);
 
   Widget build(BuildContext context) {
+    _commentIsEmpty = true;
     final title = fin.getTitle();
 
     return Scaffold(
@@ -63,6 +67,8 @@ class FinesseDetails extends StatefulWidget {
 // Create a corresponding State class.
 class FinesseDetailsState extends State<FinesseDetails> {
   Finesse fin;
+  List<String> comments = [];
+  final TextEditingController _controller = TextEditingController();
 
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
@@ -232,6 +238,151 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
+    Widget commentsHeaderSection = Padding(
+      padding: EdgeInsets.only(
+        left: 12,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          Text(
+            'Comments  ',
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xffff9900),
+            ),
+          ),
+          Text(
+            '${comments.length}',
+            style: TextStyle(
+              fontSize: 15,
+              color: Color(0xffc47600),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget addCommentSection = TextFormField(
+      controller: _controller,
+      autovalidate: true,
+      validator: (comment) {
+        bool isEmpty = comment.isEmpty;
+        if (isEmpty != _commentIsEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _commentIsEmpty = isEmpty;
+            });
+          });
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: 'Add a comment...',
+        hintStyle: TextStyle(color: Color(0xffc47600)),
+        prefixIcon: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Icon(
+            Icons.account_circle,
+            color: Colors.blue,
+            size: 50,
+          ),
+        ),
+        suffixIcon: IconButton(
+            color: Color(0xffff9900),
+            disabledColor: Colors.grey[500],
+            icon: Icon(
+              Icons.send,
+            ),
+            onPressed: (_commentIsEmpty)
+                ? null
+                : () {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
+                    setState(() {
+                      String comment = _controller.value.text;
+                      comments.add(comment);
+                      _controller.clear();
+                    });
+                  }),
+      ),
+      style: TextStyle(color: Colors.grey[100]),
+      onFieldSubmitted: (comment) {
+        setState(() => {comments.add(comment)});
+        _controller.clear();
+      },
+    );
+
+    Widget getCommentView(String comment) {
+      int min = 0xff000000;
+      int max = 0xffffffff;
+      int val = min + _rng.nextInt(max - min + 1);
+      Widget commentView = Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(
+                  Icons.account_circle,
+                  color: Color(val),
+                  size: 50,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            "User Name",
+                            style: TextStyle(
+                              color: Color(0xffff9900),
+                            ),
+                          ),
+                          Text(
+                            " · 1 hour ago",
+                            style: TextStyle(
+                              color: Color(0xffc47600),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      comment,
+                      style: TextStyle(
+                        color: Colors.grey[100],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+//          Divider(thickness: 0.5,color: Colors.black,)
+        ],
+      );
+      commentView = Padding(
+          padding: EdgeInsets.symmetric(vertical: 5), child: commentView);
+      return commentView;
+    }
+
+    List<Widget> commentsView =
+        comments.map((comment) => getCommentView(comment)).toList();
+
+    Widget viewCommentSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: commentsView,
+    );
+
     return ListView(
       children: [
         Card(
@@ -245,9 +396,21 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getDescription() != "" ? descriptionSection : Container(),
               timeSection,
               userSection,
+              commentsHeaderSection,
+              addCommentSection,
+              viewCommentSection,
             ],
           ),
         ),
+//        Card(
+//          color: Colors.grey[850],
+//          child: Column(
+//            children: [
+//              addCommentSection,
+//              viewCommentSection,
+//            ],
+//          ),
+//        ),
       ],
     );
   }
