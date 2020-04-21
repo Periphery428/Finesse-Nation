@@ -391,7 +391,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       );
       commentView = Padding(
-          padding: EdgeInsets.symmetric(vertical: 5), child: commentView);
+          padding: EdgeInsets.only(top: 5, bottom: 5, right: 10), child: commentView);
       return commentView;
     }
 
