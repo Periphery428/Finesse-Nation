@@ -44,14 +44,9 @@ main(List<String> arguments) {
   print(patterns);
   bool keep = true;
   final keeper = (String s) {
-//    if(s.startsWith('SF:')){
-//      print(s);
-//      print(patterns[0]);
-//      print(s.substring(3).contains(patterns[0]));
-//    }
-//    print(s.substring(3));
     if (s.startsWith('SF:') &&
         patterns.any((String pattern) => s.substring(3).contains(pattern))) {
+      print("Removing ${s.substring(3)}");
       keep = false;
     } else if (!keep && s == 'end_of_record') {
       keep = true;
