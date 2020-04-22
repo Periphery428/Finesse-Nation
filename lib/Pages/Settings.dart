@@ -21,7 +21,7 @@ class Settings extends StatelessWidget {
 }
 
 class Notifications {
-  static void notificationsSet(toggle) {
+  static Future<void> notificationsSet(toggle) async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
     if (User.currentUser.email.contains('@test.com') ||
         User.currentUser.email.contains('@test.edu')) {
@@ -32,7 +32,7 @@ class Notifications {
     } else {
       _firebaseMessaging.unsubscribeFromTopic('all');
     }
-    Network.changeNotifications(toggle);
+    await Network.changeNotifications(toggle);
   }
 }
 
