@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class PopUpBox {
   static Future showPopupBox(
-      {BuildContext context, Widget willDisplayWidget, Widget button}) {
+      {BuildContext context, Widget willDisplayWidget, Widget button, String title = "Filter"}) {
     return showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
             title: Text(
-              'Filter',
+              title,
               style: TextStyle(
                 color: Colors.white,
               ),
