@@ -172,9 +172,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Color(0xffff9900),
                 ),
               ),
-              fin.getDuration() != "" &&
-                      (fin.getActive().length >= 3 ||
-                          fin.isActive.contains(fin.getEmailId()))
+              fin.getDuration() != "" && (fin
+                  .getActive()
+                  .length < 3 &&
+                  !fin.isActive.contains(fin.getEmailId()))
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
