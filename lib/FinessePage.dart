@@ -80,6 +80,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      initialData: <Comment>[],
       future: comments,
       builder: (context, snapshot) {
         return snapshot.data != null
@@ -391,7 +392,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       );
       commentView = Padding(
-          padding: EdgeInsets.only(top: 5, bottom: 5, right: 10), child: commentView);
+        padding: EdgeInsets.only(
+          top: 5,
+          bottom: 5,
+          right: 10,
+        ),
+        child: commentView,
+      );
       return commentView;
     }
 
