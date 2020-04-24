@@ -307,7 +307,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           child: Icon(
             Icons.account_circle,
             color: randColor(User.currentUser.email),
-            size: 50,
+            size: 45,
           ),
         ),
         suffixIcon: IconButton(
@@ -352,7 +352,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 child: Icon(
                   Icons.account_circle,
                   color: randColor(comment.emailId),
-                  size: 50,
+                  size: 45,
                 ),
               ),
               Expanded(
@@ -360,7 +360,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.only(top: 4),
                       child: Row(
                         children: [
                           Text(
