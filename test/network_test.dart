@@ -1,14 +1,7 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
 import 'dart:async';
 import 'package:finesse_nation/Comment.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,6 +50,7 @@ const VALID_EMAIL = 'test@test.com';
 const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
+const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
 
 Future<void> login(
     {String email: VALID_EMAIL,
@@ -90,7 +84,7 @@ void main() {
 
 //  createTestUser();
 
-  test('Adding a new Finesse', () async {
+  /*test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getDescription(), newFinesse.getDescription());
@@ -270,17 +264,45 @@ void main() {
     var response =
         await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
+  });*/
+
+  test('Add valid comment', () async {
+    Comment comment =
+        Comment('test comment', VALID_EMAIL, DateTime.now().toString());
+    var response = await Network.addComment(comment, TEST_EVENT_ID);
+    expect(response.statusCode, 200);
   });
 
-  test('Add comments', () async {
-    Comment comment =
-        Comment('hello world', 'a@a.com', DateTime.now().toString());
-    String eventId = '5e9d1159c87f740017d29d93';
-    await Network.addComment(comment, eventId);
+  test('Add invalid comment', () async {
+    try {
+      await Network.addComment(Comment('', '', ''), '');
+    } catch (e) {
+      print(e.toString());
+      String error = e.toString();
+      expect(error.contains('Error while adding comment'), true);
+      expect(error.contains('status = 400'), true);
+      expect(error.contains('Please enter a valid email address'), true);
+      expect(error.contains('The comment cannot be empty'), true);
+      expect(error.contains('The time cannot be empty'), true);
+      expect(error.contains('Please enter a valid event id'), true);
+      return;
+    }
+    fail('Adding invalid comments should have thrown an exception');
   });
 
   test('Get Comments', () async {
-    String eventId = '5e9d1159c87f740017d29d93';
-    await Network.getComments(eventId);
+    Comment testComment =
+        Comment('test comment', VALID_EMAIL, DateTime.now().toString());
+    await Network.addComment(testComment, TEST_EVENT_ID);
+    List<Comment> comments = await Network.getComments(TEST_EVENT_ID);
+    Comment last = comments.last;
+    expect(last.comment, testComment.comment);
+    expect(last.emailId, testComment.emailId);
+    expect(last.postedTime, testComment.postedTime);
+  });
+
+  test('Get Invalid Comments', () async {
+    List<Comment> result = await Network.getComments('');
+    print(result.map((e) => e?.emailId ?? 'nope'));
   });
 }

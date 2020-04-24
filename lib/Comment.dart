@@ -3,12 +3,12 @@ import 'User.dart';
 class Comment {
   String _comment;
   String _emailId;
-  DateTime _postedTime;
+  String _postedTime;
 
   Comment(String comment, String emailId, String postedTime) {
     _comment = comment;
     _emailId = emailId;
-    _postedTime = parse(postedTime);
+    _postedTime = postedTime;
   }
 
   static Comment post(String comment) {
@@ -17,7 +17,7 @@ class Comment {
     return Comment(comment, emailId, postedTime);
   }
 
-  factory Comment.fromJson(var json) {
+  static Comment fromJson(var json) {
     String comment = json['comment'];
     String emailId = json['emailId'];
     String postedTime = json['postedTime'];
@@ -28,26 +28,15 @@ class Comment {
 
   String get emailId => _emailId;
 
-  DateTime get postedTime => _postedTime;
+  String get postedTime => _postedTime;
+
+  DateTime get postedDateTime => DateTime.parse(_postedTime);
 
   Map toMap() {
-    var map = Map<String, dynamic>();
-    map['comment'] = comment;
-    map['emailId'] = emailId;
-    map['postedTime'] = postedTime.toString();
+    var map = Map<String, String>();
+    map['comment'] = _comment;
+    map['emailId'] = _emailId;
+    map['postedTime'] = _postedTime;
     return map;
-  }
-
-  static dynamic parse(String time) {
-    if (time != null) {
-      try {
-        String timeStr = time.toString();
-        DateTime res = DateTime.parse(timeStr);
-        return res;
-      } catch (Exception) {
-        return DateTime.now();
-      }
-    }
-    return DateTime.now();
   }
 }

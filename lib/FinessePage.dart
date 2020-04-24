@@ -172,10 +172,9 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Color(0xffff9900),
                 ),
               ),
-              fin.getDuration() != "" && (fin
-                  .getActive()
-                  .length < 3 &&
-                  !fin.isActive.contains(fin.getEmailId()))
+              fin.getDuration() != "" &&
+                      (fin.getActive().length < 3 &&
+                          !fin.isActive.contains(fin.getEmailId()))
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
@@ -306,7 +305,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Icon(
             Icons.account_circle,
-            color: randColor(User.currentUser.email),
+            color: getColor(User.currentUser.email),
             size: 45,
           ),
         ),
@@ -351,7 +350,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Icon(
                   Icons.account_circle,
-                  color: randColor(comment.emailId),
+                  color: getColor(comment.emailId),
                   size: 45,
                 ),
               ),
@@ -370,7 +369,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                             ),
                           ),
                           Text(
-                            " · ${timeSince(comment.postedTime)}",
+                            " · ${timeSince(comment.postedDateTime)}",
                             style: TextStyle(
                               color: Color(0xffc47600),
                             ),
@@ -443,7 +442,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
     );
   }
 
-  Color randColor(String email) {
+  Color getColor(String email) {
     int min = 0xff000000;
     int max = 0xffffffff;
     int seed = email.codeUnits.fold(0, (i, j) => i + j);

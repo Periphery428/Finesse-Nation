@@ -108,7 +108,7 @@ class Network {
     }
   }
 
-  static Future<dynamic> sendToAll(String title, String body, String id,
+  static Future<http.Response> sendToAll(String title, String body, String id,
       {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
@@ -230,16 +230,18 @@ class Network {
     }
   }
 
-  static Future<void> addComment(Comment comment, String eventId) async {
+  static Future<http.Response> addComment(
+      Comment comment, String eventId) async {
     Map bodyMap = comment.toMap();
     bodyMap['eventId'] = eventId;
     http.Response response = await postData(ADD_COMMENT_URL, bodyMap);
 
     final int statusCode = response.statusCode;
-    if (statusCode != 200 && statusCode != 201) {
+    if (statusCode != 200) {
       throw Exception(
-          "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
+          "Error while adding comment, status = ${response.statusCode}, ${response.body}}");
     }
+    return response;
   }
 
   static Future<List<Comment>> getComments(String eventId) async {
@@ -252,7 +254,8 @@ class Network {
           data.map<Comment>((json) => Comment.fromJson(json)).toList();
       return comments;
     } else {
-      throw Exception('Failed to load finesses');
+      throw Exception(
+          "Error while getting comments, status = ${response.statusCode}, ${response.body}}");
     }
   }
 }
