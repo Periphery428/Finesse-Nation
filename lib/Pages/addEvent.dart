@@ -96,10 +96,9 @@ class MyCustomFormState extends State<MyCustomForm> {
       String newImage = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              TakePictureScreen(
-                camera: firstCamera,
-              ),
+          builder: (context) => TakePictureScreen(
+            camera: firstCamera,
+          ),
         ),
       );
 //    if (newImage != null) {
@@ -413,5 +412,5 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-typedef void OnPickImageCallback(double maxWidth, double maxHeight,
-    int quality);
+typedef void OnPickImageCallback(
+    double maxWidth, double maxHeight, int quality);

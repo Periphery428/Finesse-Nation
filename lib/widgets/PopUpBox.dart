@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PopUpBox {
-  static Future showPopupBox({BuildContext context,
-    Widget willDisplayWidget,
-    Widget button,
-    String title = "Filter"}) {
+  static Future showPopupBox(
+      {BuildContext context,
+      Widget willDisplayWidget,
+      Widget button,
+      String title = "Filter"}) {
     return showDialog(
         context: context,
         builder: (_) {
