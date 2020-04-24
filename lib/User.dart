@@ -38,4 +38,7 @@ class User {
   void setNotifications(var notif) {
     _notifications = notif;
   }
+  void setEmail(var email) {
+    _email = email;
+  }
 }

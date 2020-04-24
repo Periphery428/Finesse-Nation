@@ -3,22 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/Finesse.dart';
-import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/Pages/cameraPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
-
-var firstCamera = CameraDescription();
 
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Share a Finesse';
 
-    setupCamera();
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
@@ -29,17 +24,8 @@ class AddEvent extends StatelessWidget {
   }
 }
 
-void setupCamera() async {
-  // Ensure that plugin services are initialized so that `availableCameras()`
-  // can be called before `runApp()`
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
-
-  // Get a specific camera from the list of available cameras.
-  firstCamera = cameras.first;
-}
+typedef void OnPickImageCallback(
+    double maxWidth, double maxHeight, int quality);
 
 // Create a Form widget.
 class MyCustomForm extends StatefulWidget {
@@ -70,7 +56,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   double width = 600;
   double height = 240;
   dynamic _pickImageError;
-  String _retrieveDataError;
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(
@@ -89,23 +74,6 @@ class MyCustomFormState extends State<MyCustomForm> {
       typeController.dispose();
       super.dispose();
     }
-
-    navigateAndDisplaySelection(BuildContext context) async {
-      // Navigator.push returns a Future that completes after calling
-      // Navigator.pop on the Selection Screen.
-      String newImage = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TakePictureScreen(
-            camera: firstCamera,
-          ),
-        ),
-      );
-//    if (newImage != null) {
-//      setState(() {
-//        image = newImage;
-//      });
-    }
   }
 
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
@@ -120,12 +88,6 @@ class MyCustomFormState extends State<MyCustomForm> {
       _pickImageError = e;
     }
   }
-
-//  Future<void> _displayPickImageDialog(
-//      BuildContext context, OnPickImageCallback onPick) async {
-//
-//    onPick(width, height, quality);
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +182,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
               ),
               new DropdownButton<String>(
-//                hint: Text("Select an event type"),
                 style: TextStyle(color: Colors.red),
                 items: <String>['Food', 'Other'].map((String value) {
                   return new DropdownMenuItem<String>(
@@ -253,16 +214,12 @@ class MyCustomFormState extends State<MyCustomForm> {
               Material(
                 child: InkWell(
                   onTap: () {
-//                    getImage();
                   },
                   child: Container(
                     color: Colors.grey[850],
 //                  height: 150.0,
 //                    alignment: Alignment.center,
                     child: _image == null ? Container() : Image.file(_image),
-//                    child: Center(
-//
-//                    ),
                   ),
                 ),
               ),
@@ -412,5 +369,3 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-typedef void OnPickImageCallback(
-    double maxWidth, double maxHeight, int quality);
