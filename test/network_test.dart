@@ -255,7 +255,8 @@ void main() {
   test('Changing Notifications Exception', () async {
     String temp = User.currentUser.email;
     User.currentUser.setEmail("invalid");
-    await expectException(Network.changeNotifications(false), "Notification change request failed");
+    await expectException(Network.changeNotifications(false),
+        "Notification change request failed");
     User.currentUser.setEmail(temp);
   });
 
