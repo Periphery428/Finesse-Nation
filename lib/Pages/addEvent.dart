@@ -9,6 +9,7 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Pages/cameraPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:finesse_nation/widgets/PopUpBox.dart';
 
 var firstCamera = CameraDescription();
 
@@ -95,10 +96,9 @@ class MyCustomFormState extends State<MyCustomForm> {
       String newImage = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              TakePictureScreen(
-                camera: firstCamera,
-              ),
+          builder: (context) => TakePictureScreen(
+            camera: firstCamera,
+          ),
         ),
       );
 //    if (newImage != null) {
@@ -130,20 +130,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    var render;
-//    if (image == "images/photo_camera_black_288x288.png") {
-//      render = Icon(
-//        Icons.camera_alt,
-//        size: 100,
-//        color: Color(0xffFF9900),
-//      );
-//    } else {
-//      render = Image.file(
-//        File(image),
-//        width: 600,
-//        height: 240,
-//      );
-//    }
     return SingleChildScrollView(
       child: Container(
         color: Colors.grey[850],
@@ -264,37 +250,91 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ),
                 ),
               ),
-              Row(children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    _onImageButtonPressed(ImageSource.gallery,
-                        context: context);
-                  },
-                  heroTag: 'image0',
-                  tooltip: 'Pick Image from gallery',
-                  child: const Icon(Icons.photo_library),
-                ),
-                FloatingActionButton(
-                  key: Key("cameraButton"),
-                  onPressed: () {
-                    getImage();
-                  },
-                  heroTag: 'camera_pick',
-                  tooltip: 'Pick Image from gallery',
-                  child: const Icon(Icons.camera_alt),
-                )
-              ]),
               Material(
                 child: InkWell(
                   onTap: () {
-                    getImage();
+//                    getImage();
                   },
                   child: Container(
                     color: Colors.grey[850],
 //                  height: 150.0,
 //                    alignment: Alignment.center,
-                    child: Center(
-                      child: _image == null ? Container() : Image.file(_image),
+                    child: _image == null ? Container() : Image.file(_image),
+//                    child: Center(
+//
+//                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: ButtonTheme(
+                  minWidth: 100,
+                  height: 50,
+                  child: FlatButton(
+                    color: Color(0xffFF9900),
+                    onPressed: () async {
+                      await PopUpBox.showPopupBox(
+                          title: "Upload Image",
+                          context: context,
+                          button: FlatButton(
+                            key: Key("UploadOK"),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop('dialog');
+                            },
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                color: Color(0xffff9900),
+                              ),
+                            ),
+                          ),
+                          willDisplayWidget: Column(children: [
+                            FlatButton(
+                                onPressed: () {
+                                  _onImageButtonPressed(ImageSource.gallery,
+                                      context: context);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop('dialog');
+                                },
+                                child: Row(children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 15, right: 15, bottom: 15),
+                                    child: const Icon(Icons.photo_library,
+                                        color: Color(0xffFF9900)),
+                                  ),
+                                  Text(
+                                    'Upload Image From Gallery',
+                                    style: TextStyle(
+                                        color: Color(0xffFF9900), fontSize: 14),
+                                  ),
+                                ])),
+                            FlatButton(
+                                onPressed: () {
+                                  getImage();
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop('dialog');
+                                },
+                                child: Row(children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 15, right: 15, bottom: 15),
+                                    child: const Icon(Icons.camera_alt,
+                                        color: Color(0xffFF9900)),
+                                  ),
+                                  Text(
+                                    'Upload Image From Camera',
+                                    style: TextStyle(
+                                        color: Color(0xffFF9900), fontSize: 14),
+                                  ),
+                                ])),
+                          ]));
+                    },
+                    child: Text(
+                      'Upload Image',
+                      style: TextStyle(color: Colors.grey[850]),
                     ),
                   ),
                 ),
@@ -372,5 +412,5 @@ class MyCustomFormState extends State<MyCustomForm> {
   }
 }
 
-typedef void OnPickImageCallback(double maxWidth, double maxHeight,
-    int quality);
+typedef void OnPickImageCallback(
+    double maxWidth, double maxHeight, int quality);

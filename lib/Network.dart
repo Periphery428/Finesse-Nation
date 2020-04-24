@@ -83,13 +83,8 @@ class Network {
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     http.Response response = await postData(DELETE_URL, jsonObject);
-
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while removing finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while removing finesse");
     }
   }
 
@@ -99,12 +94,8 @@ class Network {
     bodyMap.addAll(jsonObject);
     http.Response response = await postData(UPDATE_URL, bodyMap);
 
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while updating finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while updating finesse");
     }
   }
 
