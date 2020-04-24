@@ -66,7 +66,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
 }
 
 String timeSince(DateTime timePosted) {
-  DateTime currTime = new DateTime.now();
+  DateTime currTime = DateTime.now();
   Duration difference = currTime.difference(timePosted);
   int seconds = difference.inSeconds;
   int minutes = difference.inMinutes;

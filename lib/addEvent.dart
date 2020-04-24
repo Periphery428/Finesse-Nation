@@ -200,13 +200,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ),
                 ),
               ),
-              new DropdownButton<String>(
+              DropdownButton<String>(
 //                hint: Text("Select an event type"),
                 style: TextStyle(color: Colors.red),
                 items: <String>['Food', 'Other'].map((String value) {
-                  return new DropdownMenuItem<String>(
+                  return DropdownMenuItem<String>(
                     value: value,
-                    child: new Text(
+                    child: Text(
                       value,
                       style: TextStyle(
                         color: Colors.white,
@@ -274,14 +274,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
-                          DateTime currTime = new DateTime.now();
+                          DateTime currTime = DateTime.now();
 
                           String imageString;
                           if (image ==
                               "images/photo_camera_black_288x288.png") {
                             imageString = '';
                           } else {
-                            File imageFile = new File(image);
+                            File imageFile = File(image);
                             imageString =
                                 base64Encode(imageFile.readAsBytesSync());
                           }

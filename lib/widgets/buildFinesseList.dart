@@ -8,7 +8,7 @@ class BuildFinesseList extends StatefulWidget {
   BuildFinesseList({Key key}) : super(key: key);
 
   @override
-  _FinesseListState createState() => new _FinesseListState();
+  _FinesseListState createState() => _FinesseListState();
 }
 
 class _FinesseListState extends State<BuildFinesseList> {
@@ -62,7 +62,7 @@ class _FinesseListState extends State<BuildFinesseList> {
   }
 
   Widget listViewWidget(List<Finesse> _finesses, BuildContext context) {
-    return new Container(
+    return Container(
       color: Colors.black,
 //      decoration: BoxDecoration(
 //          gradient: LinearGradient(
@@ -70,7 +70,7 @@ class _FinesseListState extends State<BuildFinesseList> {
 //        end: Alignment.bottomRight,
 //        colors: [Colors.lightBlue, Colors.pink],
 
-      child: new Center(
+      child: Center(
         key: Key("refresher"),
         child: SmartRefresher(
           enablePullDown: true,

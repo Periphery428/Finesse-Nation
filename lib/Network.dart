@@ -42,7 +42,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw new Exception(
+      throw Exception(
           "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
     }
   }
@@ -65,7 +65,7 @@ class Network {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool activeFilter = prefs.getBool('activeFilter') ?? true;
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
-    List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
+    List<Finesse> filteredFinesses = List<Finesse>.from(responseJson);
 
     if (activeFilter == false) {
       filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
@@ -86,7 +86,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while removing finesses");
+      throw Exception("Error while removing finesses");
     }
     if (response.statusCode == 201) {
       // TODO
@@ -101,7 +101,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while updating finesses");
+      throw Exception("Error while updating finesses");
     }
     if (response.statusCode == 201) {
       // TODO
@@ -237,7 +237,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw new Exception(
+      throw Exception(
           "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
     }
   }

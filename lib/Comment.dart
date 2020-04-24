@@ -31,7 +31,7 @@ class Comment {
   DateTime get postedTime => _postedTime;
 
   Map toMap() {
-    var map = new Map<String, dynamic>();
+    var map = Map<String, dynamic>();
     map['comment'] = comment;
     map['emailId'] = emailId;
     map['postedTime'] = postedTime.toString();
