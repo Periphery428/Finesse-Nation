@@ -272,6 +272,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   minWidth: 100,
                   height: 50,
                   child: FlatButton(
+                    key: Key("Upload"),
                     color: Color(0xffFF9900),
                     onPressed: () async {
                       await PopUpBox.showPopupBox(
@@ -292,6 +293,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           ),
                           willDisplayWidget: Column(children: [
                             FlatButton(
+                                key: Key("Gallery"),
                                 onPressed: () {
                                   _onImageButtonPressed(ImageSource.gallery,
                                       context: context);
@@ -312,6 +314,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   ),
                                 ])),
                             FlatButton(
+                                key: Key("Camera"),
                                 onPressed: () {
                                   getImage();
                                   Navigator.of(context, rootNavigator: true)
