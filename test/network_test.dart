@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:finesse_nation/Comment.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
+import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
-import '../lib/User.dart';
 
 Future<Finesse> addFinesseHelper([name]) async {
   var now = new DateTime.now();
