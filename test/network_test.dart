@@ -300,8 +300,9 @@ void main() {
   });
 
   test('Add invalid comment', () async {
+    Finesse invalid = Finesse('', 'title', 'desc', '', 'loc', 'duration', '', null, [], '', '');
     try {
-      await Network.addComment(Comment('', '', ''), testFinesse);
+      await Network.addComment(Comment('', '', ''), invalid);
     } catch (e) {
       String error = e.toString();
       expect(error.contains('Error while adding comment'), true);
