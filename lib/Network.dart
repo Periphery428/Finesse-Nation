@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/Pages/Settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
+import 'package:finesse_nation/login/flutter_login.dart';
 import 'User.dart';
 import 'login/flutter_login.dart';
 import 'Comment.dart';
@@ -83,13 +84,8 @@ class Network {
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     http.Response response = await postData(DELETE_URL, jsonObject);
-
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw Exception("Error while removing finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while removing finesse");
     }
   }
 
@@ -99,12 +95,8 @@ class Network {
     bodyMap.addAll(jsonObject);
     http.Response response = await postData(UPDATE_URL, bodyMap);
 
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw Exception("Error while updating finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while updating finesse");
     }
   }
 

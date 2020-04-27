@@ -97,22 +97,46 @@ void main() {
 
     Finesse secondNewFinesse = await addFinesseHelper('Removing a Finesse');
 
-    List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+    await getAndRemove(secondNewFinesse); // Remove the first Finesse
 
-    expect(finesseList.last.getDescription(),
-        secondNewFinesse.getDescription()); // Check that it was added
-
-    await Network.removeFinesse(finesseList.last); // Remove the first Finesse
-
-    finesseList = await Future.value(Network.fetchFinesses());
-
-    expect(
-        finesseList.last.getDescription(),
-        newFinesse
-            .getDescription()); // Check to make sure the new event was actually removed
-
-    await Network.removeFinesse(finesseList.last);
+    await getAndRemove(newFinesse);
   });
+
+//  test('Removing a Finesse Exception', () async {
+//    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
+//
+//    newFinesse.setId("hello");
+//
+//    var exceptionText = "";
+//    try {
+//      await Network.removeFinesse(newFinesse); // Try Removing a Finesse without an ID
+//    } on Exception catch (text) {
+//      exceptionText = '$text';
+//    }
+//    expect(exceptionText, "Exception: Error while removing finesse");
+//
+//    //Cleanup
+//    await getAndRemove(newFinesse);
+//
+//  });
+//
+//  test('Updating a Finesse Exception', () async {
+//    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
+//
+//    newFinesse.setId("hello");
+//
+//    var exceptionText = "";
+//    try {
+//      await Network.updateFinesse(newFinesse); // Try Removing a Finesse with a bad Id
+//    } on Exception catch (text) {
+//      exceptionText = '$text';
+//    }
+//    expect(exceptionText, "Exception: Error while updating finesse");
+//
+//    //Cleanup
+//    await getAndRemove(newFinesse);
+//
+//  });
 
   test('Updating a Finesse', () async {
     Finesse firstNewFinesse = await addFinesseHelper('Updating a Finesse');
@@ -305,4 +329,14 @@ void main() {
     List<Comment> result = await Network.getComments('no_comments');
     expect(result.length, 0);
   });
+}
+
+Future<List<Finesse>> getAndRemove(Finesse expectedFinesse) async {
+  List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+
+  expect(finesseList.last.getDescription(),
+      expectedFinesse.getDescription()); // Check that it was added
+
+  await Network.removeFinesse(finesseList.last); // Remove the first Finesse
+  return finesseList;
 }

@@ -6,8 +6,10 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:camera/camera.dart';
 import 'package:finesse_nation/main.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/cameraPage.dart';
+import 'package:finesse_nation/Pages/cameraPage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:finesse_nation/widgets/PopUpBox.dart';
 
 var firstCamera = CameraDescription();
 
@@ -64,53 +66,70 @@ class MyCustomFormState extends State<MyCustomForm> {
   String _type = "Food";
   String image = "images/photo_camera_black_288x288.png";
   final _formKey = GlobalKey<FormState>();
+  File _image;
+  double width = 600;
+  double height = 240;
+  dynamic _pickImageError;
+  String _retrieveDataError;
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    eventNameController.dispose();
-    locationController.dispose();
-    descriptionController.dispose();
-    durationController.dispose();
-    typeController.dispose();
-    super.dispose();
-  }
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxWidth: width, maxHeight: height);
 
-  navigateAndDisplaySelection(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
-    String newImage = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TakePictureScreen(
-          camera: firstCamera,
+    setState(() {
+      _image = image;
+    });
+    @override
+    void dispose() {
+      // Clean up the controller when the widget is disposed.
+      eventNameController.dispose();
+      locationController.dispose();
+      descriptionController.dispose();
+      durationController.dispose();
+      typeController.dispose();
+      super.dispose();
+    }
+
+    navigateAndDisplaySelection(BuildContext context) async {
+      // Navigator.push returns a Future that completes after calling
+      // Navigator.pop on the Selection Screen.
+      String newImage = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TakePictureScreen(
+            camera: firstCamera,
+          ),
         ),
-      ),
-    );
-    if (newImage != null) {
-      setState(() {
-        image = newImage;
-      });
+      );
+//    if (newImage != null) {
+//      setState(() {
+//        image = newImage;
+//      });
     }
   }
+
+  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
+    try {
+      _image = await ImagePicker.pickImage(
+          source: source,
+          maxWidth: width,
+          maxHeight: height,
+          imageQuality: null);
+      setState(() {});
+    } catch (e) {
+      _pickImageError = e;
+    }
+  }
+
+//  Future<void> _displayPickImageDialog(
+//      BuildContext context, OnPickImageCallback onPick) async {
+//
+//    onPick(width, height, quality);
+//  }
 
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    var render;
-    if (image == "images/photo_camera_black_288x288.png") {
-      render = Icon(
-        Icons.camera_alt,
-        size: 100,
-        color: Color(0xffFF9900),
-      );
-    } else {
-      render = Image.file(
-        File(image),
-        width: 600,
-        height: 240,
-      );
-    }
     return SingleChildScrollView(
       child: Container(
         color: Colors.grey[850],
@@ -233,15 +252,90 @@ class MyCustomFormState extends State<MyCustomForm> {
               ),
               Material(
                 child: InkWell(
-                  key: Key("cameraButton"),
                   onTap: () {
-                    navigateAndDisplaySelection(context);
+//                    getImage();
                   },
                   child: Container(
                     color: Colors.grey[850],
 //                  height: 150.0,
 //                    alignment: Alignment.center,
-                    child: render,
+                    child: _image == null ? Container() : Image.file(_image),
+//                    child: Center(
+//
+//                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: ButtonTheme(
+                  minWidth: 100,
+                  height: 50,
+                  child: FlatButton(
+                    color: Color(0xffFF9900),
+                    onPressed: () async {
+                      await PopUpBox.showPopupBox(
+                          title: "Upload Image",
+                          context: context,
+                          button: FlatButton(
+                            key: Key("UploadOK"),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop('dialog');
+                            },
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                color: Color(0xffff9900),
+                              ),
+                            ),
+                          ),
+                          willDisplayWidget: Column(children: [
+                            FlatButton(
+                                onPressed: () {
+                                  _onImageButtonPressed(ImageSource.gallery,
+                                      context: context);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop('dialog');
+                                },
+                                child: Row(children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 15, right: 15, bottom: 15),
+                                    child: const Icon(Icons.photo_library,
+                                        color: Color(0xffFF9900)),
+                                  ),
+                                  Text(
+                                    'Upload Image From Gallery',
+                                    style: TextStyle(
+                                        color: Color(0xffFF9900), fontSize: 14),
+                                  ),
+                                ])),
+                            FlatButton(
+                                onPressed: () {
+                                  getImage();
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop('dialog');
+                                },
+                                child: Row(children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 15, right: 15, bottom: 15),
+                                    child: const Icon(Icons.camera_alt,
+                                        color: Color(0xffFF9900)),
+                                  ),
+                                  Text(
+                                    'Upload Image From Camera',
+                                    style: TextStyle(
+                                        color: Color(0xffFF9900), fontSize: 14),
+                                  ),
+                                ])),
+                          ]));
+                    },
+                    child: Text(
+                      'Upload Image',
+                      style: TextStyle(color: Colors.grey[850]),
+                    ),
                   ),
                 ),
               ),
@@ -277,13 +371,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                           DateTime currTime = DateTime.now();
 
                           String imageString;
-                          if (image ==
-                              "images/photo_camera_black_288x288.png") {
+                          if (_image == null) {
                             imageString = '';
                           } else {
-                            File imageFile = File(image);
                             imageString =
-                                base64Encode(imageFile.readAsBytesSync());
+                                base64Encode(_image.readAsBytesSync());
                           }
 
                           Finesse newFinesse = Finesse.finesseAdd(
@@ -332,3 +424,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     );
   }
 }
+
+typedef void OnPickImageCallback(
+    double maxWidth, double maxHeight, int quality);

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:finesse_nation/addEvent.dart';
-import 'package:finesse_nation/Settings.dart';
+import 'package:finesse_nation/Pages/addEvent.dart';
+import 'package:finesse_nation/Pages/Settings.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
-import 'widgets/PopUpBox.dart';
+import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
-import 'LoginScreen.dart';
+import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Network.dart';
 import 'Finesse.dart';
-import 'FinessePage.dart';
+import 'Pages/FinessePage.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,8 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'VIEW',
               ),
               textColor: Color(0xffff9900),
-            ),
-          )..show(context);
+            ),)..show(context);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
@@ -145,7 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
     _fcmAlreadySetup = true;
-    _firebaseMessaging.requestNotificationPermissions();
+    if (!kIsWeb) {
+      _firebaseMessaging.requestNotificationPermissions();
+    }
   }
 
   @override

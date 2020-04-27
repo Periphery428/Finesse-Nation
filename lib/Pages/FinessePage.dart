@@ -5,8 +5,8 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
-import 'Comment.dart';
-import 'widgets/buildFinesseCard.dart';
+import '../Comment.dart';
+import '../widgets/buildFinesseCard.dart';
 
 enum DotMenu { markEnded }
 bool _commentIsEmpty;
@@ -34,7 +34,7 @@ class FinessePage extends StatelessWidget {
               const PopupMenuItem<DotMenu>(
                 key: Key("markAsEndedButton"),
                 value: DotMenu.markEnded,
-                child: Text('Mark as ended'),
+                child: Text('Mark as expired'),
               ),
             ],
           )
