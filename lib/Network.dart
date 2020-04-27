@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
 import 'User.dart';
-import 'login/flutter_login.dart';
 import 'Comment.dart';
 
 class Network {
