@@ -9628,9 +9628,9 @@ image
 
 
 Parts of the Image library were ported from the following sources:
-   
-==============================================================================   
- 
+
+==============================================================================
+
  The JPEG encoder/decoder code is derived from the following:
    https://github.com/notmasteryet/jpgjs
    Copyright (C) 2011 notmasteryet
@@ -9683,8 +9683,8 @@ The WebP encoder/decoder code is derived from the following:
   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-==============================================================================  
+  
+==============================================================================
 
 The TIFF decoder code is derived from the following:
   Apache Batik
@@ -9703,7 +9703,7 @@ The TIFF decoder code is derived from the following:
    limitations under the License.
 
 ==============================================================================
-   
+
 The OpenEXR decoder is derived in part from the OpenEXR library:
 
 Copyright (c) 2002-2011, Industrial Light & Magic, a division of 
@@ -9793,6 +9793,7 @@ http://www.limbicsoftware.com/quickpvr.html
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
+
 --------------------------------------------------------------------------------
 image_picker
 path_provider
@@ -12195,11 +12196,10 @@ path_provider_platform_interface
 
 --------------------------------------------------------------------------------
 petitparser
-xml
 
 The MIT License
 
-Copyright (c) 2006-2019 Lukas Renggli.
+Copyright (c) 2006-2020 Lukas Renggli.
 All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -15449,6 +15449,32 @@ TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
    of your accepting any such warranty or additional liability.
 
 END OF TERMS AND CONDITIONS
+--------------------------------------------------------------------------------
+xml
+
+The MIT License
+
+Copyright (c) 2006-2019 Lukas Renggli.
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
 --------------------------------------------------------------------------------
 xxhash
 
