@@ -99,13 +99,13 @@ class Network {
     }
   }
 
-  static Future<http.Response> sendToAll(String title, String body, String id,
-      {String topic: ALL_TOPIC}) {
+  static Future<http.Response> sendNotification(String title, String body, String id,
+      {String topic: ALL_TOPIC}) async {
     final content = {
       'notification': {
         'body': '$body',
         'title': '$title',
-        'image': 'https://i.imgur.com/rw4rJt2.png',
+//        'image': 'https://i.imgur.com/rw4rJt2.png',
       },
       'priority': 'high',
       'data': {
@@ -222,8 +222,12 @@ class Network {
   }
 
   static Future<http.Response> addComment(
-      Comment comment, String eventId) async {
+      Comment comment, Finesse fin) async {
     Map bodyMap = comment.toMap();
+    String notifTitle = fin.getTitle();
+    String eventId = fin.getId();
+    String commentBody = comment.comment;
+    String notifBody = '${User.currentUser.userName}: $commentBody';
     bodyMap['eventId'] = eventId;
     http.Response response = await postData(ADD_COMMENT_URL, bodyMap);
 
@@ -232,6 +236,7 @@ class Network {
       throw Exception(
           "Error while adding comment, status = ${response.statusCode}, ${response.body}}");
     }
+    Network.sendNotification(notifTitle, notifBody, eventId);
     return response;
   }
 

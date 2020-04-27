@@ -325,7 +325,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                     String comment = _controller.value.text;
                     Comment newComment = Comment.post(comment);
                     setState(() => mainComments.add(newComment));
-                    Network.addComment(newComment, fin.getId());
+                    Network.addComment(newComment, fin);
                     _controller.clear();
                   }),
       ),
@@ -334,7 +334,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         if (comment.isNotEmpty) {
           Comment newComment = Comment.post(comment);
           setState(() => mainComments.add(newComment));
-          Network.addComment(newComment, fin.getId());
+          Network.addComment(newComment, fin);
           _controller.clear();
         }
       },

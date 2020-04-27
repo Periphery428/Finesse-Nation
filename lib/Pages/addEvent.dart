@@ -393,12 +393,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                           String id = finesses.last.getId();
                           FirebaseMessaging()
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
-                          await Network.sendToAll(newFinesse.getTitle(),
+                          await Network.sendNotification(newFinesse.getTitle(),
                               newFinesse.getLocation(), id);
                           print('sending event id = $id');
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);
+                            FirebaseMessaging()
+                                .subscribeToTopic(id);
                           }
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));

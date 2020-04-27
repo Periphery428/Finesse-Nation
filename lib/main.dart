@@ -7,13 +7,42 @@ import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'Network.dart';
 import 'Finesse.dart';
 import 'Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+void showInSnackBar(String title, String body, String eventId, BuildContext context, Function callback) {
+  _scaffoldKey.currentState.showSnackBar(
+    SnackBar(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: Color(0xffc47600),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            body,
+            style: TextStyle(
+              color: Color(0xffc47600),
+            ),
+          ),
+        ],
+      ),
+      action: SnackBarAction(
+          label: 'VIEW', onPressed: () => callback(eventId, context)),
+    ),
+  );
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  Future<void> goToEvent(String id) async {
+  Future<void> goToEvent(String id, BuildContext context) async {
     Fluttertoast.showToast(
       msg: "Loading Finesse...",
       toastLength: Toast.LENGTH_LONG,
@@ -114,34 +143,52 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (!_fcmAlreadySetup) {
+      _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
           String id = message['data']['event_id'];
+          String title = message['notification']['title'];
+          String body = message['notification']['body'];
           print('recieved event id = $id');
-          Flushbar(
-            title: message['notification']['title'],
-            message: message['notification']['body'],
-            duration: Duration(seconds: 3),
-            mainButton: FlatButton(
-              onPressed: () => goToEvent(id),
-              child: Text(
-                'VIEW',
-              ),
-              textColor: Color(0xffff9900),
-            ),)..show(context);
+//          Flushbar(
+//            title: message['notification']['title'],
+//            message: message['notification']['body'],
+//            duration: Duration(seconds: 3),
+//            mainButton: FlatButton(
+//              onPressed: () => goToEvent(id),
+//              child: Text(
+//                'VIEW',
+//              ),
+//              textColor: Color(0xffff9900),
+//            ),
+//          )..show(context);
+//          Scaffold.of(context).showSnackBar(
+//            SnackBar(
+//              content: Text(
+//                'Sharing Finesse',
+//                style: TextStyle(
+//                  color: Color(0xffc47600),
+//                ),
+//              ),
+//            ),
+//          );
+          showInSnackBar(title, body, id, context, goToEvent);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
           String id = message['data']['event_id'];
-          goToEvent(id);
+          goToEvent(id, context);
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
           String id = message['data']['event_id'];
-          goToEvent(id);
+          goToEvent(id, context);
         },
       );
     }
@@ -149,11 +196,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!kIsWeb) {
       _firebaseMessaging.requestNotificationPermissions();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title

@@ -52,6 +52,7 @@ const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
+final testFinesse = Finesse(TEST_EVENT_ID, 'title', 'desc', '', 'loc', 'duration', '', null, [], '', '');
 
 Future<void> login(
     {String email: VALID_EMAIL,
@@ -287,20 +288,20 @@ void main() {
 
   test('Send Push Notification', () async {
     var response =
-        await Network.sendToAll('test', 'test', '-1', topic: 'tests');
+        await Network.sendNotification('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
   });
 
   test('Add valid comment', () async {
     Comment comment =
         Comment('test comment', VALID_EMAIL, DateTime.now().toString());
-    var response = await Network.addComment(comment, TEST_EVENT_ID);
+    var response = await Network.addComment(comment, testFinesse);
     expect(response.statusCode, 200);
   });
 
   test('Add invalid comment', () async {
     try {
-      await Network.addComment(Comment('', '', ''), '');
+      await Network.addComment(Comment('', '', ''), testFinesse);
     } catch (e) {
       String error = e.toString();
       expect(error.contains('Error while adding comment'), true);
@@ -317,7 +318,7 @@ void main() {
   test('Get Comments', () async {
     Comment testComment =
         Comment('test comment', VALID_EMAIL, DateTime.now().toString());
-    await Network.addComment(testComment, TEST_EVENT_ID);
+    await Network.addComment(testComment, testFinesse);
     List<Comment> comments = await Network.getComments(TEST_EVENT_ID);
     Comment last = comments.last;
     expect(last.comment, testComment.comment);

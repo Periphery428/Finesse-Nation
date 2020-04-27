@@ -12,7 +12,7 @@ class BuildFinesseList extends StatefulWidget {
 }
 
 class _FinesseListState extends State<BuildFinesseList> {
-  Future<List<Finesse>> _finesses = Network.fetchFinesses();
+  Future<List<Finesse>> _finesses;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -41,6 +41,7 @@ class _FinesseListState extends State<BuildFinesseList> {
 //  }
 
   Widget build(BuildContext context) {
+    _finesses = Network.fetchFinesses();
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,

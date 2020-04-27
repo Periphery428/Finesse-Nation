@@ -34,17 +34,17 @@ class Finesse {
   }
 
   Finesse(
-      var eventId,
-      var title,
-      var description,
-      var image,
-      var location,
-      var duration,
-      var category,
-      var postedTime,
-      var isActive,
-      var school,
-      var emailId) {
+      String eventId,
+      String title,
+      String description,
+      String image,
+      String location,
+      String duration,
+      String category,
+      DateTime postedTime,
+      List isActive,
+      String school,
+      String emailId) {
     this.eventId = eventId;
     this.eventTitle = title;
     this.description = description;
