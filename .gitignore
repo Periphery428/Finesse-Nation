@@ -9,7 +9,7 @@
 .history
 .svn/
 /lib/.env.dart
-google-services.json
+#google-services.json
 
 # IntelliJ related
 *.iml
