@@ -359,7 +359,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: EdgeInsets.only(top: 4, bottom: 1),
                       child: Row(
                         children: [
                           Text(

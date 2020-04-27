@@ -6,6 +6,7 @@ import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
+import '../lib/User.dart';
 
 Future<Finesse> addFinesseHelper([name]) async {
   var now = new DateTime.now();
@@ -84,7 +85,7 @@ void main() {
 
 //  createTestUser();
 
-  /*test('Adding a new Finesse', () async {
+  test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getDescription(), newFinesse.getDescription());
@@ -264,7 +265,7 @@ void main() {
     var response =
         await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
-  });*/
+  });
 
   test('Add valid comment', () async {
     Comment comment =
@@ -277,7 +278,6 @@ void main() {
     try {
       await Network.addComment(Comment('', '', ''), '');
     } catch (e) {
-      print(e.toString());
       String error = e.toString();
       expect(error.contains('Error while adding comment'), true);
       expect(error.contains('status = 400'), true);
@@ -302,7 +302,7 @@ void main() {
   });
 
   test('Get Invalid Comments', () async {
-    List<Comment> result = await Network.getComments('');
-    print(result.map((e) => e?.emailId ?? 'nope'));
+    List<Comment> result = await Network.getComments('no_comments');
+    expect(result.length, 0);
   });
 }
