@@ -218,4 +218,16 @@ class Network {
       throw Exception('Failed to get current user');
     }
   }
+
+  static Future<int> fetchVotes() async {
+    final response = await http.get(GET_URL, headers: {'api_token': token});
+    if(response.statusCode == 200) {
+      var data = json.decode(response.body);
+      int downvotes = data["upVote"];
+      int upvotes = data["downVote"];
+    }else{
+      throw Exception("Failed to load votes");
+    }
+
+    }
 }
