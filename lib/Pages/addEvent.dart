@@ -8,7 +8,7 @@ import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
-import '../Styles.dart';
+import 'package:finesse_nation/Styles.dart';
 
 class AddEvent extends StatelessWidget {
   @override

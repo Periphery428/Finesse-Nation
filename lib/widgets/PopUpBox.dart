@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Styles.dart';
+import 'package:finesse_nation/Styles.dart';
 
 class PopUpBox {
   static Future showPopupBox(

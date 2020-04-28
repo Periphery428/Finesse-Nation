@@ -9,11 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../Network.dart';
-import '../Finesse.dart';
-import 'FinessePage.dart';
+import 'package:finesse_nation/Network.dart';
+import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import '../Styles.dart';
+import 'package:finesse_nation/Styles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

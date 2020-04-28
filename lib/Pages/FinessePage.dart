@@ -5,9 +5,9 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
-import '../Comment.dart';
-import '../Util.dart';
-import '../Styles.dart';
+import 'package:finesse_nation/Comment.dart';
+import 'package:finesse_nation/Util.dart';
+import 'package:finesse_nation/Styles.dart';
 
 enum DotMenu { markEnded }
 bool _commentIsEmpty;

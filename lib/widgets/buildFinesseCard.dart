@@ -1,8 +1,8 @@
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/material.dart';
-import '../Util.dart';
-import '../Styles.dart';
+import 'package:finesse_nation/Util.dart';
+import 'package:finesse_nation/Styles.dart';
 
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
