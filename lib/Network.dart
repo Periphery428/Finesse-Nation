@@ -6,12 +6,16 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '.env.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
+import 'User.dart';
+import 'Comment.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
   static const DELETE_URL = DOMAIN + 'food/deleteEvent';
   static const ADD_URL = DOMAIN + 'food/addEvent';
   static const GET_URL = DOMAIN + 'food/getEvents';
+  static const ADD_COMMENT_URL = DOMAIN + 'comment';
+  static const GET_COMMENT_URL = DOMAIN + 'comment/';
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
@@ -19,7 +23,7 @@ class Network {
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
   static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
-
+  static const ALL_TOPIC = 'test';
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
@@ -38,7 +42,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw new Exception(
+      throw Exception(
           "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
     }
   }
@@ -53,10 +57,6 @@ class Network {
       responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
-//      print('nope');
-//      print(token);
-//      print(response.statusCode);
-//      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -65,7 +65,7 @@ class Network {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool activeFilter = prefs.getBool('activeFilter') ?? true;
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
-    List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
+    List<Finesse> filteredFinesses = List<Finesse>.from(responseJson);
 
     if (activeFilter == false) {
       filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
@@ -99,7 +99,8 @@ class Network {
     }
   }
 
-  static Future<dynamic> sendToAll(String title, String body) {
+  static Future<http.Response> sendToAll(String title, String body, String id,
+      {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
         'body': '$body',
@@ -111,8 +112,9 @@ class Network {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'id': '1',
         'status': 'done',
+        'event_id': '$id',
       },
-      'to': '/topics/all',
+      'to': '/topics/$topic',
     };
     return http.post(
       SEND_NOTIFICATION_URL,
@@ -230,4 +232,32 @@ class Network {
     }
 
     }
+  static Future<http.Response> addComment(
+      Comment comment, String eventId) async {
+    Map bodyMap = comment.toMap();
+    bodyMap['eventId'] = eventId;
+    http.Response response = await postData(ADD_COMMENT_URL, bodyMap);
+
+    final int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      throw Exception(
+          "Error while adding comment, status = ${response.statusCode}, ${response.body}}");
+    }
+    return response;
+  }
+
+  static Future<List<Comment>> getComments(String eventId) async {
+    final response = await http
+        .get(GET_COMMENT_URL + eventId, headers: {'api_token': token});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      List<Comment> comments =
+          data.map<Comment>((json) => Comment.fromJson(json)).toList();
+      return comments;
+    } else {
+      throw Exception(
+          "Error while getting comments, status = ${response.statusCode}, ${response.body}}");
+    }
+  }
 }
