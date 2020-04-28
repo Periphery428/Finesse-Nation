@@ -38,7 +38,6 @@ class MyCustomForm extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
-
   final _formKey = GlobalKey<FormState>();
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
@@ -51,15 +50,15 @@ class MyCustomFormState extends State<MyCustomForm> {
   double height = 240;
   dynamic _pickImageError;
 
-    @override
-    void dispose() {
-      // Clean up the controller when the widget is disposed.
-      eventNameController.dispose();
-      locationController.dispose();
-      descriptionController.dispose();
-      durationController.dispose();
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    eventNameController.dispose();
+    locationController.dispose();
+    descriptionController.dispose();
+    durationController.dispose();
+    super.dispose();
+  }
 
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
     try {
@@ -74,15 +73,14 @@ class MyCustomFormState extends State<MyCustomForm> {
     }
   }
 
-  Future<void> uploadImagePopup() async{
+  Future<void> uploadImagePopup() async {
     await PopUpBox.showPopupBox(
         title: "Upload Image",
         context: context,
         button: FlatButton(
           key: Key("UploadOK"),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true)
-                .pop('dialog');
+            Navigator.of(context, rootNavigator: true).pop('dialog');
           },
           child: Text(
             "OK",
@@ -94,42 +92,33 @@ class MyCustomFormState extends State<MyCustomForm> {
         willDisplayWidget: Column(children: [
           FlatButton(
               onPressed: () {
-                _onImageButtonPressed(ImageSource.gallery,
-                    context: context);
-                Navigator.of(context, rootNavigator: true)
-                    .pop('dialog');
+                _onImageButtonPressed(ImageSource.gallery, context: context);
+                Navigator.of(context, rootNavigator: true).pop('dialog');
               },
               child: Row(children: [
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: 15, right: 15, bottom: 15),
-                  child: const Icon(Icons.photo_library,
-                      color: Color(0xffFF9900)),
+                  padding: EdgeInsets.only(top: 15, right: 15, bottom: 15),
+                  child:
+                      const Icon(Icons.photo_library, color: Color(0xffFF9900)),
                 ),
                 Text(
                   'Upload Image From Gallery',
-                  style: TextStyle(
-                      color: Color(0xffFF9900), fontSize: 14),
+                  style: TextStyle(color: Color(0xffFF9900), fontSize: 14),
                 ),
               ])),
           FlatButton(
               onPressed: () {
-                _onImageButtonPressed(ImageSource.camera,
-                    context: context);
-                Navigator.of(context, rootNavigator: true)
-                    .pop('dialog');
+                _onImageButtonPressed(ImageSource.camera, context: context);
+                Navigator.of(context, rootNavigator: true).pop('dialog');
               },
               child: Row(children: [
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: 15, right: 15, bottom: 15),
-                  child: const Icon(Icons.camera_alt,
-                      color: Color(0xffFF9900)),
+                  padding: EdgeInsets.only(top: 15, right: 15, bottom: 15),
+                  child: const Icon(Icons.camera_alt, color: Color(0xffFF9900)),
                 ),
                 Text(
                   'Upload Image From Camera',
-                  style: TextStyle(
-                      color: Color(0xffFF9900), fontSize: 14),
+                  style: TextStyle(color: Color(0xffFF9900), fontSize: 14),
                 ),
               ])),
         ]));
@@ -297,7 +286,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                       color: Color(0xffFF9900),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

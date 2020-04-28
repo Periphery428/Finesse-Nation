@@ -6,9 +6,10 @@ Future<void> delay([int milliseconds = 250]) async {
 }
 
 /// Fill out the form with the necessary information.
-Future<void> addEvent(
-    FlutterDriver driver, nameText, locationText,
-    {String descriptionText = "Integration Test Description", String durationText = "Integration Test Duration", bool takePic: false}) async {
+Future<void> addEvent(FlutterDriver driver, nameText, locationText,
+    {String descriptionText = "Integration Test Description",
+    String durationText = "Integration Test Duration",
+    bool takePic: false}) async {
   nameText = "Integration Test " + nameText;
   await driver.tap(find.byValueKey('add event'));
 
@@ -29,11 +30,10 @@ Future<void> addEvent(
   await driver.waitFor(find.text(durationText));
 
   await driver.tap(find.byValueKey('submit'));
-  if(locationText != ''){
+  if (locationText != '') {
     await delay(1000);
     expect(await driver.getText(find.text("now")), "now");
   }
-
 }
 
 Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
@@ -138,8 +138,7 @@ void main() {
       String testName = 'Add event form fail test';
       String locationText = '';
 
-      await addEvent(
-          driver, testName, locationText);
+      await addEvent(driver, testName, locationText);
 
       expect(await driver.getText(find.text("Please enter a location")),
           "Please enter a location");
@@ -151,8 +150,7 @@ void main() {
       String testName = 'Add a finesse';
       String locationText = generateUniqueLocationText();
 
-      await addEvent(
-          driver, testName, locationText);
+      await addEvent(driver, testName, locationText);
 
       expect(await driver.getText(find.text(locationText)), locationText);
       await delay(1000);
@@ -228,8 +226,7 @@ void main() {
       String testName = 'View finesse info';
       String locationText = generateUniqueLocationText();
 
-      await addEvent(
-          driver, testName, locationText);
+      await addEvent(driver, testName, locationText);
 
       await driver.tap(find.text(locationText));
       await delay(1000);
@@ -256,8 +253,7 @@ void main() {
     test('Add event then mark as expired', () async {
       String testName = 'Add event then mark as expired';
       String locationText = generateUniqueLocationText();
-      await addEvent(
-          driver, testName, locationText);
+      await addEvent(driver, testName, locationText);
       await markAsEnded(driver, locationText);
     });
   });
@@ -280,8 +276,7 @@ void main() {
       var now = DateTime.now();
       String nameText = 'Maps Test ${now.toString()}';
       String locationText = 'Siebel Center';
-      await addEvent(
-          driver, nameText, locationText);
+      await addEvent(driver, nameText, locationText);
       await driver.tap(find.text('Integration Test ' + nameText));
       await delay(1000);
       await driver.tap(find.byValueKey("threeDotButton"));
