@@ -8,6 +8,7 @@ import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
+import '../Styles.dart';
 
 class AddEvent extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class AddEvent extends StatelessWidget {
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      backgroundColor: Colors.grey[850],
+      backgroundColor: Styles.darkGrey,
       body: MyCustomForm(),
     );
   }
@@ -94,7 +95,7 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
     return SingleChildScrollView(
       child: Container(
-        color: Colors.grey[850],
+        color: Styles.darkGrey,
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Form(
           key: _formKey,
@@ -110,7 +111,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 decoration: const InputDecoration(
                   labelText: "Title*",
                   labelStyle: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                   ),
                 ),
                 validator: (value) {
@@ -129,7 +130,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 decoration: const InputDecoration(
                   labelText: "Location*",
                   labelStyle: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                   ),
                 ),
                 validator: (value) {
@@ -148,7 +149,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 decoration: const InputDecoration(
                   labelText: "Description",
                   labelStyle: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                   ),
                 ),
                 validator: (value) {
@@ -164,7 +165,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 decoration: const InputDecoration(
                   labelText: "Duration",
                   labelStyle: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                   ),
                 ),
                 validator: (value) {
@@ -176,7 +177,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Text(
                   "Type",
                   style: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                     fontSize: 16,
                   ),
                 ),
@@ -206,7 +207,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: Text(
                   "Image",
                   style: TextStyle(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                     fontSize: 16,
                   ),
                 ),
@@ -215,7 +216,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                 child: InkWell(
                   onTap: () {},
                   child: Container(
-                    color: Colors.grey[850],
+                    color: Styles.darkGrey,
 //                  height: 150.0,
 //                    alignment: Alignment.center,
                     child: _image == null ? Container() : Image.file(_image),
@@ -228,7 +229,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   minWidth: 100,
                   height: 50,
                   child: FlatButton(
-                    color: Color(0xffFF9900),
+                    color: Styles.brightOrange,
                     onPressed: () async {
                       await PopUpBox.showPopupBox(
                           title: "Upload Image",
@@ -242,7 +243,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                             child: Text(
                               "OK",
                               style: TextStyle(
-                                color: Color(0xffff9900),
+                                color: Styles.brightOrange,
                               ),
                             ),
                           ),
@@ -259,12 +260,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     padding: EdgeInsets.only(
                                         top: 15, right: 15, bottom: 15),
                                     child: const Icon(Icons.photo_library,
-                                        color: Color(0xffFF9900)),
+                                        color: Styles.brightOrange),
                                   ),
                                   Text(
                                     'Upload Image From Gallery',
                                     style: TextStyle(
-                                        color: Color(0xffFF9900), fontSize: 14),
+                                        color: Styles.brightOrange, fontSize: 14),
                                   ),
                                 ])),
                             FlatButton(
@@ -278,19 +279,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                                     padding: EdgeInsets.only(
                                         top: 15, right: 15, bottom: 15),
                                     child: const Icon(Icons.camera_alt,
-                                        color: Color(0xffFF9900)),
+                                        color: Styles.brightOrange),
                                   ),
                                   Text(
                                     'Upload Image From Camera',
                                     style: TextStyle(
-                                        color: Color(0xffFF9900), fontSize: 14),
+                                        color: Styles.brightOrange, fontSize: 14),
                                   ),
                                 ])),
                           ]));
                     },
                     child: Text(
                       'Upload Image',
-                      style: TextStyle(color: Colors.grey[850]),
+                      style: TextStyle(color: Styles.darkGrey),
                     ),
                   ),
                 ),
@@ -304,7 +305,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                     height: 50,
                     child: RaisedButton(
                       key: Key('submit'),
-                      color: Color(0xffFF9900),
+                      color: Styles.brightOrange,
                       onPressed: () async {
                         // Validate returns true if the form is valid, or false
                         // otherwise.
@@ -315,7 +316,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                               content: Text(
                                 'Sharing Finesse',
                                 style: TextStyle(
-                                  color: Color(0xffc47600),
+                                  color: Styles.darkOrange,
                                 ),
                               ),
                             ),
@@ -367,7 +368,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                       },
                       child: Text(
                         'SUBMIT',
-                        style: TextStyle(color: Colors.grey[850]),
+                        style: TextStyle(color: Styles.darkGrey),
                       ),
                     ),
                   ),

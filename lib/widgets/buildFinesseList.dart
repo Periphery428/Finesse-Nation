@@ -3,6 +3,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/widgets/buildFinesseCard.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
+import '../Styles.dart';
 
 class BuildFinesseList extends StatefulWidget {
   BuildFinesseList({Key key}) : super(key: key);

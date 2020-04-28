@@ -2,10 +2,11 @@ import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/material.dart';
 import '../Util.dart';
+import '../Styles.dart';
 
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
-    color: Colors.grey[850],
+    color: Styles.darkGrey,
     child: InkWell(
       onTap: () => {
         Navigator.push(
@@ -29,7 +30,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
 //          isThreeLine: true,
           leading: Icon(
             fin.getCategory() == "Food" ? Icons.fastfood : Icons.help,
-            color: Color(0xffc47600),
+            color: Styles.darkOrange,
           ),
           title: fin.getTitle() == null
               ? Text("Null")
@@ -38,7 +39,7 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                   key: Key("title"),
                   style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xffff9900),
+                    color: Styles.brightOrange,
                   ),
                 ),
           subtitle: Column(
@@ -51,14 +52,14 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                     ? Text("")
                     : Text(
                         fin.getLocation(),
-                        style: TextStyle(color: Color(0xffc47600)),
+                        style: TextStyle(color: Styles.darkOrange),
                       )
               ]),
           trailing: fin.getPostedTime() == null
               ? Text('')
               : Text(
                   Util.timeSince(fin.postedTime),
-                  style: TextStyle(color: Color(0xffc47600)),
+                  style: TextStyle(color: Styles.darkOrange),
                 ),
         ),
       ]),

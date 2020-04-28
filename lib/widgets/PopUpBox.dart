@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Styles.dart';
 
 class PopUpBox {
   static Future showPopupBox(
@@ -16,7 +17,7 @@ class PopUpBox {
                 color: Colors.white,
               ),
             ),
-            backgroundColor: Colors.grey[850],
+            backgroundColor: Styles.darkGrey,
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

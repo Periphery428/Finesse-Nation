@@ -13,7 +13,7 @@ import 'Network.dart';
 import 'Finesse.dart';
 import 'Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'Styles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
       title: 'Finesse Nation',
       theme: ThemeData(
         primaryColor: Colors.black,
-        canvasColor: Colors.grey[850],
-        accentColor: Color(0xffff9900),
+        canvasColor: Styles.darkGrey,
+        accentColor: Styles.brightOrange,
       ),
       home: LoginScreen(),
     );
@@ -93,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Fluttertoast.showToast(
       msg: "Loading Finesse...",
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Color(0xff2e3032),
-      textColor: Color(0xffff9900),
+      backgroundColor: Styles.darkGrey,
+      textColor: Styles.brightOrange,
     );
     List<Finesse> finesses = await Network.fetchFinesses();
     Finesse latest = finesses.firstWhere((finesse) => finesse.getId() == id);
@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 'VIEW',
               ),
-              textColor: Color(0xffff9900),
+              textColor: Styles.brightOrange,
             ),)..show(context);
         },
         onLaunch: (Map<String, dynamic> message) async {
@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text(
           "OK",
           style: TextStyle(
-            color: Color(0xffff9900),
+            color: Styles.brightOrange,
           ),
         ),
       ),
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         } else {
                           return CustomSwitch(
                             key: Key("activeFilter"),
-                            activeColor: Color(0xffff9900),
+                            activeColor: Styles.brightOrange,
                             value: snapshot.data,
                             onChanged: (value) {
                               localActive = value;
@@ -243,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             } else {
                               return CustomSwitch(
                                   key: Key("typeFilter"),
-                                  activeColor: Color(0xffff9900),
+                                  activeColor: Styles.brightOrange,
                                   value: snapshot.data,
                                   onChanged: (value) {
                                     localType = value;
@@ -340,9 +340,9 @@ class _MyHomePageState extends State<MyHomePage> {
         key: Key('add event'),
         child: Icon(
           Icons.add,
-          color: Colors.grey[850],
+          color: Styles.darkGrey,
         ),
-        backgroundColor: Color(0xffff9900),
+        backgroundColor: Styles.brightOrange,
       ),
       body: BuildFinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
