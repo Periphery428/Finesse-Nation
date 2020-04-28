@@ -6,7 +6,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
 import '../Comment.dart';
-import '../widgets/buildFinesseCard.dart';
+import '../Util.dart';
 
 enum DotMenu { markEnded }
 bool _commentIsEmpty;
@@ -369,7 +369,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                             ),
                           ),
                           Text(
-                            " · ${timeSince(comment.postedDateTime)}",
+                            " · ${Util.timeSince(comment.postedDateTime)}",
                             style: TextStyle(
                               color: Color(0xffc47600),
                             ),
