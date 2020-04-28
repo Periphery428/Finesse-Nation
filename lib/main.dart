@@ -9,7 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'Network.dart';
+import 'Finesse.dart';
+import 'Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +23,11 @@ void main() async {
   runApp(MyApp());
 }
 
-//User currentUser = new User("Test", "Test", "Test");
+//User currentUser = User("Test", "Test", "Test");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
+bool _fcmAlreadySetup = false;
 
 class MyApp extends StatelessWidget {
 // This widget is the root of your application.
@@ -50,10 +55,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-//  Future<bool> _goToLogin(BuildContext context) {
-//    return Navigator.of(context).pushReplacementNamed('/').then((_) => false);
-//  }
-
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<bool> _activeFilter;
@@ -88,15 +89,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  void reload() {
+  Future<void> goToEvent(String id) async {
+    Fluttertoast.showToast(
+      msg: "Loading Finesse...",
+      toastLength: Toast.LENGTH_LONG,
+      backgroundColor: Color(0xff2e3032),
+      textColor: Color(0xffff9900),
+    );
+    List<Finesse> finesses = await Network.fetchFinesses();
+    Finesse latest = finesses.firstWhere((finesse) => finesse.getId() == id);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FinessePage(latest)));
     setState(() {
-      print('refreshed');
-      Fluttertoast.showToast(
-        msg: "Refreshing...",
-        toastLength: Toast.LENGTH_LONG,
-        backgroundColor: Color(0xff2e3032),
-        textColor: Color(0xffff9900),
-      );
+      print('reloading');
     });
   }
 
@@ -109,30 +114,38 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        Flushbar(
-          title: message['notification']['title'],
-          message: message['notification']['body'],
-          duration: Duration(seconds: 3),
-          mainButton: FlatButton(
-            onPressed: () => reload(),
-            child: Text(
-              'REFRESH',
-            ),
-            textColor: Color(0xffff9900),
-          ),
-        )..show(context);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
+    _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
+    if (!_fcmAlreadySetup) {
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+          String id = message['data']['event_id'];
+          print('recieved event id = $id');
+          Flushbar(
+            title: message['notification']['title'],
+            message: message['notification']['body'],
+            duration: Duration(seconds: 3),
+            mainButton: FlatButton(
+              onPressed: () => goToEvent(id),
+              child: Text(
+                'VIEW',
+              ),
+              textColor: Color(0xffff9900),
+            ),)..show(context);
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+          String id = message['data']['event_id'];
+          goToEvent(id);
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+          String id = message['data']['event_id'];
+          goToEvent(id);
+        },
+      );
+    }
+    _fcmAlreadySetup = true;
     if (!kIsWeb) {
       _firebaseMessaging.requestNotificationPermissions();
     }

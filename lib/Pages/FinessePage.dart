@@ -4,8 +4,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
+import '../Comment.dart';
+import '../widgets/buildFinesseCard.dart';
 
 enum DotMenu { markEnded }
+bool _commentIsEmpty;
+List<Comment> mainComments;
 
 class FinessePage extends StatelessWidget {
   final Finesse fin;
@@ -13,6 +18,7 @@ class FinessePage extends StatelessWidget {
   FinessePage(this.fin);
 
   Widget build(BuildContext context) {
+    _commentIsEmpty = true;
     final title = fin.getTitle();
 
     return Scaffold(
@@ -63,13 +69,29 @@ class FinesseDetails extends StatefulWidget {
 // Create a corresponding State class.
 class FinesseDetailsState extends State<FinesseDetails> {
   Finesse fin;
+  Future<List<Comment>> comments;
+  final TextEditingController _controller = TextEditingController();
 
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
+    this.comments = Network.getComments(fin.getId());
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      initialData: <Comment>[],
+      future: comments,
+      builder: (context, snapshot) {
+        return snapshot.data != null
+            ? mainCard(snapshot.data, context)
+            : Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget mainCard(List<Comment> comments, BuildContext context) {
+    mainComments = comments;
     Widget imageSection = InkWell(
       onTap: () => Navigator.push(
         context,
@@ -151,8 +173,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 ),
               ),
               fin.getDuration() != "" &&
-                      (fin.getActive().length >= 3 ||
-                          fin.isActive.contains(fin.getEmailId()))
+                      (fin.getActive().length < 3 &&
+                          !fin.isActive.contains(fin.getEmailId()))
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
@@ -232,6 +254,162 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
+    Widget commentsHeaderSection = Padding(
+      padding: EdgeInsets.only(
+        left: 12,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          Text(
+            'Comments  ',
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xffff9900),
+            ),
+          ),
+          Text(
+            '${mainComments.length}',
+            style: TextStyle(
+              fontSize: 15,
+              color: Color(0xffc47600),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget addCommentSection = TextFormField(
+      controller: _controller,
+      autovalidate: true,
+      validator: (comment) {
+//        if (comment.isEmpty) {
+//          return 'Comment cannot be empty';
+//        }
+//        return null;
+        bool isEmpty = comment.isEmpty;
+        if (isEmpty != _commentIsEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              _commentIsEmpty = isEmpty;
+            });
+          });
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: 'Add a comment...',
+        hintStyle: TextStyle(color: Color(0xffc47600)),
+        prefixIcon: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Icon(
+            Icons.account_circle,
+            color: getColor(User.currentUser.email),
+            size: 45,
+          ),
+        ),
+        suffixIcon: IconButton(
+            color: Color(0xffff9900),
+            disabledColor: Colors.grey[500],
+            icon: Icon(
+              Icons.send,
+            ),
+            onPressed: (_commentIsEmpty)
+                ? null
+                : () {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
+                    String comment = _controller.value.text;
+                    Comment newComment = Comment.post(comment);
+                    setState(() => mainComments.add(newComment));
+                    Network.addComment(newComment, fin.getId());
+                    _controller.clear();
+                  }),
+      ),
+      style: TextStyle(color: Colors.grey[100]),
+      onFieldSubmitted: (comment) {
+        if (comment.isNotEmpty) {
+          Comment newComment = Comment.post(comment);
+          setState(() => mainComments.add(newComment));
+          Network.addComment(newComment, fin.getId());
+          _controller.clear();
+        }
+      },
+    );
+
+    Widget getCommentView(Comment comment) {
+      Widget commentView = Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(
+                  Icons.account_circle,
+                  color: getColor(comment.emailId),
+                  size: 45,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 4, bottom: 1),
+                      child: Row(
+                        children: [
+                          Text(
+                            comment.emailId,
+                            style: TextStyle(
+                              color: Color(0xffff9900),
+                            ),
+                          ),
+                          Text(
+                            " · ${timeSince(comment.postedDateTime)}",
+                            style: TextStyle(
+                              color: Color(0xffc47600),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      comment.comment,
+                      style: TextStyle(
+                        color: Colors.grey[100],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+//          Divider(thickness: 0.5,color: Colors.black,)
+        ],
+      );
+      commentView = Padding(
+        padding: EdgeInsets.only(
+          top: 5,
+          bottom: 5,
+          right: 10,
+        ),
+        child: commentView,
+      );
+      return commentView;
+    }
+
+    List<Widget> commentsView =
+        mainComments.map((comment) => getCommentView(comment)).toList();
+
+    Widget viewCommentSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: commentsView,
+    );
+
     return ListView(
       children: [
         Card(
@@ -245,11 +423,31 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getDescription() != "" ? descriptionSection : Container(),
               timeSection,
               userSection,
+              commentsHeaderSection,
+              viewCommentSection,
+              addCommentSection,
             ],
           ),
         ),
+//        Card(
+//          color: Colors.grey[850],
+//          child: Column(
+//            children: [
+//              addCommentSection,
+//              viewCommentSection,
+//            ],
+//          ),
+//        ),
       ],
     );
+  }
+
+  Color getColor(String email) {
+    int min = 0xff000000;
+    int max = 0xffffffff;
+    int seed = email.codeUnits.fold(0, (i, j) => i + j);
+    int val = min + Random(seed).nextInt(max - min + 1);
+    return Color(val);
   }
 }
 

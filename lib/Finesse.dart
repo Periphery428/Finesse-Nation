@@ -92,7 +92,7 @@ class Finesse {
   }
 
   Map toMap() {
-    var map = new Map<String, dynamic>();
+    var map = Map<String, dynamic>();
     map["eventTitle"] = eventTitle;
     map["description"] = description;
     map["image"] = image;

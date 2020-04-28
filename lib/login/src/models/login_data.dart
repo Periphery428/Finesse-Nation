@@ -25,7 +25,7 @@ class LoginData {
   int get hashCode => hash2(email, password);
 
   Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
+    var map = Map<String, dynamic>();
     map["emailId"] = email;
     map["password"] = password;
 

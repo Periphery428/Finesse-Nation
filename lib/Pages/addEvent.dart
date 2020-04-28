@@ -181,12 +181,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                   ),
                 ),
               ),
-              new DropdownButton<String>(
+              DropdownButton<String>(
                 style: TextStyle(color: Colors.red),
                 items: <String>['Food', 'Other'].map((String value) {
-                  return new DropdownMenuItem<String>(
+                  return DropdownMenuItem<String>(
                     value: value,
-                    child: new Text(
+                    child: Text(
                       value,
                       style: TextStyle(
                         color: Colors.white,
@@ -310,14 +310,21 @@ class MyCustomFormState extends State<MyCustomForm> {
                         // otherwise.
                         if (_formKey.currentState.validate()) {
                           // If the form is valid, display a Snackbar.
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text('Sharing Finesse',
-                                  style: TextStyle(color: Color(0xffc47600)))));
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Sharing Finesse',
+                                style: TextStyle(
+                                  color: Color(0xffc47600),
+                                ),
+                              ),
+                            ),
+                          );
                           Text eventName = Text(eventNameController.text);
                           Text location = Text(locationController.text);
                           Text description = Text(descriptionController.text);
                           Text duration = Text(durationController.text);
-                          DateTime currTime = new DateTime.now();
+                          DateTime currTime = DateTime.now();
 
                           String imageString;
                           if (_image == null) {
@@ -337,11 +344,17 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          FirebaseMessaging().unsubscribeFromTopic('all');
-                          await Network.sendToAll(
-                              newFinesse.getTitle(), newFinesse.getLocation());
+                          List<Finesse> finesses =
+                              await Network.fetchFinesses();
+                          String id = finesses.last.getId();
+                          FirebaseMessaging()
+                              .unsubscribeFromTopic(Network.ALL_TOPIC);
+                          await Network.sendToAll(newFinesse.getTitle(),
+                              newFinesse.getLocation(), id);
+                          print('sending event id = $id');
                           if (User.currentUser.notifications) {
-                            FirebaseMessaging().subscribeToTopic('all');
+                            FirebaseMessaging()
+                                .subscribeToTopic(Network.ALL_TOPIC);
                           }
                           Navigator.removeRouteBelow(
                               context, ModalRoute.of(context));
