@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:finesse_nation/login/flutter_login.dart';
-import 'package:finesse_nation/main.dart';
+import 'package:finesse_nation/Pages/main.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:finesse_nation/Styles.dart';
 
 class LoginScreen extends StatelessWidget {
   changeStatusColor(Color color) async {
@@ -43,7 +44,7 @@ class LoginScreen extends StatelessWidget {
       theme: LoginTheme(
           primaryColor: Colors.black,
           accentColor: Colors.black,
-          cardTheme: CardTheme(color: Color(0xffff9900)),
+          cardTheme: CardTheme(color: Styles.brightOrange),
           buttonTheme: LoginButtonTheme(
             splashColor: Colors.grey[800],
           )

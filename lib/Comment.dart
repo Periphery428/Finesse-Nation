@@ -1,4 +1,4 @@
-import 'User.dart';
+import 'package:finesse_nation/User.dart';
 
 class Comment {
   String _comment;
