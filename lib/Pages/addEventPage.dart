@@ -38,32 +38,19 @@ class MyCustomForm extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyCustomFormState extends State<MyCustomForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
 
+  final _formKey = GlobalKey<FormState>();
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
   final durationController = TextEditingController();
-  final typeController = TextEditingController();
   String _type = "Food";
-  String image = "images/photo_camera_black_288x288.png";
-  final _formKey = GlobalKey<FormState>();
+
   File _image;
   double width = 600;
   double height = 240;
   dynamic _pickImageError;
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(
-        source: ImageSource.camera, maxWidth: width, maxHeight: height);
-
-    setState(() {
-      _image = image;
-    });
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
@@ -71,10 +58,8 @@ class MyCustomFormState extends State<MyCustomForm> {
       locationController.dispose();
       descriptionController.dispose();
       durationController.dispose();
-      typeController.dispose();
       super.dispose();
     }
-  }
 
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
     try {
@@ -87,6 +72,67 @@ class MyCustomFormState extends State<MyCustomForm> {
     } catch (e) {
       _pickImageError = e;
     }
+  }
+
+  Future<void> uploadImagePopup() async{
+    await PopUpBox.showPopupBox(
+        title: "Upload Image",
+        context: context,
+        button: FlatButton(
+          key: Key("UploadOK"),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true)
+                .pop('dialog');
+          },
+          child: Text(
+            "OK",
+            style: TextStyle(
+              color: Color(0xffff9900),
+            ),
+          ),
+        ),
+        willDisplayWidget: Column(children: [
+          FlatButton(
+              onPressed: () {
+                _onImageButtonPressed(ImageSource.gallery,
+                    context: context);
+                Navigator.of(context, rootNavigator: true)
+                    .pop('dialog');
+              },
+              child: Row(children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 15, right: 15, bottom: 15),
+                  child: const Icon(Icons.photo_library,
+                      color: Color(0xffFF9900)),
+                ),
+                Text(
+                  'Upload Image From Gallery',
+                  style: TextStyle(
+                      color: Color(0xffFF9900), fontSize: 14),
+                ),
+              ])),
+          FlatButton(
+              onPressed: () {
+                _onImageButtonPressed(ImageSource.camera,
+                    context: context);
+                Navigator.of(context, rootNavigator: true)
+                    .pop('dialog');
+              },
+              child: Row(children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 15, right: 15, bottom: 15),
+                  child: const Icon(Icons.camera_alt,
+                      color: Color(0xffFF9900)),
+                ),
+                Text(
+                  'Upload Image From Camera',
+                  style: TextStyle(
+                      color: Color(0xffFF9900), fontSize: 14),
+                ),
+              ])),
+        ]));
   }
 
   @override
@@ -108,14 +154,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 controller: eventNameController,
                 decoration: const InputDecoration(
-                  labelText: "Title*",
+                  labelText: "Title *",
                   labelStyle: TextStyle(
                     color: Color(0xffFF9900),
                   ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please Enter an Event Name';
+                    return 'Please enter an event name';
                   }
                   return null;
                 },
@@ -127,14 +173,14 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ),
                 controller: locationController,
                 decoration: const InputDecoration(
-                  labelText: "Location*",
+                  labelText: "Location *",
                   labelStyle: TextStyle(
                     color: Color(0xffFF9900),
                   ),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please Enter a Location';
+                    return 'Please enter a location';
                   }
                   return null;
                 },
@@ -230,63 +276,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   child: FlatButton(
                     color: Color(0xffFF9900),
                     onPressed: () async {
-                      await PopUpBox.showPopupBox(
-                          title: "Upload Image",
-                          context: context,
-                          button: FlatButton(
-                            key: Key("UploadOK"),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop('dialog');
-                            },
-                            child: Text(
-                              "OK",
-                              style: TextStyle(
-                                color: Color(0xffff9900),
-                              ),
-                            ),
-                          ),
-                          willDisplayWidget: Column(children: [
-                            FlatButton(
-                                onPressed: () {
-                                  _onImageButtonPressed(ImageSource.gallery,
-                                      context: context);
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop('dialog');
-                                },
-                                child: Row(children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 15, right: 15, bottom: 15),
-                                    child: const Icon(Icons.photo_library,
-                                        color: Color(0xffFF9900)),
-                                  ),
-                                  Text(
-                                    'Upload Image From Gallery',
-                                    style: TextStyle(
-                                        color: Color(0xffFF9900), fontSize: 14),
-                                  ),
-                                ])),
-                            FlatButton(
-                                onPressed: () {
-                                  getImage();
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop('dialog');
-                                },
-                                child: Row(children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 15, right: 15, bottom: 15),
-                                    child: const Icon(Icons.camera_alt,
-                                        color: Color(0xffFF9900)),
-                                  ),
-                                  Text(
-                                    'Upload Image From Camera',
-                                    style: TextStyle(
-                                        color: Color(0xffFF9900), fontSize: 14),
-                                  ),
-                                ])),
-                          ]));
+                      await uploadImagePopup();
                     },
                     child: Text(
                       'Upload Image',
@@ -306,10 +296,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                       key: Key('submit'),
                       color: Color(0xffFF9900),
                       onPressed: () async {
-                        // Validate returns true if the form is valid, or false
-                        // otherwise.
                         if (_formKey.currentState.validate()) {
-                          // If the form is valid, display a Snackbar.
+
                           Scaffold.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -351,7 +339,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
                           await Network.sendToAll(newFinesse.getTitle(),
                               newFinesse.getLocation(), id);
-                          print('sending event id = $id');
+//                          print('sending event id = $id');
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);
@@ -362,7 +350,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      MyHomePage(title: 'Finesse Nation')));
+                                      MyHomePage()));
                         }
                       },
                       child: Text(

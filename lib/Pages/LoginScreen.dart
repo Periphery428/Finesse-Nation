@@ -56,7 +56,7 @@ class LoginScreen extends StatelessWidget {
       onSignup: /*(_) => null  ,// */ Network.createUser,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => MyHomePage(title: 'Finesse Nation'),
+          builder: (context) => MyHomePage(),
         ));
       },
       onRecoverPassword: Network.recoverPassword,

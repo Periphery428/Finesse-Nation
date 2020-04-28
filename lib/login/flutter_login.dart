@@ -153,7 +153,7 @@ class __HeaderState extends State<_Header> {
             onTap: () {
               Network.updateCurrentUser(email: 'test@test.com');
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => MyHomePage(title: 'Finesse Nation'),
+                builder: (context) => MyHomePage(),
               ));
             },
           )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:finesse_nation/Pages/addEvent.dart';
-import 'package:finesse_nation/Pages/Settings.dart';
+import 'package:finesse_nation/Pages/addEventPage.dart';
+import 'package:finesse_nation/Pages/SettingsPage.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
@@ -13,7 +13,6 @@ import 'Network.dart';
 import 'Finesse.dart';
 import 'Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,9 +45,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -131,7 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 'VIEW',
               ),
               textColor: Color(0xffff9900),
-            ),)..show(context);
+            ),
+          )..show(context);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
@@ -151,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future <void> showFilterMenu() async{
+  Future<void> showFilterMenu() async {
     await PopUpBox.showPopupBox(
       context: context,
       button: FlatButton(
@@ -203,8 +201,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: EdgeInsets.only(right: 10, bottom: 10),
                 child: FutureBuilder<bool>(
                   future: _activeFilter,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<bool> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
                         return const CircularProgressIndicator();
@@ -230,16 +228,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.only(right: 10, bottom: 10),
                   child: FutureBuilder<bool>(
                       future: _typeFilter,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<bool> snapshot) {
+                      builder:
+                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                             return const CircularProgressIndicator();
                           default:
                             if (snapshot.hasError) {
                               print(snapshot.error);
-                              return Wrap(
-                                  children: <Widget>[Text('')]);
+                              return Wrap(children: <Widget>[Text('')]);
                             } else {
                               return CustomSwitch(
                                   key: Key("typeFilter"),
@@ -264,7 +261,6 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title
-//          title: Text(widget.title),
           title: Hero(
             tag: 'logo',
             child: Image.asset(
@@ -278,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
                   key: Key("Filter"), color: Colors.white),
               onPressed: () async {
-                  showFilterMenu();
+                showFilterMenu();
               },
             ),
             PopupMenuButton<DotMenu>(
