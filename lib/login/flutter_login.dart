@@ -23,7 +23,7 @@ export 'src/models/login_data.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
 import 'src/constants.dart';
-import '../main.dart';
+import '../Pages/main.dart';
 import '../Network.dart';
 
 class _AnimationTimeDilationDropdown extends StatelessWidget {

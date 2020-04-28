@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:finesse_nation/login/flutter_login.dart';
-import 'package:finesse_nation/main.dart';
+import 'package:finesse_nation/Pages/main.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import '../Styles.dart';
