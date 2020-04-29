@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/Pages/Settings.dart';
+import 'package:finesse_nation/Pages/SettingsPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '.env.dart';
+import 'package:finesse_nation/.env.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
-import 'User.dart';
-import 'Comment.dart';
+import 'package:finesse_nation/Comment.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
@@ -39,15 +38,17 @@ class Network {
         body: json.encode(data));
   }
 
-  static Future<void> addFinesse(Finesse newFinesse) async {
+  static Future<void> addFinesse(Finesse newFinesse,
+      {var url = ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
-    http.Response response = await postData(ADD_URL, bodyMap);
+    http.Response response = await postData(url, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
       throw Exception(
           "Error while posting data, $token, ${response.statusCode},"
               " ${response.body}, ${response.toString()}");
+
     }
   }
 
@@ -87,6 +88,7 @@ class Network {
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     http.Response response = await postData(DELETE_URL, jsonObject);
+
     if (response.statusCode != 200) {
       throw new Exception("Error while removing finesse");
     }
@@ -202,12 +204,11 @@ class Network {
         : null;
   }
 
-  static Future<String> changeNotifications(toggle) async {
+  static Future<void> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
-      return null;
     } else {
       throw Exception('Notification change request failed');
     }

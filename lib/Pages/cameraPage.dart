@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+import 'package:finesse_nation/Styles.dart';
 
 //Future<void> main() async {
 //  // Ensure that plugin services are initialized so that `availableCameras()`
@@ -90,9 +91,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           key: Key("takepic"),
           child: Icon(
             Icons.camera_alt,
-            color: Colors.grey[850],
+            color: Styles.darkGrey,
           ),
-          backgroundColor: Color(0xffff9900),
+          backgroundColor: Styles.brightOrange,
           // Provide an onPressed callback.
           onPressed: () async {
             // Take the Picture in a try / catch block. If anything goes wrong,

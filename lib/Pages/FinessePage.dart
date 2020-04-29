@@ -5,8 +5,9 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
-import '../Comment.dart';
-import '../widgets/buildFinesseCard.dart';
+import 'package:finesse_nation/Comment.dart';
+import 'package:finesse_nation/Util.dart';
+import 'package:finesse_nation/Styles.dart';
 
 enum DotMenu { markEnded }
 
@@ -129,7 +130,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
-          color: Color(0xffff9900),
+          color: Styles.brightOrange,
         ),
       ),
     );
@@ -143,7 +144,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.info,
-              color: Color(0xffc47600),
+              color: Styles.darkOrange,
               size: 24.0,
             ),
           ),
@@ -152,7 +153,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getDescription(),
               style: TextStyle(
                 fontSize: 16,
-                color: Color(0xffff9900),
+                color: Styles.brightOrange,
               ),
             ),
           ),
@@ -168,7 +169,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.calendar_today,
-              color: Color(0xffc47600),
+              color: Styles.darkOrange,
               size: 24.0,
             ),
           ),
@@ -182,7 +183,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                     : 'Inactive',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xffff9900),
+                  color: Styles.brightOrange,
                 ),
               ),
               fin.getDuration() != "" &&
@@ -191,7 +192,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   ? Text("Duration: ${fin.getDuration()}",
                       style: TextStyle(
                         fontSize: 15,
-                        color: Color(0xffc47600),
+                        color: Styles.darkOrange,
                       ))
                   : Container(),
             ],
@@ -264,7 +265,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.account_circle,
-              color: Color(0xffc47600),
+              color: Styles.darkOrange,
               size: 24.0,
             ),
           ),
@@ -272,7 +273,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             "Posted by: ",
             style: TextStyle(
               fontSize: 16,
-              color: Color(0xffff9900),
+              color: Styles.brightOrange,
             ),
           ),
           Column(
@@ -282,7 +283,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                 fin.getEmailId(),
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xffff9900),
+                  color: Styles.brightOrange,
                 ),
               ),
             ],
@@ -299,7 +300,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.place,
-              color: Color(0xffc47600),
+              color: Styles.darkOrange,
               size: 24.0,
             ),
           ),
@@ -311,7 +312,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   fin.getLocation(),
                   style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xffff9900),
+                    color: Styles.brightOrange,
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -335,14 +336,14 @@ class FinesseDetailsState extends State<FinesseDetails> {
             'Comments  ',
             style: TextStyle(
               fontSize: 16,
-              color: Color(0xffff9900),
+              color: Styles.brightOrange,
             ),
           ),
           Text(
             '${mainComments.length}',
             style: TextStyle(
               fontSize: 15,
-              color: Color(0xffc47600),
+              color: Styles.darkOrange,
             ),
           ),
         ],
@@ -369,7 +370,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
       },
       decoration: InputDecoration(
         hintText: 'Add a comment...',
-        hintStyle: TextStyle(color: Color(0xffc47600)),
+        hintStyle: TextStyle(color: Styles.darkOrange),
         prefixIcon: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Icon(
@@ -379,7 +380,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
         ),
         suffixIcon: IconButton(
-            color: Color(0xffff9900),
+            color: Styles.brightOrange,
             disabledColor: Colors.grey[500],
             icon: Icon(
               Icons.send,
@@ -434,13 +435,13 @@ class FinesseDetailsState extends State<FinesseDetails> {
                           Text(
                             comment.emailId,
                             style: TextStyle(
-                              color: Color(0xffff9900),
+                              color: Styles.brightOrange,
                             ),
                           ),
                           Text(
-                            " · ${timeSince(comment.postedDateTime)}",
+                            " · ${Util.timeSince(comment.postedDateTime)}",
                             style: TextStyle(
-                              color: Color(0xffc47600),
+                              color: Styles.darkOrange,
                             ),
                           ),
                         ],
@@ -482,7 +483,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
     return ListView(
       children: [
         Card(
-          color: Colors.grey[850],
+          color: Styles.darkGrey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -500,7 +501,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
         ),
 //        Card(
-//          color: Colors.grey[850],
+//          color: Styles.darkGrey,
 //          child: Column(
 //            children: [
 //              addCommentSection,
@@ -630,8 +631,8 @@ markAsEnded(Finesse fin) {
     Fluttertoast.showToast(
       msg: "Already marked as inactive",
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Color(0xff2e3032),
-      textColor: Color(0xffff9900),
+      backgroundColor: Styles.darkGrey,
+      textColor: Styles.brightOrange,
     );
     return;
   }
@@ -641,7 +642,7 @@ markAsEnded(Finesse fin) {
   Fluttertoast.showToast(
     msg: "Marked as inactive",
     toastLength: Toast.LENGTH_LONG,
-    backgroundColor: Color(0xff2e3032),
-    textColor: Color(0xffff9900),
+    backgroundColor: Styles.darkGrey,
+    textColor: Styles.brightOrange,
   );
 }

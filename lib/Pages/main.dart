@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:finesse_nation/Pages/addEvent.dart';
-import 'package:finesse_nation/Pages/Settings.dart';
+import 'package:finesse_nation/Pages/addEventPage.dart';
+import 'package:finesse_nation/Pages/SettingsPage.dart';
 import 'package:finesse_nation/widgets/buildFinesseList.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
@@ -9,11 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'Network.dart';
-import 'Finesse.dart';
-import 'Pages/FinessePage.dart';
+import 'package:finesse_nation/Network.dart';
+import 'package:finesse_nation/Finesse.dart';
+import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'package:finesse_nation/Styles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
       title: 'Finesse Nation',
       theme: ThemeData(
         primaryColor: Colors.black,
-        canvasColor: Colors.grey[850],
-        accentColor: Color(0xffff9900),
+        canvasColor: Styles.darkGrey,
+        accentColor: Styles.brightOrange,
       ),
       home: LoginScreen(),
     );
@@ -46,9 +46,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -93,8 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Fluttertoast.showToast(
       msg: "Loading Finesse...",
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Color(0xff2e3032),
-      textColor: Color(0xffff9900),
+      backgroundColor: Styles.darkGrey,
+      textColor: Styles.brightOrange,
     );
     List<Finesse> finesses = await Network.fetchFinesses();
     Finesse latest = finesses.firstWhere((finesse) => finesse.getId() == id);
@@ -130,8 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 'VIEW',
               ),
-              textColor: Color(0xffff9900),
-            ),)..show(context);
+              textColor: Styles.brightOrange,
+            ),
+          )..show(context);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
@@ -151,13 +150,118 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> showFilterMenu() async {
+    await PopUpBox.showPopupBox(
+      context: context,
+      button: FlatButton(
+        key: Key("FilterOK"),
+        onPressed: () {
+          if (localActive != null) {
+            _setActiveFilter(localActive);
+          }
+          if (localType != null) {
+            _setTypeFilter(localType);
+          }
+
+          Navigator.of(context, rootNavigator: true).pop('dialog');
+        },
+        child: Text(
+          "OK",
+          style: TextStyle(
+            color: Styles.brightOrange,
+          ),
+        ),
+      ),
+      willDisplayWidget: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 10, bottom: 30),
+                child: Text(
+                  'Show inactive posts',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 10, bottom: 10),
+                child: Text(
+                  'Show non food posts',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 10, bottom: 10),
+                child: FutureBuilder<bool>(
+                  future: _activeFilter,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const CircularProgressIndicator();
+                      default:
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return Wrap(children: <Widget>[Text('')]);
+                        } else {
+                          return CustomSwitch(
+                            key: Key("activeFilter"),
+                            activeColor: Styles.brightOrange,
+                            value: snapshot.data,
+                            onChanged: (value) {
+                              localActive = value;
+                            },
+                          );
+                        }
+                    }
+                  },
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(right: 10, bottom: 10),
+                  child: FutureBuilder<bool>(
+                      future: _typeFilter,
+                      builder:
+                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const CircularProgressIndicator();
+                          default:
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return Wrap(children: <Widget>[Text('')]);
+                            } else {
+                              return CustomSwitch(
+                                  key: Key("typeFilter"),
+                                  activeColor: Styles.brightOrange,
+                                  value: snapshot.data,
+                                  onChanged: (value) {
+                                    localType = value;
+                                  });
+                            }
+                        }
+                      })),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title
-//          title: Text(widget.title),
           title: Hero(
             tag: 'logo',
             child: Image.asset(
@@ -167,120 +271,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           centerTitle: true,
           actions: <Widget>[
-//            IconButton(
-//              icon: const Icon(FontAwesomeIcons.signOutAlt),
-//              key: Key('logoutButton'),
-//              color: Colors.white,
-//              onPressed: () => _goToLogin(context),
-//            ),
             IconButton(
               icon: Image.asset("images/baseline_filter_list_black_18dp.png",
                   key: Key("Filter"), color: Colors.white),
               onPressed: () async {
-                await PopUpBox.showPopupBox(
-                  context: context,
-                  button: FlatButton(
-                    key: Key("FilterOK"),
-                    onPressed: () {
-                      if (localActive != null) {
-                        _setActiveFilter(localActive);
-                      }
-                      if (localType != null) {
-                        _setTypeFilter(localType);
-                      }
-
-                      Navigator.of(context, rootNavigator: true).pop('dialog');
-                    },
-                    child: Text(
-                      "OK",
-                      style: TextStyle(
-                        color: Color(0xffff9900),
-                      ),
-                    ),
-                  ),
-                  willDisplayWidget: Row(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10, bottom: 30),
-                            child: Text(
-                              'Show inactive posts',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10, bottom: 10),
-                            child: Text(
-                              'Show non food posts',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10, bottom: 10),
-                            child: FutureBuilder<bool>(
-                              future: _activeFilter,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<bool> snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.waiting:
-                                    return const CircularProgressIndicator();
-                                  default:
-                                    if (snapshot.hasError) {
-                                      print(snapshot.error);
-                                      return Wrap(children: <Widget>[Text('')]);
-                                    } else {
-                                      return CustomSwitch(
-                                        key: Key("activeFilter"),
-                                        activeColor: Color(0xffff9900),
-                                        value: snapshot.data,
-                                        onChanged: (value) {
-                                          localActive = value;
-                                        },
-                                      );
-                                    }
-                                }
-                              },
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 10, bottom: 10),
-                              child: FutureBuilder<bool>(
-                                  future: _typeFilter,
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<bool> snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.waiting:
-                                        return const CircularProgressIndicator();
-                                      default:
-                                        if (snapshot.hasError) {
-                                          print(snapshot.error);
-                                          return Wrap(
-                                              children: <Widget>[Text('')]);
-                                        } else {
-                                          return CustomSwitch(
-                                              key: Key("typeFilter"),
-                                              activeColor: Color(0xffff9900),
-                                              value: snapshot.data,
-                                              onChanged: (value) {
-                                                localType = value;
-                                              });
-                                        }
-                                    }
-                                  })),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+                showFilterMenu();
               },
             ),
             PopupMenuButton<DotMenu>(
@@ -342,9 +337,9 @@ class _MyHomePageState extends State<MyHomePage> {
         key: Key('add event'),
         child: Icon(
           Icons.add,
-          color: Colors.grey[850],
+          color: Styles.darkGrey,
         ),
-        backgroundColor: Color(0xffff9900),
+        backgroundColor: Styles.brightOrange,
       ),
       body: BuildFinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
