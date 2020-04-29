@@ -378,12 +378,8 @@ void main() {
   });
 
   test('Post invalid vote', () async {
-    try {
-      var response = await Network.postVote("", CURRENT_USER_EMAIL, -1);
-    } catch (e) {
-      String error = e.toString();
-      expect(error.contains("Error while voting"), true);
-    }
+    expectException(Network.postVote("", CURRENT_USER_EMAIL, -1),
+        "Error while voting");
   });
 
   test('Get previous upvote', () async {
@@ -405,13 +401,8 @@ void main() {
   });
 
   test('Get invalid previous vote', () async {
-    try{
-      int result = await Network.fetchUserVoteOnEvent("", "");
-    }
-    catch(e){
-      String error = e.toString();
-      expect(error.contains("Failed to load user vote"), true);
-    }
+    expectException(Network.fetchUserVoteOnEvent("eventId", "hello"),
+        "Failed to load user vote");
   });
 
 }

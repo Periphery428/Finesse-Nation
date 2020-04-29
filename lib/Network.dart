@@ -274,8 +274,7 @@ class Network {
     final int statusCode = response.statusCode;
     if (statusCode != 200) {
       throw Exception(
-          "Error while voting, status = ${response.statusCode},"
-              " ${response.body}");
+          "Error while voting");
     }
     return response;
   }
@@ -306,8 +305,7 @@ class Network {
       return comments;
     } else {
       throw Exception(
-          "Error while getting comments, status = ${response.statusCode},"
-              " ${response.body}}");
+          "Error while getting comments");
     }
   }
 }
