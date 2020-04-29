@@ -98,6 +98,20 @@ void main() {
     Network.removeFinesse(finesseList.last);
   });
 
+  test('Adding a new Finesse Exception', () async {
+    var now = new DateTime.now();
+    Finesse newFinesse = Finesse.finesseAdd(
+        "Add Event exception test",
+        "Description:" + now.toString(),
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+    expectException(Network.addFinesse(newFinesse, url:"http://google.com"), "Failed to post data");
+  });
+
+
   test('Removing a Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Removing a Finesse');
 

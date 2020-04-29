@@ -35,9 +35,9 @@ class Network {
         body: json.encode(data));
   }
 
-  static Future<void> addFinesse(Finesse newFinesse) async {
+  static Future<void> addFinesse(Finesse newFinesse, {var url=ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
-    http.Response response = await postData(ADD_URL, bodyMap);
+    http.Response response = await postData(url, bodyMap);
 
     if (response.statusCode != 200) {
       throw Exception('Failed to post data');
@@ -242,8 +242,7 @@ class Network {
           data.map<Comment>((json) => Comment.fromJson(json)).toList();
       return comments;
     } else {
-      throw Exception(
-          "Error while getting comments");
+      throw Exception("Error while getting comments");
     }
   }
 }
