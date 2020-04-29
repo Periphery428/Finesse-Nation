@@ -23,6 +23,9 @@ class Network {
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
   static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
+  static const GET_EVENT_VOTING_URL = DOMAIN + 'vote/eventPoints?eventId=';
+  static const GET_USER_VOTE_ON_EVENT_URL = DOMAIN + 'vote/info?';
+  static const POST_EVENT_VOTING_URL = DOMAIN + 'vote';
   static const ALL_TOPIC = 'test';
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
@@ -221,17 +224,58 @@ class Network {
     }
   }
 
-  static Future<int> fetchVotes() async {
-    final response = await http.get(GET_URL, headers: {'api_token': token});
-    if(response.statusCode == 200) {
+  static Future<int> fetchVotes(eventId) async {
+    final response = await http
+        .get(GET_EVENT_VOTING_URL + eventId, headers: {'api_token': token});
+    if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      int downvotes = data["upVote"];
-      int upvotes = data["downVote"];
-    }else{
+      int votes = data["upVote"] - data["downVote"];
+      return votes;
+    } else {
       throw Exception("Failed to load votes");
     }
+  }
 
+  static Future<int> fetchUserVoteOnEvent(eventId, emailId) async {
+    final response = await http.get(
+        GET_USER_VOTE_ON_EVENT_URL +
+            "eventId=" +
+            eventId +
+            "&emailId=" +
+            emailId,
+        headers: {'api_token': token});
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      String vote = data["status"];
+      if (vote == "UPVOTE") {
+        return 1;
+      } else if (vote == "DOWNVOTE") {
+        return -1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw Exception("Failed to load user vote");
     }
+  }
+
+  static Future<http.Response> postVote(
+      String eventId, String emailId, int vote) async {
+    Map bodyMap = {};
+    bodyMap["eventId"] = eventId;
+    bodyMap["emailId"] = emailId;
+    bodyMap["vote"] = vote;
+
+    http.Response response = await postData(POST_EVENT_VOTING_URL, bodyMap);
+
+    final int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      throw Exception(
+          "Error while voting, status = ${response.statusCode}, ${response.body}");
+    }
+    return response;
+  }
+
   static Future<http.Response> addComment(
       Comment comment, String eventId) async {
     Map bodyMap = comment.toMap();

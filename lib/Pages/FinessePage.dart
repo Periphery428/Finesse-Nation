@@ -9,7 +9,9 @@ import '../Comment.dart';
 import '../widgets/buildFinesseCard.dart';
 
 enum DotMenu { markEnded }
+
 bool _commentIsEmpty;
+int voteAmount;
 List<Comment> mainComments;
 
 class FinessePage extends StatelessWidget {
@@ -19,6 +21,7 @@ class FinessePage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     _commentIsEmpty = true;
+    voteAmount = 0;
     final title = fin.getTitle();
 
     return Scaffold(
@@ -70,27 +73,34 @@ class FinesseDetails extends StatefulWidget {
 class FinesseDetailsState extends State<FinesseDetails> {
   Finesse fin;
   Future<List<Comment>> comments;
+  Future<int> votes;
+  Future<int> origVote;
   final TextEditingController _controller = TextEditingController();
 
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
     this.comments = Network.getComments(fin.getId());
+    this.votes = Network.fetchVotes(fin.getId());
+    this.origVote =
+        Network.fetchUserVoteOnEvent(fin.getId(), User.currentUser.email);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      initialData: <Comment>[],
-      future: comments,
-      builder: (context, snapshot) {
+      initialData: [<Comment>[], 0, 0],
+      future: Future.wait([comments, votes, origVote]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
         return snapshot.data != null
-            ? mainCard(snapshot.data, context)
+            ? mainCard(
+                snapshot.data[0], snapshot.data[1], snapshot.data[2], context)
             : Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget mainCard(List<Comment> comments, BuildContext context) {
+  Widget mainCard(
+      List<Comment> comments, int votes, int origVote, BuildContext context) {
     mainComments = comments;
     Widget imageSection = InkWell(
       onTap: () => Navigator.push(
@@ -111,6 +121,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ),
       ),
     );
+
     Widget titleSection = Container(
       padding: const EdgeInsets.all(20),
       child: Text(
@@ -122,6 +133,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ),
       ),
     );
+
     Widget descriptionSection = Container(
       padding: const EdgeInsets.only(left: 20, bottom: 20),
       child: Row(
@@ -147,6 +159,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
     Widget timeSection = Container(
       padding: const EdgeInsets.only(left: 20, bottom: 20),
       child: Row(
@@ -186,6 +199,62 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ],
       ),
     );
+
+    Widget votingSection = Container(
+        padding: const EdgeInsets.only(left: 20, bottom: 20),
+        child: Row(
+          children: [
+            Row(children: [
+              Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(
+                      ((getVoteCount(origVote, voteAmount, votes)) >= 0)
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
+                      color: Color(0xffc47600),
+                      size: 24.0)),
+              Text(
+                (getVoteCount(origVote, voteAmount, votes)).abs().toString() +
+                    ((getVoteCount(origVote, voteAmount, votes) >= 0)
+                        ? " upvotes"
+                        : " downvotes"),
+                style: TextStyle(fontSize: 16, color: Color(0xffff9900)),
+              ),
+            ]),
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_upward,
+                    color: Color(0xffc47600),
+                  ),
+                  onPressed: (!canUpVote(origVote, voteAmount))
+                      ? null
+                      : () {
+                          Network.postVote(
+                              fin.getId(), User.currentUser.email, 1);
+                          setState(() {
+                            voteAmount = 1;
+                          });
+                        },
+                ),
+                IconButton(
+                    icon: Icon(Icons.arrow_downward, color: Color(0xffc47600)),
+                    color: Color(0xffc47600),
+                    onPressed: (!canDownVote(origVote, voteAmount))
+                        ? null
+                        : () {
+                            Network.postVote(
+                                fin.getId(), User.currentUser.email, -1);
+                            setState(() {
+                              voteAmount = -1;
+                            });
+                          })
+              ],
+            )
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ));
 
     Widget userSection = Container(
       padding: const EdgeInsets.only(left: 20, bottom: 20),
@@ -423,6 +492,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
               fin.getDescription() != "" ? descriptionSection : Container(),
               timeSection,
               userSection,
+              votingSection,
               commentsHeaderSection,
               viewCommentSection,
               addCommentSection,
@@ -448,6 +518,125 @@ class FinesseDetailsState extends State<FinesseDetails> {
     int seed = email.codeUnits.fold(0, (i, j) => i + j);
     int val = min + Random(seed).nextInt(max - min + 1);
     return Color(val);
+  }
+
+  int getVoteCount(int origVote, int voteAmount, int votes) {
+    if (origVote == -1) {
+      if (voteAmount == 0) {
+        return votes;
+      } else if (voteAmount == 1) {
+        return votes + 2;
+      } else if (voteAmount == -1) {
+        return votes;
+      } else {
+        print(
+            "voting count logic is broke :c origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else if (origVote == 0) {
+      if (voteAmount == 0) {
+        return votes;
+      } else if (voteAmount == 1) {
+        return votes + 1;
+      } else if (voteAmount == -1) {
+        return votes - 1;
+      } else {
+        print(
+            "voting count logic is broke :( origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else if (origVote == 1) {
+      if (voteAmount == 0) {
+        return votes;
+      } else if (voteAmount == -1) {
+        return votes - 2;
+      } else if (voteAmount == 1) {
+        return votes;
+      } else {
+        print(
+            "voting count logic is broke :{ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else {
+      print(
+          "voting count logic is broke :[ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+    }
+    return votes;
+  }
+
+  canUpVote(int origVote, int voteAmount) {
+    if (origVote == -1) {
+      if (voteAmount == 0) {
+        return true;
+      } else if (voteAmount == 1) {
+        return false;
+      } else if (voteAmount == -1) {
+        return true;
+      } else {
+        print(
+            "voting up logic is broke :c origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else if (origVote == 0) {
+      if (voteAmount == 0) {
+        return true;
+      } else if (voteAmount == 1) {
+        return false;
+      } else if (voteAmount == -1) {
+        return true;
+      } else {
+        print(
+            "voting up logic is broke :( origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else if (origVote == 1) {
+      if (voteAmount == 0) {
+        return false;
+      } else if (voteAmount == -1) {
+        return true;
+      } else if (voteAmount == 1) {
+        return false;
+      } else {
+        print(
+            "voting up logic is broke :{ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+      }
+    } else {
+      print(
+          "voting up logic is broke :[ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
+    }
+    return false;
+  }
+
+  canDownVote(int origVote, int voteAmount) {
+    if (origVote == -1) {
+      if (voteAmount == 0) {
+        return false;
+      } else if (voteAmount == 1) {
+        return true;
+      } else if (voteAmount == -1) {
+        return false;
+      } else {
+        print("voting down logic is broke :c");
+      }
+    } else if (origVote == 0) {
+      if (voteAmount == 0) {
+        return true;
+      } else if (voteAmount == 1) {
+        return true;
+      } else if (voteAmount == -1) {
+        return false;
+      } else {
+        print("voting down logic is broke :(");
+      }
+    } else if (origVote == 1) {
+      if (voteAmount == 0) {
+        return true;
+      } else if (voteAmount == -1) {
+        return false;
+      } else if (voteAmount == 1) {
+        return true;
+      } else {
+        print("voting down logic is broke :{");
+      }
+    } else {
+      print("voting down logic is broke :[");
+    }
+    return false;
   }
 }
 
