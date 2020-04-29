@@ -110,7 +110,7 @@ void main() {
         "Food",
         new DateTime.now());
     expectException(Network.addFinesse(newFinesse, url: "http://google.com"),
-        "Failed to post data");
+        "Error while posting data");
   });
 
   test('Removing a Finesse', () async {

@@ -46,8 +46,7 @@ class Network {
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
       throw Exception(
-          "Error while posting data, $token, ${response.statusCode},"
-              " ${response.body}, ${response.toString()}");
+          "Error while posting data");
 
     }
   }
