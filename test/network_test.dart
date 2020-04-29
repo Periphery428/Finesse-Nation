@@ -108,9 +108,9 @@ void main() {
         "60 hours",
         "Food",
         new DateTime.now());
-    expectException(Network.addFinesse(newFinesse, url:"http://google.com"), "Failed to post data");
+    expectException(Network.addFinesse(newFinesse, url: "http://google.com"),
+        "Failed to post data");
   });
-
 
   test('Removing a Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Removing a Finesse');
@@ -122,28 +122,38 @@ void main() {
     await getAndRemove(newFinesse);
   });
 
-//  test('Removing a Finesse Exception', () async {
-//    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
-//
-//    newFinesse.setId("invalid");
-//    await expectException(Network.removeFinesse(newFinesse),
-//        "Error while removing finesse");
-//
-//    //Cleanup
-//    await getAndRemove(newFinesse);
-//  });
-//
-//  test('Updating a Finesse Exception', () async {
-//    Finesse newFinesse = await addFinesseHelper('Updating a Finesse Exception');
-//
-//    newFinesse.setId("invalid");
-//
-//    await expectException(Network.updateFinesse(newFinesse),
-//        "Error while updating finesse");
-//
-//    //Cleanup
-//    await getAndRemove(newFinesse);
-//  });
+  test('Removing a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+
+    newFinesse.setId("invalid");
+    await expectException(Network.removeFinesse(newFinesse),
+        "Error while removing finesse");
+
+  });
+
+  test('Updating a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+
+    newFinesse.setId("invalid");
+
+    await expectException(Network.updateFinesse(newFinesse),
+        "Error while updating finesse");
+
+  });
 
   test('Updating a Finesse', () async {
     Finesse firstNewFinesse = await addFinesseHelper('Updating a Finesse');

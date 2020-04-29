@@ -35,7 +35,8 @@ class Network {
         body: json.encode(data));
   }
 
-  static Future<void> addFinesse(Finesse newFinesse, {var url=ADD_URL}) async {
+  static Future<void> addFinesse(Finesse newFinesse,
+      {var url = ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
     http.Response response = await postData(url, bodyMap);
 
