@@ -37,7 +37,7 @@ class FinessePage extends StatelessWidget {
               const PopupMenuItem<DotMenu>(
                 key: Key("markAsEndedButton"),
                 value: DotMenu.markEnded,
-                child: Text('Mark as expired'),
+                child: Text('Mark as inactive'),
               ),
             ],
           )
@@ -528,9 +528,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
         return votes + 2;
       } else if (voteAmount == -1) {
         return votes;
-      } else {
-        print(
-            "voting count logic is broke :c origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
     } else if (origVote == 0) {
       if (voteAmount == 0) {
@@ -539,9 +536,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
         return votes + 1;
       } else if (voteAmount == -1) {
         return votes - 1;
-      } else {
-        print(
-            "voting count logic is broke :( origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
     } else if (origVote == 1) {
       if (voteAmount == 0) {
@@ -550,93 +544,59 @@ class FinesseDetailsState extends State<FinesseDetails> {
         return votes - 2;
       } else if (voteAmount == 1) {
         return votes;
-      } else {
-        print(
-            "voting count logic is broke :{ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
-    } else {
-      print(
-          "voting count logic is broke :[ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
     }
-    return votes;
+    throw Exception("Failure in getting vote count");
   }
 
   canUpVote(int origVote, int voteAmount) {
-    if (origVote == -1) {
+    if (origVote == 0) {
       if (voteAmount == 0) {
         return true;
       } else if (voteAmount == 1) {
         return false;
       } else if (voteAmount == -1) {
         return true;
-      } else {
-        print(
-            "voting up logic is broke :c origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
-    } else if (origVote == 0) {
-      if (voteAmount == 0) {
+    } else if (origVote == -1) {
+      if (voteAmount == 0 || voteAmount == -1) {
         return true;
       } else if (voteAmount == 1) {
         return false;
-      } else if (voteAmount == -1) {
-        return true;
-      } else {
-        print(
-            "voting up logic is broke :( origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
     } else if (origVote == 1) {
-      if (voteAmount == 0) {
+      if (voteAmount == 0 || voteAmount == 1) {
         return false;
       } else if (voteAmount == -1) {
         return true;
-      } else if (voteAmount == 1) {
-        return false;
-      } else {
-        print(
-            "voting up logic is broke :{ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
       }
-    } else {
-      print(
-          "voting up logic is broke :[ origVote: $origVote, voteAmount: $voteAmount, votes: $votes");
     }
-    return false;
+    throw Exception("Failure to check upvoting");
   }
 
   canDownVote(int origVote, int voteAmount) {
-    if (origVote == -1) {
+    if (origVote == 0) {
       if (voteAmount == 0) {
-        return false;
+        return true;
       } else if (voteAmount == 1) {
         return true;
       } else if (voteAmount == -1) {
         return false;
-      } else {
-        print("voting down logic is broke :c");
       }
-    } else if (origVote == 0) {
-      if (voteAmount == 0) {
-        return true;
+    } else if (origVote == -1) {
+      if (voteAmount == 0 || voteAmount == -1) {
+        return false;
       } else if (voteAmount == 1) {
         return true;
-      } else if (voteAmount == -1) {
-        return false;
-      } else {
-        print("voting down logic is broke :(");
       }
     } else if (origVote == 1) {
-      if (voteAmount == 0) {
+      if (voteAmount == 0 || voteAmount == 1) {
         return true;
       } else if (voteAmount == -1) {
         return false;
-      } else if (voteAmount == 1) {
-        return true;
-      } else {
-        print("voting down logic is broke :{");
       }
-    } else {
-      print("voting down logic is broke :[");
     }
-    return false;
+    throw Exception("Failure to check downvoting");
   }
 }
 
@@ -668,19 +628,18 @@ markAsEnded(Finesse fin) {
   List activeList = fin.getActive();
   if (activeList.contains(User.currentUser.email)) {
     Fluttertoast.showToast(
-      msg: "Already marked as expired",
+      msg: "Already marked as inactive",
       toastLength: Toast.LENGTH_LONG,
       backgroundColor: Color(0xff2e3032),
       textColor: Color(0xffff9900),
     );
-
     return;
   }
   activeList.add(User.currentUser.email);
   fin.setActive(activeList);
   Network.updateFinesse(fin);
   Fluttertoast.showToast(
-    msg: "Marked as expired",
+    msg: "Marked as inactive",
     toastLength: Toast.LENGTH_LONG,
     backgroundColor: Color(0xff2e3032),
     textColor: Color(0xffff9900),
