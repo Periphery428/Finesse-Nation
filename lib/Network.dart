@@ -39,7 +39,7 @@ class Network {
     Map bodyMap = newFinesse.toMap();
     http.Response response = await postData(ADD_URL, bodyMap);
 
-    if (response.statusCode != 200){
+    if (response.statusCode != 200) {
       throw Exception('Failed to post data');
     }
   }
@@ -243,7 +243,7 @@ class Network {
       return comments;
     } else {
       throw Exception(
-          "Error while getting comments, status = ${response.statusCode}, ${response.body}}");
+          "Error while getting comments");
     }
   }
 }

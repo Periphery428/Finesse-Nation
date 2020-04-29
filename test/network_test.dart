@@ -54,7 +54,6 @@ const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
 
-
 Future<void> login(
     {String email: VALID_EMAIL,
     String password: VALID_PASSWORD,
@@ -149,9 +148,9 @@ void main() {
     expect(finesseList.last.getDescription(),
         isNot(firstNewFinesse.getDescription()));
     expect(finesseList.last.getDescription(), updatedFinesse.getDescription());
-    expect(finesseList.last.getConvertedImage(), updatedFinesse.getConvertedImage());
+    expect(finesseList.last.getConvertedImage(),
+        updatedFinesse.getConvertedImage());
     expect(finesseList.last.getImage(), updatedFinesse.getImage());
-
 
     await Network.removeFinesse(finesseList.last);
   });
