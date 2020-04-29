@@ -53,6 +53,7 @@ const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
+const NOT_VOTED_TEST_EVENT_ID = '5e953aef6f5e40002ecc9a60';
 
 Future<void> login(
     {String email: VALID_EMAIL,
@@ -109,7 +110,7 @@ void main() {
         "Food",
         new DateTime.now());
     expectException(Network.addFinesse(newFinesse, url: "http://google.com"),
-        "Failed to post data");
+        "Error while posting data");
   });
 
   test('Removing a Finesse', () async {
@@ -356,6 +357,54 @@ void main() {
     List<Comment> result = await Network.getComments('no_comments');
     expect(result.length, 0);
   });
+
+  test('Get Votes', () async {
+    int result = await Network.fetchVotes(TEST_EVENT_ID);
+    expect((result == 0) || (result == -1) || (result == 1), true);
+  });
+
+  test('Get invalid votes', () async {
+    try {
+      int result = await Network.fetchVotes("");
+    } catch (e) {
+      String error = e.toString();
+      expect(error.contains("Failed to load votes"), true);
+    }
+  });
+
+  test('Post vote', () async {
+    var response = await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, 1);
+    expect(response.statusCode, 200);
+  });
+
+  test('Post invalid vote', () async {
+    expectException(Network.postVote("", CURRENT_USER_EMAIL, -1),
+        "Error while voting");
+  });
+
+  test('Get previous upvote', () async {
+    int result =
+        await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, 1);
+  });
+
+  test('Get lack of previous vote', () async {
+    int result =
+    await Network.fetchUserVoteOnEvent(NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, 0);
+  });
+
+  test('Get previous downvote', () async {
+    await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, -1);
+    int result = await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, -1);
+  });
+
+  test('Get invalid previous vote', () async {
+    expectException(Network.fetchUserVoteOnEvent("eventId", "hello"),
+        "Failed to load user vote");
+  });
+
 }
 
 /// Checks if the the passed in function throws an exception
