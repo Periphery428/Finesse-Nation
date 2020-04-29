@@ -48,6 +48,7 @@ void createTestUser() async {
 }
 
 const VALID_EMAIL = 'test@test.com';
+const INVALID_EMAIL = 'Finesse';
 const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
@@ -89,7 +90,26 @@ void main() {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getDescription(), newFinesse.getDescription());
+    expect(finesseList.last.getLocation(), newFinesse.getLocation());
+    expect(finesseList.last.getTitle(), newFinesse.getTitle());
+    expect(finesseList.last.getPostedTime(), newFinesse.getPostedTime());
+    expect(finesseList.last.getEmailId(), newFinesse.getEmailId());
+    expect(finesseList.last.getDuration(), newFinesse.getDuration());
     Network.removeFinesse(finesseList.last);
+  });
+
+  test('Adding a new Finesse Exception', () async {
+    var now = new DateTime.now();
+    Finesse newFinesse = Finesse.finesseAdd(
+        "Add Event exception test",
+        "Description:" + now.toString(),
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+    expectException(Network.addFinesse(newFinesse, url: "http://google.com"),
+        "Failed to post data");
   });
 
   test('Removing a Finesse', () async {
@@ -102,28 +122,36 @@ void main() {
     await getAndRemove(newFinesse);
   });
 
-//  test('Removing a Finesse Exception', () async {
-//    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
-//
-//    newFinesse.setId("invalid");
-//    await expectException(Network.removeFinesse(newFinesse),
-//        "Error while removing finesse");
-//
-//    //Cleanup
-//    await getAndRemove(newFinesse);
-//  });
-//
-//  test('Updating a Finesse Exception', () async {
-//    Finesse newFinesse = await addFinesseHelper('Updating a Finesse Exception');
-//
-//    newFinesse.setId("invalid");
-//
-//    await expectException(Network.updateFinesse(newFinesse),
-//        "Error while updating finesse");
-//
-//    //Cleanup
-//    await getAndRemove(newFinesse);
-//  });
+  test('Removing a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+
+    newFinesse.setId("invalid");
+    await expectException(
+        Network.removeFinesse(newFinesse), "Error while removing finesse");
+  });
+
+  test('Updating a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+
+    newFinesse.setId("invalid");
+
+    await expectException(
+        Network.updateFinesse(newFinesse), "Error while updating finesse");
+  });
 
   test('Updating a Finesse', () async {
     Finesse firstNewFinesse = await addFinesseHelper('Updating a Finesse');
@@ -142,6 +170,9 @@ void main() {
     expect(finesseList.last.getDescription(),
         isNot(firstNewFinesse.getDescription()));
     expect(finesseList.last.getDescription(), updatedFinesse.getDescription());
+    expect(finesseList.last.getConvertedImage(),
+        updatedFinesse.getConvertedImage());
+    expect(finesseList.last.getImage(), updatedFinesse.getImage());
 
     await Network.removeFinesse(finesseList.last);
   });
@@ -183,11 +214,11 @@ void main() {
   });
 
   test('Validate good email', () async {
-    validateEmail('hello@world.edu', null);
+    validateEmail(VALID_EMAIL, null);
   });
 
   test('Validate bad email', () async {
-    validateEmail('Finesse', 'Invalid email address');
+    validateEmail(INVALID_EMAIL, 'Invalid email address');
   });
 
   test('Validating empty email', () async {
@@ -238,6 +269,16 @@ void main() {
     String password = VALID_PASSWORD;
     await signup(
         email: email, password: password, expected: 'User already exists');
+  });
+
+  test('Recover Password good email', () async {
+    String result = await Network.recoverPassword(VALID_EMAIL);
+    expect(result, null);
+  });
+
+  test('Recover Password bad email', () async {
+    String result = await Network.recoverPassword(INVALID_EMAIL);
+    expect(result, 'Invalid email address');
   });
 
   test('Changing Notifications ON', () async {

@@ -35,14 +35,13 @@ class Network {
         body: json.encode(data));
   }
 
-  static Future<void> addFinesse(Finesse newFinesse) async {
+  static Future<void> addFinesse(Finesse newFinesse,
+      {var url = ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
-    http.Response response = await postData(ADD_URL, bodyMap);
+    http.Response response = await postData(url, bodyMap);
 
-    final int statusCode = response.statusCode;
-    if (statusCode != 200 && statusCode != 201) {
-      throw Exception(
-          "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
+    if (response.statusCode != 200) {
+      throw Exception('Failed to post data');
     }
   }
 
@@ -244,8 +243,7 @@ class Network {
           data.map<Comment>((json) => Comment.fromJson(json)).toList();
       return comments;
     } else {
-      throw Exception(
-          "Error while getting comments, status = ${response.statusCode}, ${response.body}}");
+      throw Exception("Error while getting comments");
     }
   }
 }

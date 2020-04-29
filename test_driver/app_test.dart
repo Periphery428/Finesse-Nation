@@ -38,6 +38,7 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
 
     await driver.tap(find.text("OK"));
   }
+  await delay(200);
   if (uploadPic) {
     await driver.tap(find.byValueKey('Upload'));
 
@@ -53,7 +54,7 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('submit'));
   if (locationText != '') {
     await delay(1000);
-    expect(await driver.getText(find.text("now")), "now");
+    await driver.waitFor(find.text("now"));
   }
 }
 
@@ -197,14 +198,9 @@ void main() {
     if (envVars['ANDROID_SDK_ROOT'] != null) {
       test('Add Event with Gallery Image Test', () async {
         String nameText = 'Integration Test Image from Gallery';
-        String durationText = 'Integration Test Duration';
-        String descriptionText =
-            'The location is a timestamp to make a unique value for the test to look for.';
-        var now = DateTime.now();
-        String locationText = 'Location: ' + now.toString();
+        String locationText = generateUniqueLocationText();
 
-        await addEvent(driver, nameText, locationText,
-            uploadPic: true, takePic: true);
+        await addEvent(driver, nameText, locationText, uploadPic: true);
         await delay(1000);
 
         expect(await driver.getText(find.text(locationText)), locationText);

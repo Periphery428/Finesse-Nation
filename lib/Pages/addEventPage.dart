@@ -268,69 +268,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                     key: Key("Upload"),
                     onPressed: () async {
                       await uploadImagePopup();
-
-                      await PopUpBox.showPopupBox(
-                          title: "Upload Image",
-                          context: context,
-                          button: FlatButton(
-                            key: Key("UploadOK"),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop('dialog');
-                            },
-                            child: Text(
-                              "OK",
-                              style: TextStyle(
-                                color: Styles.brightOrange,
-                              ),
-                            ),
-                          ),
-                          willDisplayWidget: Column(children: [
-                            FlatButton(
-                                key: Key("Gallery"),
-                                onPressed: () {
-                                  _onImageButtonPressed(ImageSource.gallery,
-                                      context: context);
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop('dialog');
-                                },
-                                child: Row(children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 15, right: 15, bottom: 15),
-                                    child: const Icon(Icons.photo_library,
-                                        color: Styles.brightOrange),
-                                  ),
-                                  Text(
-                                    'Upload Image From Gallery',
-                                    style: TextStyle(
-                                        color: Styles.brightOrange,
-                                        fontSize: 14),
-                                  ),
-                                ])),
-                            FlatButton(
-                                key: Key("Camera"),
-                                onPressed: () {
-                                  _onImageButtonPressed(ImageSource.camera,
-                                      context: context);
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop('dialog');
-                                },
-                                child: Row(children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 15, right: 15, bottom: 15),
-                                    child: const Icon(Icons.camera_alt,
-                                        color: Styles.brightOrange),
-                                  ),
-                                  Text(
-                                    'Upload Image From Camera',
-                                    style: TextStyle(
-                                        color: Styles.brightOrange,
-                                        fontSize: 14),
-                                  ),
-                                ])),
-                          ]));
                     },
                     child: Text(
                       'Upload Image',
