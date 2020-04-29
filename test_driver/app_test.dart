@@ -1,5 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'dart:io';
 
 Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
@@ -9,7 +10,8 @@ Future<void> delay([int milliseconds = 250]) async {
 Future<void> addEvent(FlutterDriver driver, nameText, locationText,
     {String descriptionText = "Integration Test Description",
     String durationText = "Integration Test Duration",
-    bool takePic: false}) async {
+    bool takePic: false,
+    bool uploadPic: false}) async {
   nameText = "Integration Test " + nameText;
   await driver.tap(find.byValueKey('add event'));
 
@@ -28,6 +30,25 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   await driver.tap(find.byValueKey('duration'));
   await driver.enterText(durationText);
   await driver.waitFor(find.text(durationText));
+  if (takePic) {
+    await driver.tap(find.byValueKey('Upload'));
+
+    await driver.waitFor(find.text("Upload Image From Camera"));
+//    await driver.tap(find.byValueKey('Camera'));
+
+    await driver.tap(find.text("OK"));
+  }
+  if (uploadPic) {
+    await driver.tap(find.byValueKey('Upload'));
+
+    await driver.waitFor(find.text("Upload Image From Gallery"));
+
+    await driver.tap(find.text("OK"));
+
+//    await driver.tap(find.byValueKey('Gallery'));
+//
+//    await driver.tap(find.text("IMG"));
+  }
 
   await driver.tap(find.byValueKey('submit'));
   if (locationText != '') {
@@ -123,8 +144,35 @@ void main() {
 
   group('Add Event:', () {
     FlutterDriver driver;
+    final Map<String, String> envVars = Platform.environment;
 
     setUpAll(() async {
+      if (envVars['ANDROID_SDK_ROOT'] != null) {
+        final String adbPath =
+            envVars['ANDROID_SDK_ROOT'] + '/platform-tools/adb.exe';
+        await Process.run(adbPath, [
+          'shell',
+          'pm',
+          'grant',
+          'com.periphery.finesse_nation',
+          'android.permission.READ_EXTERNAL_STORAGE'
+        ]);
+        await Process.run(adbPath, [
+          'shell',
+          'pm',
+          'grant',
+          'com.periphery.finesse_nation',
+          'android.permission.READ_PHONE_STATE'
+        ]);
+        await Process.run(adbPath, [
+          'shell',
+          'pm',
+          'grant',
+          'com.periphery.finesse_nation',
+          'android.permission.CAMERA'
+        ]);
+      }
+
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -145,6 +193,25 @@ void main() {
 
       await driver.tap(find.byTooltip('Back'));
     });
+
+    if (envVars['ANDROID_SDK_ROOT'] != null) {
+      test('Add Event with Gallery Image Test', () async {
+        String nameText = 'Integration Test Image from Gallery';
+        String durationText = 'Integration Test Duration';
+        String descriptionText =
+            'The location is a timestamp to make a unique value for the test to look for.';
+        var now = DateTime.now();
+        String locationText = 'Location: ' + now.toString();
+
+        await addEvent(driver, nameText, locationText,
+            uploadPic: true, takePic: true);
+        await delay(1000);
+
+        expect(await driver.getText(find.text(locationText)), locationText);
+        await delay(1000);
+        await markAsEnded(driver, locationText);
+      });
+    }
 
     test('Add a finesse', () async {
       String testName = 'Add a finesse';

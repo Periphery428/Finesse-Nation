@@ -265,6 +265,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                   height: 50,
                   child: FlatButton(
                     color: Styles.brightOrange,
+                    key: Key("Upload"),
                     onPressed: () async {
                       await uploadImagePopup();
 
@@ -286,6 +287,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           ),
                           willDisplayWidget: Column(children: [
                             FlatButton(
+                                key: Key("Gallery"),
                                 onPressed: () {
                                   _onImageButtonPressed(ImageSource.gallery,
                                       context: context);
@@ -307,6 +309,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   ),
                                 ])),
                             FlatButton(
+                                key: Key("Camera"),
                                 onPressed: () {
                                   _onImageButtonPressed(ImageSource.camera,
                                       context: context);
