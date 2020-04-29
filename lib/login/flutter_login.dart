@@ -23,8 +23,8 @@ export 'src/models/login_data.dart';
 export 'src/providers/login_messages.dart';
 export 'src/providers/login_theme.dart';
 import 'src/constants.dart';
-import '../main.dart';
-import '../Network.dart';
+import 'package:finesse_nation/Pages/main.dart';
+import 'package:finesse_nation/Network.dart';
 
 class _AnimationTimeDilationDropdown extends StatelessWidget {
   _AnimationTimeDilationDropdown({
@@ -153,7 +153,7 @@ class __HeaderState extends State<_Header> {
             onTap: () {
               Network.updateCurrentUser(email: 'test@test.com');
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => MyHomePage(title: 'Finesse Nation'),
+                builder: (context) => MyHomePage(),
               ));
             },
           )

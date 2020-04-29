@@ -35,7 +35,11 @@ class User {
 
   bool get notifications => _notifications ?? true;
 
-  void setNotifications(var notif) {
-    _notifications = notif;
+  void setNotifications(var notification) {
+    _notifications = notification;
+  }
+
+  void setEmail(var email) {
+    _email = email;
   }
 }

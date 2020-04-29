@@ -6,10 +6,13 @@ Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
 }
 
-//Fill out the form with the necessary information.
-Future<void> addEvent(
-    FlutterDriver driver, nameText, locationText, descriptionText, durationText,
-    {bool takePic: false, bool uploadPic: false}) async {
+/// Fill out the form with the necessary information.
+Future<void> addEvent(FlutterDriver driver, nameText, locationText,
+    {String descriptionText = "Integration Test Description",
+    String durationText = "Integration Test Duration",
+    bool takePic: false,
+    bool uploadPic: false}) async {
+  nameText = "Integration Test " + nameText;
   await driver.tap(find.byValueKey('add event'));
 
   await driver.tap(find.byValueKey('name'));
@@ -30,7 +33,6 @@ Future<void> addEvent(
   if (takePic) {
     await driver.tap(find.byValueKey('Upload'));
 
-
     await driver.waitFor(find.text("Upload Image From Camera"));
 //    await driver.tap(find.byValueKey('Camera'));
 
@@ -48,8 +50,11 @@ Future<void> addEvent(
 //    await driver.tap(find.text("IMG"));
   }
 
-
   await driver.tap(find.byValueKey('submit'));
+  if (locationText != '') {
+    await delay(1000);
+    expect(await driver.getText(find.text("now")), "now");
+  }
 }
 
 Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
@@ -77,9 +82,13 @@ Future<void> login(FlutterDriver driver,
 }
 
 Future<void> logout(FlutterDriver driver) async {
+  await gotoSettings(driver);
+  await driver.tap(find.byValueKey("logoutButton"));
+}
+
+Future gotoSettings(FlutterDriver driver) async {
   await driver.tap(find.byValueKey("dropdownButton"));
   await driver.tap(find.byValueKey("settingsButton"));
-  await driver.tap(find.byValueKey("logoutButton"));
 }
 
 Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
@@ -90,7 +99,7 @@ Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
 }
 
 void main() {
-  group('Login', () {
+  group('Login:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -126,21 +135,21 @@ void main() {
     });
 
     test('Invalid email', () async {
-      String badEmail = "Invalid email address";
+      String errorText = "Invalid email address";
 
       await login(driver, email: 'invalidemail.com');
-      await driver.getText(find.text(badEmail));
+      await driver.getText(find.text(errorText));
     });
   });
 
-  group('Add Event', () {
+  group('Add Event:', () {
     FlutterDriver driver;
     final Map<String, String> envVars = Platform.environment;
 
     setUpAll(() async {
       if (envVars['ANDROID_SDK_ROOT'] != null) {
-        final String adbPath = envVars['ANDROID_SDK_ROOT'] +
-            '/platform-tools/adb.exe';
+        final String adbPath =
+            envVars['ANDROID_SDK_ROOT'] + '/platform-tools/adb.exe';
         await Process.run(adbPath, [
           'shell',
           'pm',
@@ -172,20 +181,15 @@ void main() {
       }
     });
 
-    test('Add Event Form Fail Test', () async {
+    test('Add event form fail test', () async {
       await login(driver);
-      String nameText = 'Integration Test Free Food';
-      String descriptionText =
-          'The location is a timestamp to make a unique value for the test to look for.';
-      String durationText = 'Integration Test Duration';
+      String testName = 'Add event form fail test';
       String locationText = '';
 
-      await addEvent(
-          driver, nameText, locationText, descriptionText, durationText);
-      await delay(1000);
+      await addEvent(driver, testName, locationText);
 
-      expect(await driver.getText(find.text("Please Enter a Location")),
-          "Please Enter a Location");
+      expect(await driver.getText(find.text("Please enter a location")),
+          "Please enter a location");
 
       await driver.tap(find.byTooltip('Back'));
     });
@@ -199,8 +203,7 @@ void main() {
         var now = DateTime.now();
         String locationText = 'Location: ' + now.toString();
 
-        await addEvent(
-            driver, nameText, locationText, descriptionText, durationText,
+        await addEvent(driver, nameText, locationText,
             uploadPic: true, takePic: true);
         await delay(1000);
 
@@ -210,18 +213,11 @@ void main() {
       });
     }
 
-    test('Add Event UI Test', () async {
-      // Build our app and trigger a frame.
-      String nameText = 'Integration Test Free Food';
-      String durationText = 'Integration Test Duration';
-      String descriptionText =
-          'The location is a timestamp to make a unique value for the test to look for.';
-      var now = DateTime.now();
-      String locationText = 'Location: ' + now.toString();
+    test('Add a finesse', () async {
+      String testName = 'Add a finesse';
+      String locationText = generateUniqueLocationText();
 
-      await addEvent(
-          driver, nameText, locationText, descriptionText, durationText);
-      await delay(1000);
+      await addEvent(driver, testName, locationText);
 
       expect(await driver.getText(find.text(locationText)), locationText);
       await delay(1000);
@@ -229,7 +225,7 @@ void main() {
     });
   });
 
-  group('Filters ', () {
+  group('Filters:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -255,7 +251,7 @@ void main() {
     });
   });
 
-  group('Settings Page', () {
+  group('Settings Page:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -270,18 +266,16 @@ void main() {
 
     test('Settings Page ', () async {
       // Build our app and trigger a frame.
-      await driver.tap(find.byValueKey("dropdownButton"));
-      await driver.tap(find.text("Settings"));
+      await gotoSettings(driver);
       await driver.tap(find.byValueKey("Notification Toggle"));
       await driver.tap(find.pageBack());
-      await driver.tap(find.byValueKey("dropdownButton"));
-      await driver.tap(find.text("Settings"));
+      await gotoSettings(driver);
       await driver.tap(find.byValueKey("Notification Toggle"));
       await driver.tap(find.pageBack());
     });
   });
 
-  group('Finesse Page', () {
+  group('Finesse Page:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -294,19 +288,15 @@ void main() {
       }
     });
 
-    test('View Info Test', () async {
+    test('View finesse info', () async {
       // Build our app and trigger a frame.
-      String nameText = 'View Info Integration Test Free Food';
-      String durationText = 'Integration Test Duration';
-      String descriptionText = 'View Info description';
-      var now = DateTime.now();
-      String locationText = 'Location: ' + now.toString();
-      await addEvent(
-          driver, nameText, locationText, descriptionText, durationText);
-      await delay(1000);
+      String testName = 'View finesse info';
+      String locationText = generateUniqueLocationText();
+
+      await addEvent(driver, testName, locationText);
+
       await driver.tap(find.text(locationText));
       await delay(1000);
-      await driver.getText(find.text(descriptionText));
       await driver.getText(find.text(locationText));
       await driver.tap(find.pageBack());
       await delay(5000);
@@ -314,7 +304,7 @@ void main() {
     });
   });
 
-  group('Mark as Expired', () {
+  group('Mark as Expired:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -327,20 +317,15 @@ void main() {
       }
     });
 
-    test('Add test then mark as expired', () async {
-      String nameText = 'View Info Integration Test Free Food';
-      String durationText = 'Mark as Expired Integration Test';
-      String descriptionText = 'View Info description';
-      var now = DateTime.now();
-      String locationText = 'Location: ' + now.toString();
-      await addEvent(
-          driver, nameText, locationText, descriptionText, durationText);
-      await delay(5000);
+    test('Add event then mark as expired', () async {
+      String testName = 'Add event then mark as expired';
+      String locationText = generateUniqueLocationText();
+      await addEvent(driver, testName, locationText);
       await markAsEnded(driver, locationText);
     });
   });
 
-  group('Maps Link', () {
+  group('Maps Link:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -357,13 +342,9 @@ void main() {
       // Build our app and trigger a frame.
       var now = DateTime.now();
       String nameText = 'Maps Test ${now.toString()}';
-      String durationText = 'Integration Test Duration';
-      String descriptionText = 'View Info description';
       String locationText = 'Siebel Center';
-      await addEvent(
-          driver, nameText, locationText, descriptionText, durationText);
-      await delay(1000);
-      await driver.tap(find.text(nameText));
+      await addEvent(driver, nameText, locationText);
+      await driver.tap(find.text('Integration Test ' + nameText));
       await delay(1000);
       await driver.tap(find.byValueKey("threeDotButton"));
       await delay(1000);
@@ -375,4 +356,10 @@ void main() {
       await delay(1000);
     });
   });
+}
+
+String generateUniqueLocationText() {
+  var now = DateTime.now();
+  String locationText = 'Location: ' + now.toString();
+  return locationText;
 }

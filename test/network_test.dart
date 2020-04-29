@@ -105,37 +105,24 @@ void main() {
 //  test('Removing a Finesse Exception', () async {
 //    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
 //
-//    newFinesse.setId("hello");
-//
-//    var exceptionText = "";
-//    try {
-//      await Network.removeFinesse(newFinesse); // Try Removing a Finesse without an ID
-//    } on Exception catch (text) {
-//      exceptionText = '$text';
-//    }
-//    expect(exceptionText, "Exception: Error while removing finesse");
+//    newFinesse.setId("invalid");
+//    await expectException(Network.removeFinesse(newFinesse),
+//        "Error while removing finesse");
 //
 //    //Cleanup
 //    await getAndRemove(newFinesse);
-//
 //  });
 //
 //  test('Updating a Finesse Exception', () async {
-//    Finesse newFinesse = await addFinesseHelper('Removing a Finesse Exception');
+//    Finesse newFinesse = await addFinesseHelper('Updating a Finesse Exception');
 //
-//    newFinesse.setId("hello");
+//    newFinesse.setId("invalid");
 //
-//    var exceptionText = "";
-//    try {
-//      await Network.updateFinesse(newFinesse); // Try Removing a Finesse with a bad Id
-//    } on Exception catch (text) {
-//      exceptionText = '$text';
-//    }
-//    expect(exceptionText, "Exception: Error while updating finesse");
+//    await expectException(Network.updateFinesse(newFinesse),
+//        "Error while updating finesse");
 //
 //    //Cleanup
 //    await getAndRemove(newFinesse);
-//
 //  });
 
   test('Updating a Finesse', () async {
@@ -178,6 +165,7 @@ void main() {
     List<Finesse> finesseList = createFinesseList(
         type: "Food", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
+
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
@@ -253,17 +241,19 @@ void main() {
   });
 
   test('Changing Notifications ON', () async {
-    bool toggle = true;
-    var result = await Network.changeNotifications(toggle);
-    expect(result, null);
-    expect(User.currentUser.notifications, toggle);
+    await testChangingNotifications(true);
   });
 
   test('Changing Notifications OFF', () async {
-    bool toggle = false;
-    var result = await Network.changeNotifications(toggle);
-    expect(result, null);
-    expect(User.currentUser.notifications, toggle);
+    await testChangingNotifications(false);
+  });
+
+  test('Changing Notifications Exception', () async {
+    String temp = User.currentUser.email;
+    User.currentUser.setEmail("invalid");
+    await expectException(Network.changeNotifications(false),
+        "Notification change request failed");
+    User.currentUser.setEmail(temp);
   });
 
   test('Getting Current User Data', () async {
@@ -276,13 +266,9 @@ void main() {
   });
 
   test('Send Garbage to the Update Current User Function', () async {
-    var exceptionText = "";
-    try {
-      await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu");
-    } on Exception catch (text) {
-      exceptionText = '$text';
-    }
-    expect(exceptionText, "Exception: Failed to get current user");
+    await expectException(
+        Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"),
+        "Failed to get current user");
   });
 
   test('Send Push Notification', () async {
@@ -329,6 +315,22 @@ void main() {
     List<Comment> result = await Network.getComments('no_comments');
     expect(result.length, 0);
   });
+}
+
+/// Checks if the the passed in function throws an exception
+Future<void> expectException(f, expectedText) async {
+  var exceptionText = "";
+  try {
+    await f;
+  } on Exception catch (text) {
+    exceptionText = '$text';
+  }
+  expect(exceptionText, 'Exception: $expectedText');
+}
+
+Future testChangingNotifications(bool toggle) async {
+  await Network.changeNotifications(toggle);
+  expect(User.currentUser.notifications, toggle);
 }
 
 Future<List<Finesse>> getAndRemove(Finesse expectedFinesse) async {
