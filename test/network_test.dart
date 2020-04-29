@@ -48,10 +48,12 @@ void createTestUser() async {
 }
 
 const VALID_EMAIL = 'test@test.com';
+const INVALID_EMAIL = 'Finesse';
 const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
+
 
 Future<void> login(
     {String email: VALID_EMAIL,
@@ -89,6 +91,11 @@ void main() {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getDescription(), newFinesse.getDescription());
+    expect(finesseList.last.getLocation(), newFinesse.getLocation());
+    expect(finesseList.last.getTitle(), newFinesse.getTitle());
+    expect(finesseList.last.getPostedTime(), newFinesse.getPostedTime());
+    expect(finesseList.last.getEmailId(), newFinesse.getEmailId());
+    expect(finesseList.last.getDuration(), newFinesse.getDuration());
     Network.removeFinesse(finesseList.last);
   });
 
@@ -142,6 +149,9 @@ void main() {
     expect(finesseList.last.getDescription(),
         isNot(firstNewFinesse.getDescription()));
     expect(finesseList.last.getDescription(), updatedFinesse.getDescription());
+    expect(finesseList.last.getConvertedImage(), updatedFinesse.getConvertedImage());
+    expect(finesseList.last.getImage(), updatedFinesse.getImage());
+
 
     await Network.removeFinesse(finesseList.last);
   });
@@ -183,11 +193,11 @@ void main() {
   });
 
   test('Validate good email', () async {
-    validateEmail('hello@world.edu', null);
+    validateEmail(VALID_EMAIL, null);
   });
 
   test('Validate bad email', () async {
-    validateEmail('Finesse', 'Invalid email address');
+    validateEmail(INVALID_EMAIL, 'Invalid email address');
   });
 
   test('Validating empty email', () async {
@@ -238,6 +248,16 @@ void main() {
     String password = VALID_PASSWORD;
     await signup(
         email: email, password: password, expected: 'User already exists');
+  });
+
+  test('Recover Password good email', () async {
+    String result = await Network.recoverPassword(VALID_EMAIL);
+    expect(result, null);
+  });
+
+  test('Recover Password bad email', () async {
+    String result = await Network.recoverPassword(INVALID_EMAIL);
+    expect(result, 'Invalid email address');
   });
 
   test('Changing Notifications ON', () async {

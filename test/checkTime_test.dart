@@ -54,4 +54,32 @@ void main() {
         currTime.hour, currTime.minute, currTime.second - 10);
     expect(true, Util.timeSince(time1) != "1 minutes ago");
   });
+
+  test('Testing timeSince 1 minute ago', () async {
+    DateTime currTime = new DateTime.now();
+    DateTime time1 = new DateTime(currTime.year, currTime.month, currTime.day,
+        currTime.hour, currTime.minute-1, currTime.second);
+    expect(Util.timeSince(time1), "1 minute ago");
+  });
+
+  test('Testing timeSince 1 hour ago', () async {
+    DateTime currTime = new DateTime.now();
+    DateTime time1 = new DateTime(currTime.year, currTime.month, currTime.day,
+        currTime.hour-1, currTime.minute, currTime.second);
+    expect(Util.timeSince(time1), "1 hour ago");
+  });
+
+  test('Testing timeSince 1 day ago', () async {
+    DateTime currTime = new DateTime.now();
+    DateTime time1 = new DateTime(currTime.year, currTime.month, currTime.day-1,
+        currTime.hour, currTime.minute, currTime.second);
+    expect(Util.timeSince(time1), "1 day ago");
+  });
+
+  test('Testing timeSince 2 days ago', () async {
+    DateTime currTime = new DateTime.now();
+    DateTime time1 = new DateTime(currTime.year, currTime.month, currTime.day-2,
+        currTime.hour, currTime.minute, currTime.second);
+    expect(Util.timeSince(time1), "2 days ago");
+  });
 }

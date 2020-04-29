@@ -39,10 +39,8 @@ class Network {
     Map bodyMap = newFinesse.toMap();
     http.Response response = await postData(ADD_URL, bodyMap);
 
-    final int statusCode = response.statusCode;
-    if (statusCode != 200 && statusCode != 201) {
-      throw Exception(
-          "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
+    if (response.statusCode != 200){
+      throw Exception('Failed to post data');
     }
   }
 
