@@ -92,7 +92,7 @@ class Finesse {
   }
 
   Map toMap() {
-    var map = new Map<String, dynamic>();
+    var map = Map<String, dynamic>();
     map["eventTitle"] = eventTitle;
     map["description"] = description;
     map["image"] = image;
@@ -120,11 +120,11 @@ class Finesse {
   }
 
   String getImage() {
-    return image;
+    return this.image;
   }
 
   Uint8List getConvertedImage() {
-    return convertedImage;
+    return this.convertedImage;
   }
 
   String getTitle() {
@@ -132,27 +132,27 @@ class Finesse {
   }
 
   String getLocation() {
-    return location;
+    return this.location;
   }
 
   String getDescription() {
-    return description;
+    return this.description;
   }
 
   String getDuration() {
-    return duration;
+    return this.duration;
   }
 
   String getCategory() {
-    return category;
+    return this.category;
   }
 
   String getId() {
-    return eventId;
+    return this.eventId;
   }
 
   DateTime getPostedTime() {
-    return postedTime;
+    return this.postedTime;
   }
 
   List getActive() {

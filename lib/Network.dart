@@ -1,17 +1,20 @@
 import 'dart:convert';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/User.dart';
-import 'package:finesse_nation/Pages/Settings.dart';
+import 'package:finesse_nation/Pages/SettingsPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '.env.dart';
+import 'package:finesse_nation/.env.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
+import 'package:finesse_nation/Comment.dart';
 
 class Network {
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
   static const DELETE_URL = DOMAIN + 'food/deleteEvent';
   static const ADD_URL = DOMAIN + 'food/addEvent';
   static const GET_URL = DOMAIN + 'food/getEvents';
+  static const ADD_COMMENT_URL = DOMAIN + 'comment';
+  static const GET_COMMENT_URL = DOMAIN + 'comment/';
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
   static const LOGIN_URL = DOMAIN + 'user/login';
   static const SIGNUP_URL = DOMAIN + 'user/signup';
@@ -19,7 +22,10 @@ class Network {
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
   static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
-
+  static const GET_EVENT_VOTING_URL = DOMAIN + 'vote/eventPoints?eventId=';
+  static const GET_USER_VOTE_ON_EVENT_URL = DOMAIN + 'vote/info?';
+  static const POST_EVENT_VOTING_URL = DOMAIN + 'vote';
+  static const ALL_TOPIC = 'test';
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
@@ -32,14 +38,16 @@ class Network {
         body: json.encode(data));
   }
 
-  static Future<void> addFinesse(Finesse newFinesse) async {
+  static Future<void> addFinesse(Finesse newFinesse,
+      {var url = ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
-    http.Response response = await postData(ADD_URL, bodyMap);
+    http.Response response = await postData(url, bodyMap);
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw new Exception(
-          "Error while posting data, $token, ${response.statusCode}, ${response.body}, ${response.toString()}");
+      throw Exception(
+          "Error while posting data");
+
     }
   }
 
@@ -53,10 +61,6 @@ class Network {
       responseJson = await applyFilters(responseJson);
       return responseJson;
     } else {
-//      print('nope');
-//      print(token);
-//      print(response.statusCode);
-//      print(response.body);
       throw Exception('Failed to load finesses');
     }
   }
@@ -65,7 +69,7 @@ class Network {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool activeFilter = prefs.getBool('activeFilter') ?? true;
     final bool typeFilter = prefs.getBool('typeFilter') ?? true;
-    List<Finesse> filteredFinesses = new List<Finesse>.from(responseJson);
+    List<Finesse> filteredFinesses = List<Finesse>.from(responseJson);
 
     if (activeFilter == false) {
       filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
@@ -84,12 +88,8 @@ class Network {
     var jsonObject = {"eventId": newFinesse.getId()};
     http.Response response = await postData(DELETE_URL, jsonObject);
 
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while removing finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while removing finesse");
     }
   }
 
@@ -99,16 +99,13 @@ class Network {
     bodyMap.addAll(jsonObject);
     http.Response response = await postData(UPDATE_URL, bodyMap);
 
-    final int statusCode = response.statusCode;
-    if (statusCode < 200 || statusCode > 400 || json == null) {
-      throw new Exception("Error while updating finesses");
-    }
-    if (response.statusCode == 201) {
-      // TODO
+    if (response.statusCode != 200) {
+      throw new Exception("Error while updating finesse");
     }
   }
 
-  static Future<dynamic> sendToAll(String title, String body) {
+  static Future<http.Response> sendToAll(String title, String body, String id,
+      {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
         'body': '$body',
@@ -120,8 +117,9 @@ class Network {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'id': '1',
         'status': 'done',
+        'event_id': '$id',
       },
-      'to': '/topics/all',
+      'to': '/topics/$topic',
     };
     return http.post(
       SEND_NOTIFICATION_URL,
@@ -188,7 +186,9 @@ class Network {
       return 'Email can\'t be empty';
     }
     bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?)*$")
         .hasMatch(email);
     if (emailValid) {
       return null;
@@ -203,12 +203,11 @@ class Network {
         : null;
   }
 
-  static Future<String> changeNotifications(toggle) async {
+  static Future<void> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
     if (response.statusCode == 200) {
       User.currentUser.setNotifications(toggle);
-      return null;
     } else {
       throw Exception('Notification change request failed');
     }
@@ -225,6 +224,88 @@ class Network {
       await Notifications.notificationsSet(User.currentUser.notifications);
     } else {
       throw Exception('Failed to get current user');
+    }
+  }
+
+  static Future<int> fetchVotes(eventId) async {
+    final response = await http
+        .get(GET_EVENT_VOTING_URL + eventId, headers: {'api_token': token});
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      int votes = data["upVote"] - data["downVote"];
+      return votes;
+    } else {
+      throw Exception("Failed to load votes");
+    }
+  }
+
+  static Future<int> fetchUserVoteOnEvent(eventId, emailId) async {
+    final response = await http.get(
+        GET_USER_VOTE_ON_EVENT_URL +
+            "eventId=" +
+            eventId +
+            "&emailId=" +
+            emailId,
+        headers: {'api_token': token});
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      String vote = data["status"];
+      if (vote == "UPVOTE") {
+        return 1;
+      } else if (vote == "DOWNVOTE") {
+        return -1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw Exception("Failed to load user vote");
+    }
+  }
+
+  static Future<http.Response> postVote(
+      String eventId, String emailId, int vote) async {
+    Map bodyMap = {};
+    bodyMap["eventId"] = eventId;
+    bodyMap["emailId"] = emailId;
+    bodyMap["vote"] = vote;
+
+    http.Response response = await postData(POST_EVENT_VOTING_URL, bodyMap);
+
+    final int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      throw Exception(
+          "Error while voting");
+    }
+    return response;
+  }
+
+  static Future<http.Response> addComment(
+      Comment comment, String eventId) async {
+    Map bodyMap = comment.toMap();
+    bodyMap['eventId'] = eventId;
+    http.Response response = await postData(ADD_COMMENT_URL, bodyMap);
+
+    final int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      throw Exception(
+          "Error while adding comment, status = ${response.statusCode},"
+              " ${response.body}}");
+    }
+    return response;
+  }
+
+  static Future<List<Comment>> getComments(String eventId) async {
+    final response = await http
+        .get(GET_COMMENT_URL + eventId, headers: {'api_token': token});
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      List<Comment> comments =
+          data.map<Comment>((json) => Comment.fromJson(json)).toList();
+      return comments;
+    } else {
+      throw Exception(
+          "Error while getting comments");
     }
   }
 }

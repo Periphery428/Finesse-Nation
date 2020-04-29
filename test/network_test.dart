@@ -1,10 +1,5 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
 import 'dart:async';
+import 'package:finesse_nation/Comment.dart';
 import 'package:finesse_nation/Finesse.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/User.dart';
@@ -53,9 +48,12 @@ void createTestUser() async {
 }
 
 const VALID_EMAIL = 'test@test.com';
+const INVALID_EMAIL = 'Finesse';
 const CURRENT_USER_EMAIL = "test1@test.edu";
 const VALID_PASSWORD = 'test123';
 const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
+const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
+const NOT_VOTED_TEST_EVENT_ID = '5e953aef6f5e40002ecc9a60';
 
 Future<void> login(
     {String email: VALID_EMAIL,
@@ -93,7 +91,26 @@ void main() {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
     expect(finesseList.last.getDescription(), newFinesse.getDescription());
+    expect(finesseList.last.getLocation(), newFinesse.getLocation());
+    expect(finesseList.last.getTitle(), newFinesse.getTitle());
+    expect(finesseList.last.getPostedTime(), newFinesse.getPostedTime());
+    expect(finesseList.last.getEmailId(), newFinesse.getEmailId());
+    expect(finesseList.last.getDuration(), newFinesse.getDuration());
     Network.removeFinesse(finesseList.last);
+  });
+
+  test('Adding a new Finesse Exception', () async {
+    var now = new DateTime.now();
+    Finesse newFinesse = Finesse.finesseAdd(
+        "Add Event exception test",
+        "Description:" + now.toString(),
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
+    expectException(Network.addFinesse(newFinesse, url: "http://google.com"),
+        "Error while posting data");
   });
 
   test('Removing a Finesse', () async {
@@ -101,21 +118,40 @@ void main() {
 
     Finesse secondNewFinesse = await addFinesseHelper('Removing a Finesse');
 
-    List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+    await getAndRemove(secondNewFinesse); // Remove the first Finesse
 
-    expect(finesseList.last.getDescription(),
-        secondNewFinesse.getDescription()); // Check that it was added
+    await getAndRemove(newFinesse);
+  });
 
-    await Network.removeFinesse(finesseList.last); // Remove the first Finesse
+  test('Removing a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
 
-    finesseList = await Future.value(Network.fetchFinesses());
+    newFinesse.setId("invalid");
+    await expectException(
+        Network.removeFinesse(newFinesse), "Error while removing finesse");
+  });
 
-    expect(
-        finesseList.last.getDescription(),
-        newFinesse
-            .getDescription()); // Check to make sure the new event was actually removed
+  test('Updating a Finesse Exception', () async {
+    Finesse newFinesse = Finesse.finesseAdd(
+        "",
+        "Description:",
+        null,
+        "Activities and Recreation Center",
+        "60 hours",
+        "Food",
+        new DateTime.now());
 
-    await Network.removeFinesse(finesseList.last);
+    newFinesse.setId("invalid");
+
+    await expectException(
+        Network.updateFinesse(newFinesse), "Error while updating finesse");
   });
 
   test('Updating a Finesse', () async {
@@ -135,6 +171,9 @@ void main() {
     expect(finesseList.last.getDescription(),
         isNot(firstNewFinesse.getDescription()));
     expect(finesseList.last.getDescription(), updatedFinesse.getDescription());
+    expect(finesseList.last.getConvertedImage(),
+        updatedFinesse.getConvertedImage());
+    expect(finesseList.last.getImage(), updatedFinesse.getImage());
 
     await Network.removeFinesse(finesseList.last);
   });
@@ -158,6 +197,7 @@ void main() {
     List<Finesse> finesseList = createFinesseList(
         type: "Food", isActive: ["username1", "username2", "username3"]);
     List<Finesse> newList = await Network.applyFilters(finesseList);
+
     expect(newList.length, 0);
     expect(newList.length < finesseList.length, true);
   });
@@ -175,11 +215,11 @@ void main() {
   });
 
   test('Validate good email', () async {
-    validateEmail('hello@world.edu', null);
+    validateEmail(VALID_EMAIL, null);
   });
 
   test('Validate bad email', () async {
-    validateEmail('Finesse', 'Invalid email address');
+    validateEmail(INVALID_EMAIL, 'Invalid email address');
   });
 
   test('Validating empty email', () async {
@@ -232,18 +272,30 @@ void main() {
         email: email, password: password, expected: 'User already exists');
   });
 
-  test('Changing Notifications ON', () async {
-    bool toggle = true;
-    var result = await Network.changeNotifications(toggle);
+  test('Recover Password good email', () async {
+    String result = await Network.recoverPassword(VALID_EMAIL);
     expect(result, null);
-    expect(User.currentUser.notifications, toggle);
+  });
+
+  test('Recover Password bad email', () async {
+    String result = await Network.recoverPassword(INVALID_EMAIL);
+    expect(result, 'Invalid email address');
+  });
+
+  test('Changing Notifications ON', () async {
+    await testChangingNotifications(true);
   });
 
   test('Changing Notifications OFF', () async {
-    bool toggle = false;
-    var result = await Network.changeNotifications(toggle);
-    expect(result, null);
-    expect(User.currentUser.notifications, toggle);
+    await testChangingNotifications(false);
+  });
+
+  test('Changing Notifications Exception', () async {
+    String temp = User.currentUser.email;
+    User.currentUser.setEmail("invalid");
+    await expectException(Network.changeNotifications(false),
+        "Notification change request failed");
+    User.currentUser.setEmail(temp);
   });
 
   test('Getting Current User Data', () async {
@@ -256,17 +308,127 @@ void main() {
   });
 
   test('Send Garbage to the Update Current User Function', () async {
-    var exceptionText = "";
-    try {
-      await Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu");
-    } on Exception catch (text) {
-      exceptionText = '$text';
-    }
-    expect(exceptionText, "Exception: Failed to get current user");
+    await expectException(
+        Network.updateCurrentUser(email: "asdfasefwef@esaasef.edu"),
+        "Failed to get current user");
   });
 
   test('Send Push Notification', () async {
-    var response = await Network.sendToAll('test', 'test');
+    var response =
+        await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
   });
+
+  test('Add valid comment', () async {
+    Comment comment =
+        Comment('test comment', VALID_EMAIL, DateTime.now().toString());
+    var response = await Network.addComment(comment, TEST_EVENT_ID);
+    expect(response.statusCode, 200);
+  });
+
+  test('Add invalid comment', () async {
+    try {
+      await Network.addComment(Comment('', '', ''), '');
+    } catch (e) {
+      String error = e.toString();
+      expect(error.contains('Error while adding comment'), true);
+      expect(error.contains('status = 400'), true);
+      expect(error.contains('Please enter a valid email address'), true);
+      expect(error.contains('The comment cannot be empty'), true);
+      expect(error.contains('The time cannot be empty'), true);
+      expect(error.contains('Please enter a valid event id'), true);
+      return;
+    }
+    fail('Adding invalid comments should have thrown an exception');
+  });
+
+  test('Get Comments', () async {
+    Comment testComment =
+        Comment('test comment', VALID_EMAIL, DateTime.now().toString());
+    await Network.addComment(testComment, TEST_EVENT_ID);
+    List<Comment> comments = await Network.getComments(TEST_EVENT_ID);
+    Comment last = comments.last;
+    expect(last.comment, testComment.comment);
+    expect(last.emailId, testComment.emailId);
+    expect(last.postedTime, testComment.postedTime);
+  });
+
+  test('Get Invalid Comments', () async {
+    List<Comment> result = await Network.getComments('no_comments');
+    expect(result.length, 0);
+  });
+
+  test('Get Votes', () async {
+    int result = await Network.fetchVotes(TEST_EVENT_ID);
+    expect((result == 0) || (result == -1) || (result == 1), true);
+  });
+
+  test('Get invalid votes', () async {
+    try {
+      int result = await Network.fetchVotes("");
+    } catch (e) {
+      String error = e.toString();
+      expect(error.contains("Failed to load votes"), true);
+    }
+  });
+
+  test('Post vote', () async {
+    var response = await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, 1);
+    expect(response.statusCode, 200);
+  });
+
+  test('Post invalid vote', () async {
+    expectException(Network.postVote("", CURRENT_USER_EMAIL, -1),
+        "Error while voting");
+  });
+
+  test('Get previous upvote', () async {
+    int result =
+        await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, 1);
+  });
+
+  test('Get lack of previous vote', () async {
+    int result =
+    await Network.fetchUserVoteOnEvent(NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, 0);
+  });
+
+  test('Get previous downvote', () async {
+    await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, -1);
+    int result = await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    expect(result, -1);
+  });
+
+  test('Get invalid previous vote', () async {
+    expectException(Network.fetchUserVoteOnEvent("eventId", "hello"),
+        "Failed to load user vote");
+  });
+
+}
+
+/// Checks if the the passed in function throws an exception
+Future<void> expectException(f, expectedText) async {
+  var exceptionText = "";
+  try {
+    await f;
+  } on Exception catch (text) {
+    exceptionText = '$text';
+  }
+  expect(exceptionText, 'Exception: $expectedText');
+}
+
+Future testChangingNotifications(bool toggle) async {
+  await Network.changeNotifications(toggle);
+  expect(User.currentUser.notifications, toggle);
+}
+
+Future<List<Finesse>> getAndRemove(Finesse expectedFinesse) async {
+  List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
+
+  expect(finesseList.last.getDescription(),
+      expectedFinesse.getDescription()); // Check that it was added
+
+  await Network.removeFinesse(finesseList.last); // Remove the first Finesse
+  return finesseList;
 }

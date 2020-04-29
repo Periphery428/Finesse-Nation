@@ -6,7 +6,7 @@
 
 There are free meals and giveaways on campus all the time. Finesse Nation is an app that would allow users to share where the free items are located on campus.
 
-Developed in Android Studio using the Flutter framework
+Developed in Android Studio using the Flutter framework.
 
 ## Setup Token
 
@@ -32,13 +32,24 @@ Then click the run button in Android studio.
 
 ## Running Tests
 
+### Unit Tests
 Run Unit Tests
 ```
 flutter test
 ```
 
+### Integration Tests
+To run the camera integration tests.
+
+Setup ANDROID_SDK_ROOT env variable into your path
+
+ANDROID_SDK_ROOT = "C:/Users/$User/AppData/Local/Android/sdk"
+
+Or wherever your sdk is stored.
+
 Run Integration Tests (You must have the emulator open first for this to work.)
 ```
 flutter drive --target=test_driver/app.dart
 ```
+
 

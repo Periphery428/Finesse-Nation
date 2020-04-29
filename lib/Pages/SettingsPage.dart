@@ -4,6 +4,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:finesse_nation/User.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
+import 'package:finesse_nation/Styles.dart';
 
 class Settings extends StatelessWidget {
   @override
@@ -14,14 +15,14 @@ class Settings extends StatelessWidget {
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      backgroundColor: Colors.grey[850],
+      backgroundColor: Styles.darkGrey,
       body: SettingsPage(),
     );
   }
 }
 
 class Notifications {
-  static void notificationsSet(toggle) {
+  static Future<void> notificationsSet(toggle) async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
     if (User.currentUser.email.contains('@test.com') ||
         User.currentUser.email.contains('@test.edu')) {
@@ -32,7 +33,7 @@ class Notifications {
     } else {
       _firebaseMessaging.unsubscribeFromTopic('all');
     }
-    Network.changeNotifications(toggle);
+    await Network.changeNotifications(toggle);
   }
 }
 
@@ -81,7 +82,7 @@ class SettingsPageState extends State<SettingsPage> {
                           right: 15, bottom: 10, top: 10, left: 10),
                       child: CustomSwitch(
                           key: Key("Notification Toggle"),
-                          activeColor: Color(0xffff9900),
+                          activeColor: Styles.brightOrange,
                           value: toggle,
                           onChanged: (value) {
                             toggle = !toggle;
@@ -121,10 +122,10 @@ class SettingsPageState extends State<SettingsPage> {
                           right: 15, bottom: 10, top: 10, left: 10),
                       child: RaisedButton(
                         key: Key('logoutButton'),
-                        color: Color(0xffFF9900),
+                        color: Styles.brightOrange,
                         child: Text(
                           'LOGOUT',
-                          style: TextStyle(color: Colors.grey[850]),
+                          style: TextStyle(color: Styles.darkGrey),
                         ),
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(

@@ -727,7 +727,7 @@ class _RecoverCardState extends State<_RecoverCard>
     super.initState();
 
     final auth = Provider.of<Auth>(context, listen: false);
-    _nameController = new TextEditingController(text: auth.email);
+    _nameController = TextEditingController(text: auth.email);
 
     _submitController = AnimationController(
       vsync: this,
