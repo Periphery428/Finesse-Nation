@@ -133,9 +133,8 @@ void main() {
         new DateTime.now());
 
     newFinesse.setId("invalid");
-    await expectException(Network.removeFinesse(newFinesse),
-        "Error while removing finesse");
-
+    await expectException(
+        Network.removeFinesse(newFinesse), "Error while removing finesse");
   });
 
   test('Updating a Finesse Exception', () async {
@@ -150,9 +149,8 @@ void main() {
 
     newFinesse.setId("invalid");
 
-    await expectException(Network.updateFinesse(newFinesse),
-        "Error while updating finesse");
-
+    await expectException(
+        Network.updateFinesse(newFinesse), "Error while updating finesse");
   });
 
   test('Updating a Finesse', () async {
