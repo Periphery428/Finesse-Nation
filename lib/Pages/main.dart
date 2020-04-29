@@ -129,7 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 'VIEW',
               ),
               textColor: Styles.brightOrange,
-            ),)..show(context);
+            ),
+          )..show(context);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");

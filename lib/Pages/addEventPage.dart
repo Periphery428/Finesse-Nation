@@ -302,7 +302,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   Text(
                                     'Upload Image From Gallery',
                                     style: TextStyle(
-                                        color: Styles.brightOrange, fontSize: 14),
+                                        color: Styles.brightOrange,
+                                        fontSize: 14),
                                   ),
                                 ])),
                             FlatButton(
@@ -322,7 +323,8 @@ class MyCustomFormState extends State<MyCustomForm> {
                                   Text(
                                     'Upload Image From Camera',
                                     style: TextStyle(
-                                        color: Styles.brightOrange, fontSize: 14),
+                                        color: Styles.brightOrange,
+                                        fontSize: 14),
                                   ),
                                 ])),
                           ]));
