@@ -35,17 +35,10 @@ Then click the run button in Android studio.
 ### Unit Tests
 Run Unit Tests
 ```
-flutter test
+flutter test --coverage
 ```
 
 ### Integration Tests
-To run the camera integration tests.
-
-Setup ANDROID_SDK_ROOT env variable into your path
-
-ANDROID_SDK_ROOT = "C:/Users/$User/AppData/Local/Android/sdk"
-
-Or wherever your sdk is stored.
 
 Run Integration Tests (You must have the emulator open first for this to work.)
 ```

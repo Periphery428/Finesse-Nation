@@ -2,11 +2,14 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'dart:io';
 
+///Must await this function. Used to create delay between UI actions
 Future<void> delay([int milliseconds = 250]) async {
   await Future<void>.delayed(Duration(milliseconds: milliseconds));
 }
 
-/// Fill out the form with the necessary information.
+/// Fill out the form with the necessary information for a finesse
+/// Parameters to require the name and location.
+/// Optional parameters for location duration and picture taking
 Future<void> addEvent(FlutterDriver driver, nameText, locationText,
     {String descriptionText = "Integration Test Description",
     String durationText = "Integration Test Duration",
@@ -34,7 +37,6 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
     await driver.tap(find.byValueKey('Upload'));
 
     await driver.waitFor(find.text("Upload Image From Camera"));
-//    await driver.tap(find.byValueKey('Camera'));
 
     await driver.tap(find.text("OK"));
   }
@@ -45,10 +47,6 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
     await driver.waitFor(find.text("Upload Image From Gallery"));
 
     await driver.tap(find.text("OK"));
-
-//    await driver.tap(find.byValueKey('Gallery'));
-//
-//    await driver.tap(find.text("IMG"));
   }
 
   await driver.tap(find.byValueKey('submit'));
@@ -58,16 +56,8 @@ Future<void> addEvent(FlutterDriver driver, nameText, locationText,
   }
 }
 
-Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
-    {Duration timeout = const Duration(seconds: 5)}) async {
-  try {
-    await driver.waitFor(finder, timeout: timeout);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
+/// Login a user by entering a username and password
+/// Signup parameter to specify if the user should be signed up instead.
 Future<void> login(FlutterDriver driver,
     {email: 'test@test.com', password: 'test123', signUp: false}) async {
   await driver.tap(find.byValueKey('emailField'));
@@ -82,21 +72,31 @@ Future<void> login(FlutterDriver driver,
   await driver.tap(find.byValueKey("loginButton"));
 }
 
+/// Goes to the settings menu and logs out the user
 Future<void> logout(FlutterDriver driver) async {
   await gotoSettings(driver);
   await driver.tap(find.byValueKey("logoutButton"));
 }
 
+/// Opens up the settings menu from the home page
 Future gotoSettings(FlutterDriver driver) async {
   await driver.tap(find.byValueKey("dropdownButton"));
   await driver.tap(find.byValueKey("settingsButton"));
 }
 
+/// Marks a post as inactive on the finesse page
 Future<void> markAsEnded(FlutterDriver driver, String locationText) async {
   await driver.tap(find.text(locationText));
   await driver.tap(find.byValueKey("threeDotButton"));
   await driver.tap(find.byValueKey("markAsEndedButton"));
   await driver.tap(find.pageBack());
+}
+
+///Generate a unique string for location based on the timestamp
+String generateUniqueLocationText() {
+  var now = DateTime.now();
+  String locationText = 'Location: ' + now.toString();
+  return locationText;
 }
 
 void main() {
@@ -148,32 +148,6 @@ void main() {
     final Map<String, String> envVars = Platform.environment;
 
     setUpAll(() async {
-      if (envVars['ANDROID_SDK_ROOT'] != null) {
-        final String adbPath =
-            envVars['ANDROID_SDK_ROOT'] + '/platform-tools/adb.exe';
-        await Process.run(adbPath, [
-          'shell',
-          'pm',
-          'grant',
-          'com.periphery.finesse_nation',
-          'android.permission.READ_EXTERNAL_STORAGE'
-        ]);
-        await Process.run(adbPath, [
-          'shell',
-          'pm',
-          'grant',
-          'com.periphery.finesse_nation',
-          'android.permission.READ_PHONE_STATE'
-        ]);
-        await Process.run(adbPath, [
-          'shell',
-          'pm',
-          'grant',
-          'com.periphery.finesse_nation',
-          'android.permission.CAMERA'
-        ]);
-      }
-
       driver = await FlutterDriver.connect();
     });
     tearDownAll(() async {
@@ -182,6 +156,7 @@ void main() {
       }
     });
 
+    /// Tries to add an event but should be stopped by a form validation.
     test('Add event form fail test', () async {
       await login(driver);
       String testName = 'Add event form fail test';
@@ -195,20 +170,21 @@ void main() {
       await driver.tap(find.byTooltip('Back'));
     });
 
-    if (envVars['ANDROID_SDK_ROOT'] != null) {
-      test('Add Event with Gallery Image Test', () async {
-        String nameText = 'Integration Test Image from Gallery';
-        String locationText = generateUniqueLocationText();
+    /// This Test only checks if the gallery button is there.
+    /// Currently flutter drive is not able to have control over the interface outside our app.
+    test('Add Event with Gallery Image Test', () async {
+      String nameText = 'Integration Test Image from Gallery';
+      String locationText = generateUniqueLocationText();
 
-        await addEvent(driver, nameText, locationText, uploadPic: true);
-        await delay(1000);
+      await addEvent(driver, nameText, locationText, uploadPic: true);
+      await delay(1000);
 
-        expect(await driver.getText(find.text(locationText)), locationText);
-        await delay(1000);
-        await markAsEnded(driver, locationText);
-      });
-    }
+      expect(await driver.getText(find.text(locationText)), locationText);
+      await delay(1000);
+      await markAsEnded(driver, locationText);
+    });
 
+    /// Add a finesse through the normal entry methods.
     test('Add a finesse', () async {
       String testName = 'Add a finesse';
       String locationText = generateUniqueLocationText();
@@ -234,12 +210,14 @@ void main() {
       }
     });
 
+    /// Switch the filter button
     test('Filter active', () async {
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("activeFilter"));
       await driver.tap(find.byValueKey("FilterOK"));
     });
 
+    /// Switch the filter button
     test('Filter Other', () async {
       await driver.tap(find.byValueKey("Filter"));
       await driver.tap(find.byValueKey("typeFilter"));
@@ -260,6 +238,7 @@ void main() {
       }
     });
 
+    /// Go to the settings page and toggle the notifications.
     test('Settings Page ', () async {
       // Build our app and trigger a frame.
       await gotoSettings(driver);
@@ -284,6 +263,7 @@ void main() {
       }
     });
 
+    ///Check that when a finesse is clicked on, the proper information is displayed
     test('View finesse info', () async {
       // Build our app and trigger a frame.
       String testName = 'View finesse info';
@@ -300,7 +280,8 @@ void main() {
     });
   });
 
-  group('Mark as Expired:', () {
+  /// Mark an event as inactive
+  group('Mark as Inactive:', () {
     FlutterDriver driver;
 
     setUpAll(() async {
@@ -313,6 +294,7 @@ void main() {
       }
     });
 
+    /// Simple adding an event through the form and marking it inactive
     test('Add event then mark as expired', () async {
       String testName = 'Add event then mark as expired';
       String locationText = generateUniqueLocationText();
@@ -334,6 +316,7 @@ void main() {
       }
     });
 
+    /// Click on the google maps link and google maps will open up.
     test('View Map Test', () async {
       // Build our app and trigger a frame.
       var now = DateTime.now();
@@ -354,8 +337,4 @@ void main() {
   });
 }
 
-String generateUniqueLocationText() {
-  var now = DateTime.now();
-  String locationText = 'Location: ' + now.toString();
-  return locationText;
-}
+

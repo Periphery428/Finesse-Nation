@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart' as a;
 
@@ -13,6 +12,8 @@ import 'package:args/args.dart' as a;
 /// -r, --remove=<PATTERN>    a pattern of paths to exclude from coverage
 /// -h, --help                show this help
 /// ```
+///
+/// This file is necessary because the UI pages should not be included in the coverage because they cannot be tested using traditional methods.
 main(List<String> arguments) {
   final parser = a.ArgParser()
     ..addSeparator(

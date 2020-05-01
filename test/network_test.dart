@@ -8,6 +8,8 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
+/// Helper function to add a finesse to the database.
+/// Optional parameter name of the test
 Future<Finesse> addFinesseHelper([name]) async {
   var now = new DateTime.now();
   Finesse newFinesse = Finesse.finesseAdd(
@@ -22,6 +24,8 @@ Future<Finesse> addFinesseHelper([name]) async {
   return newFinesse;
 }
 
+/// Creates a list of 4 finesses to mock the finesse list from the database
+/// Optional parameters to set the type and the state of active.
 List<Finesse> createFinesseList({String type = "Food", List isActive}) {
   List<Finesse> finesseList = [];
 
@@ -39,14 +43,6 @@ List<Finesse> createFinesseList({String type = "Food", List isActive}) {
   return finesseList;
 }
 
-void createTestUser() async {
-  LoginData data = new LoginData(email: CURRENT_USER_EMAIL, password: "123456");
-  var res = await Network.createUser(data);
-  if (res != null) {
-    await Network.updateCurrentUser(email: CURRENT_USER_EMAIL);
-  }
-}
-
 const VALID_EMAIL = 'test@test.com';
 const INVALID_EMAIL = 'Finesse';
 const CURRENT_USER_EMAIL = "test1@test.edu";
@@ -55,6 +51,7 @@ const INVALID_LOGIN_MSG = 'Username or password is incorrect.';
 const TEST_EVENT_ID = '5e9fd7bbc318bf0017bf05a1';
 const NOT_VOTED_TEST_EVENT_ID = '5e953aef6f5e40002ecc9a60';
 
+///Login function to handle creating the login data and verify success
 Future<void> login(
     {String email: VALID_EMAIL,
     String password: VALID_PASSWORD,
@@ -64,17 +61,20 @@ Future<void> login(
   expect(actual, expected);
 }
 
+///Signup a new user with email and password and verify success
 Future<void> signup({String email, String password, var expected}) async {
   LoginData data = LoginData(email: email, password: password);
   var actual = await Network.createUser(data);
   expect(actual, expected);
 }
 
+///Check if the email is valid
 void validateEmail(String email, var expected) {
   var result = Network.validateEmail(email);
   expect(result, expected);
 }
 
+///Check if the password is valid
 void validatePassword(String password, var expected) {
   var result = Network.validatePassword(password);
   expect(result, expected);
@@ -85,8 +85,7 @@ void main() {
   SharedPreferences.setMockInitialValues(
       {"typeFilter": false, "activeFilter": false});
 
-//  createTestUser();
-
+  ///Add a new finesse to the database and check that the database contains it
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
@@ -99,6 +98,7 @@ void main() {
     Network.removeFinesse(finesseList.last);
   });
 
+  ///Add a finesse with invalid url and check for exception
   test('Adding a new Finesse Exception', () async {
     var now = new DateTime.now();
     Finesse newFinesse = Finesse.finesseAdd(
@@ -113,6 +113,7 @@ void main() {
         "Error while posting data");
   });
 
+  ///Add a finesse to the database and then remove it and verify that it is gone
   test('Removing a Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Removing a Finesse');
 
@@ -123,6 +124,7 @@ void main() {
     await getAndRemove(newFinesse);
   });
 
+  ///Remove a finesse with invalid ID
   test('Removing a Finesse Exception', () async {
     Finesse newFinesse = Finesse.finesseAdd(
         "",
@@ -138,6 +140,7 @@ void main() {
         Network.removeFinesse(newFinesse), "Error while removing finesse");
   });
 
+  ///Update a finesse with invalid id
   test('Updating a Finesse Exception', () async {
     Finesse newFinesse = Finesse.finesseAdd(
         "",
@@ -154,6 +157,7 @@ void main() {
         Network.updateFinesse(newFinesse), "Error while updating finesse");
   });
 
+  ///Add a finesse and then update it and verify that it has updated
   test('Updating a Finesse', () async {
     Finesse firstNewFinesse = await addFinesseHelper('Updating a Finesse');
 
@@ -178,6 +182,7 @@ void main() {
     await Network.removeFinesse(finesseList.last);
   });
 
+  /// Get a list of other finesses and filter them. Verify that they are removed.
   test('applyFilters Test Other', () async {
     List<Finesse> finesseList = createFinesseList(type: "Other", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
@@ -185,6 +190,7 @@ void main() {
     expect(newList.length < finesseList.length, true);
   });
 
+  /// Verify nothing was filtered
   test('applyFilters Test No Filter', () async {
     List<Finesse> finesseList = createFinesseList(type: "Food", isActive: []);
     List<Finesse> newList = await Network.applyFilters(finesseList);
@@ -193,6 +199,7 @@ void main() {
     expect(newList.length == finesseList.length, true);
   });
 
+  /// Verify inactive posts were removed
   test('applyFilters Test Inactive', () async {
     List<Finesse> finesseList = createFinesseList(
         type: "Food", isActive: ["username1", "username2", "username3"]);
@@ -202,6 +209,7 @@ void main() {
     expect(newList.length < finesseList.length, true);
   });
 
+  /// With filters off posts were not filtered.
   test('applyFilters Test Filters off', () async {
     SharedPreferences.setMockInitialValues(
         {"typeFilter": true, "activeFilter": true});
@@ -257,6 +265,7 @@ void main() {
         expected: INVALID_LOGIN_MSG);
   });
 
+  ///Signing up a unique user (based on timestamp)
   test('Correct Signup', () async {
     String email =
         DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
@@ -265,6 +274,7 @@ void main() {
     await login(email: email, password: password, expected: null);
   });
 
+  ///Invalid user signed up.
   test('Incorrect Signup', () async {
     String email = VALID_EMAIL; // Already exists
     String password = VALID_PASSWORD;
@@ -277,7 +287,7 @@ void main() {
     expect(result, null);
   });
 
-  test('Recover Password bad email', () async {
+  test('Recover Password invalid email', () async {
     String result = await Network.recoverPassword(INVALID_EMAIL);
     expect(result, 'Invalid email address');
   });
@@ -290,6 +300,7 @@ void main() {
     await testChangingNotifications(false);
   });
 
+  ///Change the notifications with an invalid user email
   test('Changing Notifications Exception', () async {
     String temp = User.currentUser.email;
     User.currentUser.setEmail("invalid");
@@ -298,6 +309,7 @@ void main() {
     User.currentUser.setEmail(temp);
   });
 
+  /// Get the current user data for test1@test.com and verify
   test('Getting Current User Data', () async {
     User.currentUser =
         User(CURRENT_USER_EMAIL, "none", "none", "none", 0, false);
@@ -313,12 +325,14 @@ void main() {
         "Failed to get current user");
   });
 
+  ///Send push notification check for network response
   test('Send Push Notification', () async {
     var response =
         await Network.sendToAll('test', 'test', '-1', topic: 'tests');
     expect(response.statusCode, 200);
   });
 
+  /// Add a valid comment the database check that the api responds
   test('Add valid comment', () async {
     Comment comment =
         Comment('test comment', VALID_EMAIL, DateTime.now().toString());
@@ -326,6 +340,7 @@ void main() {
     expect(response.statusCode, 200);
   });
 
+  /// Check that an exception is thrown when adding an empty comment
   test('Add invalid comment', () async {
     try {
       await Network.addComment(Comment('', '', ''), '');
@@ -342,6 +357,7 @@ void main() {
     fail('Adding invalid comments should have thrown an exception');
   });
 
+  /// Get the comments for a specific event and verify that they are correct.
   test('Get Comments', () async {
     Comment testComment =
         Comment('test comment', VALID_EMAIL, DateTime.now().toString());
@@ -363,12 +379,14 @@ void main() {
     expect((result == 0) || (result == -1) || (result == 1), true);
   });
 
+  /// Check that an exception was thrown
   test('Get invalid votes', () async {
     try {
       int result = await Network.fetchVotes("");
     } catch (e) {
       String error = e.toString();
       expect(error.contains("Failed to load votes"), true);
+      return;
     }
   });
 
@@ -378,8 +396,8 @@ void main() {
   });
 
   test('Post invalid vote', () async {
-    expectException(Network.postVote("", CURRENT_USER_EMAIL, -1),
-        "Error while voting");
+    expectException(
+        Network.postVote("", CURRENT_USER_EMAIL, -1), "Error while voting");
   });
 
   test('Get previous upvote', () async {
@@ -389,14 +407,15 @@ void main() {
   });
 
   test('Get lack of previous vote', () async {
-    int result =
-    await Network.fetchUserVoteOnEvent(NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    int result = await Network.fetchUserVoteOnEvent(
+        NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
     expect(result, 0);
   });
 
   test('Get previous downvote', () async {
     await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, -1);
-    int result = await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    int result =
+        await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
     expect(result, -1);
   });
 
@@ -404,10 +423,9 @@ void main() {
     expectException(Network.fetchUserVoteOnEvent("eventId", "hello"),
         "Failed to load user vote");
   });
-
 }
 
-/// Checks if the the passed in function throws an exception
+/// Checks if the passed in function throws an exception
 Future<void> expectException(f, expectedText) async {
   var exceptionText = "";
   try {
@@ -418,11 +436,13 @@ Future<void> expectException(f, expectedText) async {
   expect(exceptionText, 'Exception: $expectedText');
 }
 
+/// Wrapper to check notifications easier
 Future testChangingNotifications(bool toggle) async {
   await Network.changeNotifications(toggle);
   expect(User.currentUser.notifications, toggle);
 }
 
+/// Get finesses to find the id and remove the finesse.
 Future<List<Finesse>> getAndRemove(Finesse expectedFinesse) async {
   List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
 

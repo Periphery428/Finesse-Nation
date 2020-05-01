@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+///Reads the environment variable from your path.
 Future<void> main() async {
   final config = {
     'FINESSE_API_TOKEN': Platform.environment['FINESSE_API_TOKEN'],

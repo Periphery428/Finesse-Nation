@@ -45,9 +45,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw Exception(
-          "Error while posting data");
-
+      throw Exception("Error while posting data");
     }
   }
 
@@ -185,11 +183,11 @@ class Network {
     if (email.isEmpty) {
       return 'Email can\'t be empty';
     }
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?)*$")
-        .hasMatch(email);
+    bool emailValid =
+        RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                r"{0,253}[a-zA-Z0-9])?)*$")
+            .hasMatch(email);
     if (emailValid) {
       return null;
     }
@@ -273,8 +271,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200) {
-      throw Exception(
-          "Error while voting");
+      throw Exception("Error while voting");
     }
     return response;
   }
@@ -289,7 +286,7 @@ class Network {
     if (statusCode != 200) {
       throw Exception(
           "Error while adding comment, status = ${response.statusCode},"
-              " ${response.body}}");
+          " ${response.body}}");
     }
     return response;
   }
@@ -304,8 +301,7 @@ class Network {
           data.map<Comment>((json) => Comment.fromJson(json)).toList();
       return comments;
     } else {
-      throw Exception(
-          "Error while getting comments");
+      throw Exception("Error while getting comments");
     }
   }
 }
