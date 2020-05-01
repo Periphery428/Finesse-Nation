@@ -6,7 +6,6 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Util.dart';
 import 'package:finesse_nation/Comment.dart';
 
-
 ///Misc Supplemental unit tests to increase code coverage
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
