@@ -8,6 +8,18 @@ There are free meals and giveaways on campus all the time. Finesse Nation is an 
 
 Developed in Android Studio using the Flutter framework.
 
+
+## Contributors
+Robert Beckwith
+
+Aditya Pandey
+
+Shilpa Rani
+
+Krastan Dimitrov
+
+Jeffrey Josol
+
 ## Setup Token
 
 You must set the environment variable ```FINESSE_NATION_TOKEN``` with the secret token.
