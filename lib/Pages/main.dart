@@ -10,8 +10,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:finesse_nation/Network.dart';
-import 'package:finesse_nation/Finesse.dart';
-import 'package:finesse_nation/Pages/FinessePage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:finesse_nation/Styles.dart';
 
@@ -61,6 +59,22 @@ class _MyHomePageState extends State<MyHomePage> {
   bool localActive;
   bool localType;
 
+  BuildContext _context;
+
+  void showSnackBar(var message) {
+    Flushbar(
+      title: message['notification']['title'],
+      message: message['notification']['body'],
+      duration: Duration(seconds: 3),
+      mainButton: FlatButton(
+        onPressed: () => reload(),
+        child: Text(
+          'RELOAD',
+        ),
+        textColor: Styles.brightOrange,
+      ),
+    )..show(_context);
+  }
   Future<void> _setActiveFilter(val) async {
     final SharedPreferences prefs = await _prefs;
     final bool activeFilter = val;
@@ -87,17 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  Future<void> goToEvent(String id) async {
+  Future<void> reload() async {
     Fluttertoast.showToast(
-      msg: "Loading Finesse...",
+      msg: "Reloading...",
       toastLength: Toast.LENGTH_LONG,
       backgroundColor: Styles.darkGrey,
       textColor: Styles.brightOrange,
     );
-    List<Finesse> finesses = await Network.fetchFinesses();
-    Finesse latest = finesses.firstWhere((finesse) => finesse.getId() == id);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FinessePage(latest)));
     setState(() {
       print('reloading');
     });
@@ -112,42 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _typeFilter = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('typeFilter') ?? true);
     });
-    _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
-    if (!_fcmAlreadySetup) {
-      _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print("onMessage: $message");
-          String id = message['data']['event_id'];
-          print('recieved event id = $id');
-          Flushbar(
-            title: message['notification']['title'],
-            message: message['notification']['body'],
-            duration: Duration(seconds: 3),
-            mainButton: FlatButton(
-              onPressed: () => goToEvent(id),
-              child: Text(
-                'VIEW',
-              ),
-              textColor: Styles.brightOrange,
-            ),
-          )..show(context);
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print("onLaunch: $message");
-          String id = message['data']['event_id'];
-          goToEvent(id);
-        },
-        onResume: (Map<String, dynamic> message) async {
-          print("onResume: $message");
-          String id = message['data']['event_id'];
-          goToEvent(id);
-        },
-      );
-    }
-    _fcmAlreadySetup = true;
-    if (!kIsWeb) {
-      _firebaseMessaging.requestNotificationPermissions();
-    }
   }
 
   Future<void> showFilterMenu() async {
@@ -258,6 +232,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
+    if (!_fcmAlreadySetup) {
+      _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+          showSnackBar(message);
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+          setState(() {
+            print('reloading');
+          });
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+          setState(() {
+            print('reloading');
+          });
+        },
+      );
+    }
+    _fcmAlreadySetup = true;
+    if (!kIsWeb) {
+      _firebaseMessaging.requestNotificationPermissions();
+    }
     return Scaffold(
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by

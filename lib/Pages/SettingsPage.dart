@@ -29,9 +29,9 @@ class Notifications {
       return;
     }
     if (toggle) {
-      _firebaseMessaging.subscribeToTopic('all');
+      _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
     } else {
-      _firebaseMessaging.unsubscribeFromTopic('all');
+      _firebaseMessaging.unsubscribeFromTopic(Network.ALL_TOPIC);
     }
     await Network.changeNotifications(toggle);
   }

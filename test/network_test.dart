@@ -314,8 +314,7 @@ void main() {
   });
 
   test('Send Push Notification', () async {
-    var response =
-        await Network.sendToAll('test', 'test', '-1', topic: 'tests');
+    var response = await Network.sendToAll('test', 'test', topic: 'tests');
     expect(response.statusCode, 200);
   });
 
@@ -378,8 +377,8 @@ void main() {
   });
 
   test('Post invalid vote', () async {
-    expectException(Network.postVote("", CURRENT_USER_EMAIL, -1),
-        "Error while voting");
+    expectException(
+        Network.postVote("", CURRENT_USER_EMAIL, -1), "Error while voting");
   });
 
   test('Get previous upvote', () async {
@@ -389,14 +388,15 @@ void main() {
   });
 
   test('Get lack of previous vote', () async {
-    int result =
-    await Network.fetchUserVoteOnEvent(NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    int result = await Network.fetchUserVoteOnEvent(
+        NOT_VOTED_TEST_EVENT_ID, CURRENT_USER_EMAIL);
     expect(result, 0);
   });
 
   test('Get previous downvote', () async {
     await Network.postVote(TEST_EVENT_ID, CURRENT_USER_EMAIL, -1);
-    int result = await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
+    int result =
+        await Network.fetchUserVoteOnEvent(TEST_EVENT_ID, CURRENT_USER_EMAIL);
     expect(result, -1);
   });
 
@@ -404,7 +404,6 @@ void main() {
     expectException(Network.fetchUserVoteOnEvent("eventId", "hello"),
         "Failed to load user vote");
   });
-
 }
 
 /// Checks if the the passed in function throws an exception

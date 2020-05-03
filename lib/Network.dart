@@ -25,7 +25,7 @@ class Network {
   static const GET_EVENT_VOTING_URL = DOMAIN + 'vote/eventPoints?eventId=';
   static const GET_USER_VOTE_ON_EVENT_URL = DOMAIN + 'vote/info?';
   static const POST_EVENT_VOTING_URL = DOMAIN + 'vote';
-  static const ALL_TOPIC = 'test';
+  static const ALL_TOPIC = 'new_finesse';
   static final token = environment['FINESSE_API_TOKEN'];
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
@@ -45,9 +45,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200 && statusCode != 201) {
-      throw Exception(
-          "Error while posting data");
-
+      throw Exception("Error while posting data");
     }
   }
 
@@ -104,7 +102,7 @@ class Network {
     }
   }
 
-  static Future<http.Response> sendToAll(String title, String body, String id,
+  static Future<http.Response> sendToAll(String title, String body,
       {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
@@ -117,7 +115,6 @@ class Network {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'id': '1',
         'status': 'done',
-        'event_id': '$id',
       },
       'to': '/topics/$topic',
     };
@@ -185,11 +182,11 @@ class Network {
     if (email.isEmpty) {
       return 'Email can\'t be empty';
     }
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?)*$")
-        .hasMatch(email);
+    bool emailValid =
+        RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                r"{0,253}[a-zA-Z0-9])?)*$")
+            .hasMatch(email);
     if (emailValid) {
       return null;
     }
@@ -273,8 +270,7 @@ class Network {
 
     final int statusCode = response.statusCode;
     if (statusCode != 200) {
-      throw Exception(
-          "Error while voting");
+      throw Exception("Error while voting");
     }
     return response;
   }
@@ -289,7 +285,7 @@ class Network {
     if (statusCode != 200) {
       throw Exception(
           "Error while adding comment, status = ${response.statusCode},"
-              " ${response.body}}");
+          " ${response.body}}");
     }
     return response;
   }
@@ -304,8 +300,7 @@ class Network {
           data.map<Comment>((json) => Comment.fromJson(json)).toList();
       return comments;
     } else {
-      throw Exception(
-          "Error while getting comments");
+      throw Exception("Error while getting comments");
     }
   }
 }
