@@ -1,16 +1,30 @@
 class User {
-  String _email;
-  String _password;
-  String _userName;
-  String _school;
-  int _points;
-  bool _notifications;
+  /// This user's email.
+  String email;
 
+  /// This user's password.
+  String password;
+
+  /// This user's username.
+  String userName;
+
+  /// This user's email.
+  String school;
+
+  /// This user's current points.
+  int points;
+
+  /// This user's notification preferences.
+  bool notifications;
+
+  /// The current logged in user.
   static User currentUser = User(null, null, null, null, 0, true);
 
-  User(this._email, this._password, this._userName, this._school, this._points,
-      this._notifications);
+  /// Creates a new user.
+  User(this.email, this.password, this.userName, this.school, this.points,
+      this.notifications);
 
+  /// Creates a new user from the given [json] object.
   factory User.fromJson(Map<String, dynamic> json) {
     User user = User(
       json['emailId'] ?? "",
@@ -20,26 +34,6 @@ class User {
       json['points'] ?? 0,
       json['notifications'] ?? true,
     );
-
     return user;
-  }
-  String get email => _email ?? 'test@test.com';
-
-  String get userName => _userName ?? 'test';
-
-  String get password => _password ?? 'test123';
-
-  String get school => _school ?? 'test';
-
-  int get points => _points ?? 0;
-
-  bool get notifications => _notifications ?? true;
-
-  void setNotifications(var notification) {
-    _notifications = notification;
-  }
-
-  void setEmail(var email) {
-    _email = email;
   }
 }

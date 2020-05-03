@@ -303,10 +303,10 @@ void main() {
   ///Change the notifications with an invalid user email
   test('Changing Notifications Exception', () async {
     String temp = User.currentUser.email;
-    User.currentUser.setEmail("invalid");
+    User.currentUser.email = "invalid";
     await expectException(Network.changeNotifications(false),
         "Notification change request failed");
-    User.currentUser.setEmail(temp);
+    User.currentUser.email = temp;
   });
 
   /// Get the current user data for test1@test.com and verify

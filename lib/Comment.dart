@@ -1,22 +1,26 @@
 import 'package:finesse_nation/User.dart';
 
 class Comment {
-  String _comment;
-  String _emailId;
-  String _postedTime;
+  /// This comment's content.
+  String comment;
 
-  Comment(String comment, String emailId, String postedTime) {
-    _comment = comment;
-    _emailId = emailId;
-    _postedTime = postedTime;
-  }
+  /// This comment's author's email.
+  String emailId;
 
+  /// The time this comment was posted.
+  String postedTime;
+
+  /// Creates a comment.
+  Comment(this.comment, this.emailId, this.postedTime);
+
+  /// Creates a comment using the current user and time.
   static Comment post(String comment) {
     String emailId = User.currentUser.email;
     String postedTime = DateTime.now().toString();
     return Comment(comment, emailId, postedTime);
   }
 
+  /// Creates a comment from the [json] object.
   static Comment fromJson(var json) {
     String comment = json['comment'];
     String emailId = json['emailId'];
@@ -24,19 +28,15 @@ class Comment {
     return Comment(comment, emailId, postedTime);
   }
 
-  String get comment => _comment;
+  /// Returns the time as a DateTime object.
+  DateTime get postedDateTime => DateTime.parse(postedTime);
 
-  String get emailId => _emailId;
-
-  String get postedTime => _postedTime;
-
-  DateTime get postedDateTime => DateTime.parse(_postedTime);
-
+  /// Returns a map containing this comment's fields.
   Map toMap() {
     var map = Map<String, String>();
-    map['comment'] = _comment;
-    map['emailId'] = _emailId;
-    map['postedTime'] = _postedTime;
+    map['comment'] = comment;
+    map['emailId'] = emailId;
+    map['postedTime'] = postedTime;
     return map;
   }
 }

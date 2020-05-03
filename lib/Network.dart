@@ -9,7 +9,6 @@ import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:finesse_nation/Comment.dart';
 
 class Network {
-
   /// The root domain for the Finesse Nation API.
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
 
@@ -259,7 +258,7 @@ class Network {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
     if (response.statusCode == 200) {
-      User.currentUser.setNotifications(toggle);
+      User.currentUser.notifications = toggle;
     } else {
       throw Exception('Notification change request failed');
     }
