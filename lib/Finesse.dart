@@ -16,23 +16,7 @@ class Finesse {
   String emailId;
   String school;
 
-  static finesseAdd(
-      title, description, image, location, duration, category, timePosted,
-      {List isActive, String school, String email}) {
-    return Finesse(
-        null,
-        title,
-        description,
-        image,
-        location,
-        duration,
-        category,
-        timePosted,
-        isActive,
-        User.currentUser?.school ?? 'test',
-        User.currentUser?.email ?? 'test');
-  }
-
+  /// Creates a Finesse.
   Finesse(
       var eventId,
       var title,
@@ -59,7 +43,28 @@ class Finesse {
     this.emailId = emailId;
   }
 
-  static dynamic parse(var time) {
+  /// Creates a Finesse with an empty event id.
+  static Finesse finesseAdd(
+      title, description, image, location, duration, category, timePosted,
+      {List isActive, String school, String email}) {
+    return Finesse(
+        null,
+        title,
+        description,
+        image,
+        location,
+        duration,
+        category,
+        timePosted,
+        isActive,
+        User.currentUser?.school ?? 'test',
+        User.currentUser?.email ?? 'test');
+  }
+
+  /// Attempts to convert the [time] from a String to a DateTime.
+  ///
+  /// Returns the converted time on success, the current time on fail.
+  static dynamic parse(String time) {
     if (time != null) {
       try {
         String timeStr = time.toString();
@@ -72,6 +77,7 @@ class Finesse {
     return DateTime.now();
   }
 
+  /// Creates a Finesse from [json].
   factory Finesse.fromJson(Map<String, dynamic> json) {
 //    print('creating finesse');
     Finesse fin = Finesse(
@@ -87,10 +93,10 @@ class Finesse {
       json['school'] ?? "",
       json['emailId'] ?? "",
     );
-//    print('created finesse = ${fin.getTitle()}');
     return fin;
   }
 
+  /// Returns a map containing this comment's fields.
   Map toMap() {
     var map = Map<String, dynamic>();
     map["eventTitle"] = eventTitle;
