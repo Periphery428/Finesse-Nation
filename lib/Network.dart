@@ -9,26 +9,65 @@ import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:finesse_nation/Comment.dart';
 
 class Network {
+
+  /// The root domain for the Finesse Nation API.
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
+
+  /// Deleting a Finesse.
   static const DELETE_URL = DOMAIN + 'food/deleteEvent';
+
+  /// Adding a Finesse.
   static const ADD_URL = DOMAIN + 'food/addEvent';
+
+  /// Getting the Finesses.
   static const GET_URL = DOMAIN + 'food/getEvents';
+
+  /// Adding a comment.
   static const ADD_COMMENT_URL = DOMAIN + 'comment';
+
+  /// Getting a comment.
   static const GET_COMMENT_URL = DOMAIN + 'comment/';
+
+  /// Updating a Finesse.
   static const UPDATE_URL = DOMAIN + 'food/updateEvent';
+
+  /// Logging in with an existing account.
   static const LOGIN_URL = DOMAIN + 'user/login';
+
+  /// Creating a new account.
   static const SIGNUP_URL = DOMAIN + 'user/signup';
+
+  /// Resetting a password.
   static const PASSWORD_RESET_URL = DOMAIN + 'user/generatePasswordResetLink';
+
+  /// Toggling a user's notifications.
   static const NOTIFICATION_TOGGLE_URL = DOMAIN + 'user/changeNotifications';
+
+  /// Getting a specific user's information.
   static const GET_CURRENT_USER_URL = DOMAIN + 'user/getCurrentUser';
+
+  /// Sending a notification.
   static const SEND_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send';
+
+  /// Getting vote count for a Finesse.
   static const GET_EVENT_VOTING_URL = DOMAIN + 'vote/eventPoints?eventId=';
+
+  /// Getting a user's vote status for a particular Finesse.
   static const GET_USER_VOTE_ON_EVENT_URL = DOMAIN + 'vote/info?';
+
+  /// Add a vote to a Finesse.
   static const POST_EVENT_VOTING_URL = DOMAIN + 'vote';
+
+  /// The topic used to send notifications about new Finesses.
   static const ALL_TOPIC = 'test';
+
+  /// The authentication key for all API calls.
   static final token = environment['FINESSE_API_TOKEN'];
+
+  /// The server key for Firebase Cloud Messaging.
   static final serverKey = environment['FINESSE_SERVER_KEY'];
 
+  /// Send a POST request containing [data] to the [url].
   static Future<http.Response> postData(var url, var data) async {
     return await http.post(url,
         headers: {
@@ -38,6 +77,7 @@ class Network {
         body: json.encode(data));
   }
 
+  /// Adds [newFinesse].
   static Future<void> addFinesse(Finesse newFinesse,
       {var url = ADD_URL}) async {
     Map bodyMap = newFinesse.toMap();
@@ -49,6 +89,7 @@ class Network {
     }
   }
 
+  /// Gets Finesses.
   static Future<List<Finesse>> fetchFinesses() async {
     final response = await http.get(GET_URL, headers: {'api_token': token});
 
@@ -63,6 +104,7 @@ class Network {
     }
   }
 
+  /// Filters the current Finesses by status/type
   static Future<List<Finesse>> applyFilters(responseJson) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool activeFilter = prefs.getBool('activeFilter') ?? true;
@@ -82,6 +124,7 @@ class Network {
     return filteredFinesses;
   }
 
+  /// Removes [newFinesse].
   static Future<void> removeFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     http.Response response = await postData(DELETE_URL, jsonObject);
@@ -91,6 +134,7 @@ class Network {
     }
   }
 
+  /// Updates [newFinesse].
   static Future<void> updateFinesse(Finesse newFinesse) async {
     var jsonObject = {"eventId": newFinesse.getId()};
     var bodyMap = newFinesse.toMap();
@@ -102,6 +146,7 @@ class Network {
     }
   }
 
+  /// Sends a message containing [title] and [body] to [topic].
   static Future<http.Response> sendToAll(String title, String body, String id,
       {String topic: ALL_TOPIC}) {
     final content = {
@@ -129,7 +174,9 @@ class Network {
     );
   }
 
-  // Sign in callback
+  /// Attempts to login using the credentials in [data].
+  ///
+  /// Returns an error message on failure, null on success.
   static Future<String> authUser(LoginData data) async {
     Map bodyMap = data.toMap();
     http.Response response = await postData(LOGIN_URL, bodyMap);
@@ -142,7 +189,9 @@ class Network {
     return null;
   }
 
-  // Forgot Password callback
+  /// Attempts to reset the password associated with [email].
+  ///
+  /// Returns an error message on failure, null on success.
   static Future<String> recoverPassword(String email) async {
     email = email.trim();
     var emailCheck = validateEmail(email);
@@ -160,7 +209,9 @@ class Network {
     }
   }
 
-  // Sign up callback
+  /// Attempts to sign up using the credentials in [data].
+  ///
+  /// Returns an error message on failure, null on success.
   static Future<String> createUser(LoginData data) async {
     String email = data.email;
     email = email.trim();
@@ -179,6 +230,7 @@ class Network {
     return null;
   }
 
+  /// Validates [email].
   static String validateEmail(String email) {
     if (email.isEmpty) {
       return 'Email can\'t be empty';
@@ -195,12 +247,14 @@ class Network {
     return "Invalid email address";
   }
 
+  /// Validates [password].
   static String validatePassword(String password) {
     return password.length < 6
         ? 'Password must be at least 6 characters'
         : null;
   }
 
+  /// Changes the current user's notification preferences to [toggle].
   static Future<void> changeNotifications(toggle) async {
     var payload = {"emailId": User.currentUser.email, 'notifications': toggle};
     http.Response response = await postData(NOTIFICATION_TOGGLE_URL, payload);
@@ -211,6 +265,7 @@ class Network {
     }
   }
 
+  /// Populates the current user fields using [email].
   static Future<void> updateCurrentUser({String email}) async {
     email = email ?? User.currentUser.email;
     var payload = {"emailId": email};
@@ -225,6 +280,7 @@ class Network {
     }
   }
 
+  /// Gets the votes for a particular Finesse using [eventId].
   static Future<int> fetchVotes(eventId) async {
     final response = await http
         .get(GET_EVENT_VOTING_URL + eventId, headers: {'api_token': token});
@@ -237,6 +293,8 @@ class Network {
     }
   }
 
+  /// Gets a user's vote status for a Finesse using the user's [emailId]
+  /// and the Finesse's [eventId].
   static Future<int> fetchUserVoteOnEvent(eventId, emailId) async {
     final response = await http.get(
         GET_USER_VOTE_ON_EVENT_URL +
@@ -260,6 +318,8 @@ class Network {
     }
   }
 
+  /// Adds [vote] to a Finesse using the user's [emailId] and
+  /// the Finesses's [eventId].
   static Future<http.Response> postVote(
       String eventId, String emailId, int vote) async {
     Map bodyMap = {};
@@ -276,6 +336,7 @@ class Network {
     return response;
   }
 
+  /// Adds [comment] to the Finesse with the given [eventId].
   static Future<http.Response> addComment(
       Comment comment, String eventId) async {
     Map bodyMap = comment.toMap();
@@ -291,6 +352,7 @@ class Network {
     return response;
   }
 
+  /// Gets the comments for a Finesse given its [eventId].
   static Future<List<Comment>> getComments(String eventId) async {
     final response = await http
         .get(GET_COMMENT_URL + eventId, headers: {'api_token': token});
