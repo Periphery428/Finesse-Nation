@@ -322,13 +322,11 @@ class MyCustomFormState extends State<MyCustomForm> {
                             currTime,
                           );
                           await Network.addFinesse(newFinesse);
-                          List<Finesse> finesses =
-                              await Network.fetchFinesses();
-                          String id = finesses.last.getId();
+
                           FirebaseMessaging()
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
-                          await Network.sendToAll(newFinesse.getTitle(),
-                              newFinesse.getLocation(), id);
+                          await Network.sendToAll(
+                              newFinesse.getTitle(), newFinesse.getLocation());
 //                          print('sending event id = $id');
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()

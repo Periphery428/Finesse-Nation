@@ -58,7 +58,7 @@ class Network {
   static const POST_EVENT_VOTING_URL = DOMAIN + 'vote';
 
   /// The topic used to send notifications about new Finesses.
-  static const ALL_TOPIC = 'test';
+  static const ALL_TOPIC = 'new_finesse';
 
   /// The authentication key for all API calls.
   static final token = environment['FINESSE_API_TOKEN'];
@@ -146,20 +146,17 @@ class Network {
   }
 
   /// Sends a message containing [title] and [body] to [topic].
-  static Future<http.Response> sendToAll(String title, String body, String id,
+  static Future<http.Response> sendToAll(String title, String body,
       {String topic: ALL_TOPIC}) {
     final content = {
       'notification': {
         'body': '$body',
         'title': '$title',
-        'image': 'https://i.imgur.com/rw4rJt2.png',
       },
       'priority': 'high',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
         'status': 'done',
-        'event_id': '$id',
       },
       'to': '/topics/$topic',
     };
