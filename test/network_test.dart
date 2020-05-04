@@ -364,7 +364,7 @@ void main() {
 
   test('Get invalid votes', () async {
     try {
-      int result = await Network.fetchVotes("");
+      await Network.fetchVotes("");
     } catch (e) {
       String error = e.toString();
       expect(error.contains("Failed to load votes"), true);

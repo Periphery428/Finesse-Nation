@@ -6,8 +6,6 @@ import 'package:finesse_nation/User.dart';
 import 'package:finesse_nation/Util.dart';
 import 'package:finesse_nation/Comment.dart';
 
-import 'dart:async';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues(
