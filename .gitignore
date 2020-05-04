@@ -37,3 +37,10 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+#Coverage javascript package
+bin/
+coverage/
+node_modules/
+package-lock.json
+package.json
