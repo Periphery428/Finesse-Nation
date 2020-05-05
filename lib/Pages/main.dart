@@ -24,7 +24,7 @@ void main() async {
 //User currentUser = User("Test", "Test", "Test");
 
 // This is the type used by the popup menu below.
-enum DotMenu { settings, about, contact }
+enum DotMenu { settings }
 bool _fcmAlreadySetup = false;
 
 class MyApp extends StatelessWidget {
@@ -291,22 +291,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       }
                       break;
-                    case DotMenu.about:
-                      {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(builder: (context) => Settings()),
-//                        );
-                      }
-                      break;
-                    case DotMenu.contact:
-                      {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(builder: (context) => Settings()),
-//                        );
-                      }
-                      break;
                   }
                 });
               },
@@ -315,14 +299,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: Key("settingsButton"),
                   value: DotMenu.settings,
                   child: Text('Settings'),
-                ),
-                const PopupMenuItem<DotMenu>(
-                  value: DotMenu.about,
-                  child: Text('About'),
-                ),
-                const PopupMenuItem<DotMenu>(
-                  value: DotMenu.contact,
-                  child: Text('Contact'),
                 ),
               ],
             )
