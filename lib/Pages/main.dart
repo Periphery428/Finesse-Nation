@@ -22,8 +22,9 @@ void main() async {
 }
 
 // This is the type used by the popup menu below.
-enum DotMenu { settings, about, contact }
+enum DotMenu { settings }
 bool _fcmAlreadySetup = false;
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MyApp extends StatelessWidget {
 // This widget is the root of your application.
@@ -57,22 +58,37 @@ class _MyHomePageState extends State<MyHomePage> {
   bool localActive;
   bool localType;
 
-  BuildContext _context;
-
   void showSnackBar(var message) {
-    Flushbar(
-      title: message['notification']['title'],
-      message: message['notification']['body'],
-      duration: Duration(seconds: 3),
-      mainButton: FlatButton(
-        onPressed: () => reload(),
-        child: Text(
-          'RELOAD',
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              message['notification']['title'],
+              style: TextStyle(
+                color: Styles.brightOrange,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              message['notification']['body'],
+              style: TextStyle(
+                color: Styles.brightOrange,
+              ),
+            ),
+          ],
         ),
-        textColor: Styles.brightOrange,
+        action: SnackBarAction(
+          label: 'RELOAD',
+          onPressed: () => reload(),
+        ),
       ),
-    )..show(_context);
+    );
   }
+
   Future<void> _setActiveFilter(val) async {
     final SharedPreferences prefs = await _prefs;
     final bool activeFilter = val;
@@ -230,8 +246,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     if (!_fcmAlreadySetup) {
+      print('setting up fcm');
       _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
@@ -257,6 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _firebaseMessaging.requestNotificationPermissions();
     }
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title
@@ -289,22 +306,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       }
                       break;
-                    case DotMenu.about:
-                      {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(builder: (context) => Settings()),
-//                        );
-                      }
-                      break;
-                    case DotMenu.contact:
-                      {
-//                        Navigator.push(
-//                          context,
-//                          MaterialPageRoute(builder: (context) => Settings()),
-//                        );
-                      }
-                      break;
                   }
                 });
               },
@@ -313,14 +314,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: Key("settingsButton"),
                   value: DotMenu.settings,
                   child: Text('Settings'),
-                ),
-                const PopupMenuItem<DotMenu>(
-                  value: DotMenu.about,
-                  child: Text('About'),
-                ),
-                const PopupMenuItem<DotMenu>(
-                  value: DotMenu.contact,
-                  child: Text('Contact'),
                 ),
               ],
             )

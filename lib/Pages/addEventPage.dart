@@ -51,6 +51,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   double height = 480;
   dynamic _pickImageError;
 
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -70,7 +71,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           imageQuality: null);
       setState(() {});
     } catch (e) {
-      _pickImageError = e;
+      print(e.toString());
     }
   }
 
