@@ -47,8 +47,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   String _type = "Food";
 
   File _image;
-  double width = 600;
-  double height = 240;
+  double width = 1200;
+  double height = 480;
   dynamic _pickImageError;
 
   @override
@@ -252,9 +252,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                   onTap: () {},
                   child: Container(
                     color: Styles.darkGrey,
-//                  height: 150.0,
-//                    alignment: Alignment.center,
-                    child: _image == null ? Container() : Image.file(_image),
+                    child: _image == null
+                        ? Container()
+                        : Image.file(_image, width: 600, height: 240),
                   ),
                 ),
               ),
