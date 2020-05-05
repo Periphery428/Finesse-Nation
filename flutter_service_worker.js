@@ -12,7 +12,7 @@ const RESOURCES = {
 "assets/FontManifest.json": "9b7cd598c2610c799474ef4aa9b5777b",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/AssetManifest.json": "e6fcc7fb49f34ce4111eac8394ad48c3",
-"assets/LICENSE": "149297d56f555c1430c745c99d3a0cee",
+"assets/LICENSE": "97cd3cc9084b03bd3d4502fc3b4eb76b",
 "assets/images/rahbert.png": "98e5b6c34fa8cd40d5ada1e3deacb58d",
 "assets/images/splash.png": "381f40776a410effed87d0fec5c27d91",
 "assets/images/oldicon.png": "9090849005505bcd203a3b3b6ca8b841",
@@ -25,7 +25,7 @@ const RESOURCES = {
 "assets/images/bemzo.jpg": "570492a60b67ca635d4c5015d4f8a5b3",
 "assets/images/app_icon.png": "5f5244069ceba8559afa0a04f02321ef",
 "assets/images/baseline_filter_list_black_18dp.png": "926ee1b487c8ba08f579760bb7ea4d9c",
-"main.dart.js": "af176066c4b479e2c872eddf1cacbd9b",
+"main.dart.js": "4b4b619fb38655022145fe494bed56cf",
 "manifest.json": "e635fd6dd182a2cf920db16d047ea5f3"
 };
 
