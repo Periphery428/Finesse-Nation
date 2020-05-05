@@ -630,7 +630,7 @@ markAsEnded(Finesse fin) {
   if (activeList.contains(User.currentUser.email)) {
     Fluttertoast.showToast(
       msg: "Already marked as inactive",
-      toastLength: Toast.LENGTH_LONG,
+      toastLength: Toast.LENGTH_SHORT,
       backgroundColor: Styles.darkGrey,
       textColor: Styles.brightOrange,
     );
@@ -641,7 +641,7 @@ markAsEnded(Finesse fin) {
   Network.updateFinesse(fin);
   Fluttertoast.showToast(
     msg: "Marked as inactive",
-    toastLength: Toast.LENGTH_LONG,
+    toastLength: Toast.LENGTH_SHORT,
     backgroundColor: Styles.darkGrey,
     textColor: Styles.brightOrange,
   );
