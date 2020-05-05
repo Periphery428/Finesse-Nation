@@ -21,8 +21,6 @@ void main() async {
   runApp(MyApp());
 }
 
-//User currentUser = User("Test", "Test", "Test");
-
 // This is the type used by the popup menu below.
 enum DotMenu { settings, about, contact }
 bool _fcmAlreadySetup = false;

@@ -45,13 +45,6 @@ class FinessePage extends StatelessWidget {
         ],
       ),
       body: Container(
-//          decoration: BoxDecoration(
-//            gradient: LinearGradient(
-//              begin: Alignment.topLeft,
-//              end: Alignment.bottomRight,
-//              colors: [Colors.lightBlue, Colors.pink],
-//            ),
-//          ),
           child: FinesseDetails(fin)),
       backgroundColor: Colors.black,
     );
@@ -354,10 +347,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
       controller: _controller,
       autovalidate: true,
       validator: (comment) {
-//        if (comment.isEmpty) {
-//          return 'Comment cannot be empty';
-//        }
-//        return null;
         bool isEmpty = comment.isEmpty;
         if (isEmpty != _commentIsEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -500,15 +489,6 @@ class FinesseDetailsState extends State<FinesseDetails> {
             ],
           ),
         ),
-//        Card(
-//          color: Styles.darkGrey,
-//          child: Column(
-//            children: [
-//              addCommentSection,
-//              viewCommentSection,
-//            ],
-//          ),
-//        ),
       ],
     );
   }

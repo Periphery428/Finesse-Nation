@@ -17,38 +17,20 @@ class _FinesseListState extends State<BuildFinesseList> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-//  Future<List<Finesse>> toFuture(var list) async {
-//    return list;
-//  }
-
   void _onRefresh() async {
-//    List<Finesse> list = await Network.fetchFinesses();
     setState(() {
       _finesses = Network.fetchFinesses();
     });
-//    await Future.delayed(Duration(seconds: 2));
     if (_finesses != null) {
       _refreshController.refreshCompleted();
     }
   }
 
-//  _onLoading() async {
-//    print('loading...');
-//    await Future.delayed(Duration(seconds: 10));
-////    _refreshController.loadComplete();
-////    _finesses = fetchFinesses();
-////    _refreshController.loadComplete();
-//  }
 
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,
-//        gradient: LinearGradient(
-//          begin: Alignment.topLeft,
-//          end: Alignment.bottomRight,
-//          colors: [Colors.lightBlue, Colors.pink],
-//        ),
       ),
       child: FutureBuilder(
         future: _finesses,
@@ -64,12 +46,6 @@ class _FinesseListState extends State<BuildFinesseList> {
   Widget listViewWidget(List<Finesse> _finesses, BuildContext context) {
     return Container(
       color: Colors.black,
-//      decoration: BoxDecoration(
-//          gradient: LinearGradient(
-//        begin: Alignment.topLeft,
-//        end: Alignment.bottomRight,
-//        colors: [Colors.lightBlue, Colors.pink],
-
       child: Center(
         key: Key("refresher"),
         child: SmartRefresher(
@@ -78,7 +54,6 @@ class _FinesseListState extends State<BuildFinesseList> {
           header: WaterDropHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
-//          onLoading: _onLoading,
           child: ListView.builder(
               key: Key("listview"),
               itemCount: _finesses.length * 2,

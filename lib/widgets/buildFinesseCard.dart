@@ -27,7 +27,6 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
                 ),
         ),
         ListTile(
-//          isThreeLine: true,
           leading: Icon(
             fin.category == "Food" ? Icons.fastfood : Icons.help,
             color: Styles.darkOrange,
@@ -45,9 +44,6 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-//                fin.description == null
-//                    ? Text("Null")
-//                    : Text(fin.description),
                 fin.location == null
                     ? Text("")
                     : Text(

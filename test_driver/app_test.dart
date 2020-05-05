@@ -112,11 +112,13 @@ void main() {
       }
     });
 
+    ///Login a user
     test('Successful login', () async {
       await login(driver);
       await logout(driver);
     });
 
+    ///Register a user
     test('Successful registration', () async {
       String uniqueEmail =
           DateTime.now().millisecondsSinceEpoch.toString() + '@test.com';
@@ -126,6 +128,7 @@ void main() {
       await logout(driver);
     });
 
+    ///Check for missing information
     test('Missing information', () async {
       String badEmail = "Email can't be empty",
           badPass = "Password must be at least 6 characters";
@@ -135,6 +138,7 @@ void main() {
       await driver.getText(find.text(badPass));
     });
 
+    ///Try logging in with an invalid email
     test('Invalid email', () async {
       String errorText = "Invalid email address";
 
@@ -145,8 +149,6 @@ void main() {
 
   group('Add Event:', () {
     FlutterDriver driver;
-    final Map<String, String> envVars = Platform.environment;
-
     setUpAll(() async {
       driver = await FlutterDriver.connect();
     });
