@@ -3,17 +3,40 @@ import 'dart:convert';
 import 'package:finesse_nation/User.dart';
 
 class Finesse {
+  /// The unique ID for this Finesse.
   String eventId;
+
+  /// The title of this Finesse.
   String eventTitle;
+
+  /// The description of this Finesse.
   String description;
+
+  /// The image of this Finesse.
   String image;
+
+  /// The location of this Finesse.
   String location;
+
+  /// The duration of this Finesse.
   String duration;
+
+  /// The category of this Finesse (Food/Other).
   String category;
+
+  /// The time this Finesse was posted.
   DateTime postedTime;
+
+  /// The list of emailIds of [User]s who have marked this Finesse as inactive.
   List isActive;
+
+  /// The base64-encoded image of this Finesse.
   Uint8List convertedImage;
+
+  /// The emailId of the [User] who posted this Finesse.
   String emailId;
+
+  /// The school of the [User] who posted this Finesse.
   String school;
 
   /// Creates a Finesse.
@@ -61,10 +84,10 @@ class Finesse {
         User.currentUser?.email ?? 'test');
   }
 
-  /// Attempts to convert the [time] from a String to a DateTime.
+  /// Attempts to convert the [time] from a [String] to a [DateTime].
   ///
   /// Returns the converted time on success, the current time on fail.
-  static dynamic parse(String time) {
+  static DateTime parse(String time) {
     if (time != null) {
       try {
         String timeStr = time.toString();
@@ -79,7 +102,6 @@ class Finesse {
 
   /// Creates a Finesse from [json].
   factory Finesse.fromJson(Map<String, dynamic> json) {
-//    print('creating finesse');
     Finesse fin = Finesse(
       json['_id'],
       json['eventTitle'] ?? "",
@@ -96,7 +118,7 @@ class Finesse {
     return fin;
   }
 
-  /// Returns a map containing this comment's fields.
+  /// Returns a [Map] containing this Finesse's fields.
   Map toMap() {
     var map = Map<String, dynamic>();
     map["eventTitle"] = eventTitle;
@@ -107,65 +129,8 @@ class Finesse {
     map["category"] = category;
     map['postedTime'] = postedTime.toString();
     map['isActive'] = isActive;
-
     map['school'] = school;
     map['emailId'] = emailId;
     return map;
-  }
-
-  void setId(id) {
-    this.eventId = id;
-  }
-
-  void setDescription(desc) {
-    this.description = desc;
-  }
-
-  void setActive(activeList) {
-    this.isActive = activeList;
-  }
-
-  String getImage() {
-    return this.image;
-  }
-
-  Uint8List getConvertedImage() {
-    return this.convertedImage;
-  }
-
-  String getTitle() {
-    return eventTitle;
-  }
-
-  String getLocation() {
-    return this.location;
-  }
-
-  String getDescription() {
-    return this.description;
-  }
-
-  String getDuration() {
-    return this.duration;
-  }
-
-  String getCategory() {
-    return this.category;
-  }
-
-  String getId() {
-    return this.eventId;
-  }
-
-  DateTime getPostedTime() {
-    return this.postedTime;
-  }
-
-  List getActive() {
-    return this.isActive;
-  }
-
-  String getEmailId() {
-    return this.emailId;
   }
 }

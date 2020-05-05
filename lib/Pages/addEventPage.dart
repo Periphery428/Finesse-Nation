@@ -326,7 +326,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           FirebaseMessaging()
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
                           await Network.sendToAll(
-                              newFinesse.getTitle(), newFinesse.getLocation());
+                              newFinesse.eventTitle, newFinesse.location);
 //                          print('sending event id = $id');
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()

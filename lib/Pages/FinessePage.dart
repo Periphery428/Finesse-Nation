@@ -23,7 +23,7 @@ class FinessePage extends StatelessWidget {
   Widget build(BuildContext context) {
     _commentIsEmpty = true;
     voteAmount = 0;
-    final title = fin.getTitle();
+    final title = fin.eventTitle;
 
     return Scaffold(
       appBar: AppBar(
@@ -80,10 +80,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
 
   FinesseDetailsState(Finesse fin) {
     this.fin = fin;
-    this.comments = Network.getComments(fin.getId());
-    this.votes = Network.fetchVotes(fin.getId());
+    this.comments = Network.getComments(fin.eventId);
+    this.votes = Network.fetchVotes(fin.eventId);
     this.origVote =
-        Network.fetchUserVoteOnEvent(fin.getId(), User.currentUser.email);
+        Network.fetchUserVoteOnEvent(fin.eventId, User.currentUser.email);
   }
 
   @override
@@ -113,9 +113,9 @@ class FinesseDetailsState extends State<FinesseDetails> {
         ),
       ),
       child: Hero(
-        tag: fin.getId(),
+        tag: fin.eventId,
         child: Image.memory(
-          fin.getConvertedImage(),
+          fin.convertedImage,
           width: 600,
           height: 240,
           fit: BoxFit.cover,
@@ -126,7 +126,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
     Widget titleSection = Container(
       padding: const EdgeInsets.all(20),
       child: Text(
-        fin.getTitle(),
+        fin.eventTitle,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 30,
@@ -150,7 +150,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
           ),
           Flexible(
             child: Text(
-              fin.getDescription(),
+              fin.description,
               style: TextStyle(
                 fontSize: 16,
                 color: Styles.brightOrange,
@@ -177,8 +177,8 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getActive().length < 3 &&
-                        !fin.isActive.contains(fin.getEmailId())
+                fin.isActive.length < 3 &&
+                        !fin.isActive.contains(fin.emailId)
                     ? 'Ongoing'
                     : 'Inactive',
                 style: TextStyle(
@@ -186,10 +186,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   color: Styles.brightOrange,
                 ),
               ),
-              fin.getDuration() != "" &&
-                      (fin.getActive().length < 3 &&
-                          !fin.isActive.contains(fin.getEmailId()))
-                  ? Text("Duration: ${fin.getDuration()}",
+              fin.duration != "" &&
+                      (fin.isActive.length < 3 &&
+                          !fin.isActive.contains(fin.emailId))
+                  ? Text("Duration: ${fin.duration}",
                       style: TextStyle(
                         fontSize: 15,
                         color: Styles.darkOrange,
@@ -233,7 +233,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                       ? null
                       : () {
                           Network.postVote(
-                              fin.getId(), User.currentUser.email, 1);
+                              fin.eventId, User.currentUser.email, 1);
                           setState(() {
                             voteAmount = 1;
                           });
@@ -246,7 +246,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                         ? null
                         : () {
                             Network.postVote(
-                                fin.getId(), User.currentUser.email, -1);
+                                fin.eventId, User.currentUser.email, -1);
                             setState(() {
                               voteAmount = -1;
                             });
@@ -280,7 +280,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.getEmailId(),
+                fin.emailId,
                 style: TextStyle(
                   fontSize: 16,
                   color: Styles.brightOrange,
@@ -309,7 +309,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             children: [
               InkWell(
                 child: Text(
-                  fin.getLocation(),
+                  fin.location,
                   style: TextStyle(
                     fontSize: 16,
                     color: Styles.brightOrange,
@@ -317,7 +317,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                   ),
                 ),
                 onTap: () => launch(
-                    'https://www.google.com/maps/search/${fin.getLocation()}'),
+                    'https://www.google.com/maps/search/${fin.location}'),
               ),
             ],
           ),
@@ -395,7 +395,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
                     String comment = _controller.value.text;
                     Comment newComment = Comment.post(comment);
                     setState(() => mainComments.add(newComment));
-                    Network.addComment(newComment, fin.getId());
+                    Network.addComment(newComment, fin.eventId);
                     _controller.clear();
                   }),
       ),
@@ -404,7 +404,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
         if (comment.isNotEmpty) {
           Comment newComment = Comment.post(comment);
           setState(() => mainComments.add(newComment));
-          Network.addComment(newComment, fin.getId());
+          Network.addComment(newComment, fin.eventId);
           _controller.clear();
         }
       },
@@ -487,10 +487,10 @@ class FinesseDetailsState extends State<FinesseDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              fin.getImage() != "" ? imageSection : Container(),
+              fin.image != "" ? imageSection : Container(),
               titleSection,
               locationSection,
-              fin.getDescription() != "" ? descriptionSection : Container(),
+              fin.description != "" ? descriptionSection : Container(),
               timeSection,
               userSection,
               votingSection,
@@ -613,9 +613,9 @@ class FullImage extends StatelessWidget {
         onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
-            tag: fin.getId(),
+            tag: fin.eventId,
             child: Image.memory(
-              fin.getConvertedImage(),
+              fin.convertedImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -626,7 +626,7 @@ class FullImage extends StatelessWidget {
 }
 
 markAsEnded(Finesse fin) {
-  List activeList = fin.getActive();
+  List activeList = fin.isActive;
   if (activeList.contains(User.currentUser.email)) {
     Fluttertoast.showToast(
       msg: "Already marked as inactive",
@@ -637,7 +637,7 @@ markAsEnded(Finesse fin) {
     return;
   }
   activeList.add(User.currentUser.email);
-  fin.setActive(activeList);
+  fin.isActive = activeList;
   Network.updateFinesse(fin);
   Fluttertoast.showToast(
     msg: "Marked as inactive",

@@ -111,21 +111,21 @@ class Network {
     List<Finesse> filteredFinesses = List<Finesse>.from(responseJson);
 
     if (activeFilter == false) {
-      filteredFinesses.removeWhere((fin) => fin.getActive().length > 2);
+      filteredFinesses.removeWhere((fin) => fin.isActive.length > 2);
       filteredFinesses.removeWhere(
-          (fin) => fin.getActive().contains(User.currentUser.email));
+          (fin) => fin.isActive.contains(User.currentUser.email));
       filteredFinesses
-          .removeWhere((fin) => fin.getActive().contains(fin.emailId));
+          .removeWhere((fin) => fin.isActive.contains(fin.emailId));
     }
     if (typeFilter == false) {
-      filteredFinesses.removeWhere((value) => value.getCategory() == "Other");
+      filteredFinesses.removeWhere((value) => value.category == "Other");
     }
     return filteredFinesses;
   }
 
   /// Removes [newFinesse].
   static Future<void> removeFinesse(Finesse newFinesse) async {
-    var jsonObject = {"eventId": newFinesse.getId()};
+    var jsonObject = {"eventId": newFinesse.eventId};
     http.Response response = await postData(DELETE_URL, jsonObject);
 
     if (response.statusCode != 200) {
@@ -135,7 +135,7 @@ class Network {
 
   /// Updates [newFinesse].
   static Future<void> updateFinesse(Finesse newFinesse) async {
-    var jsonObject = {"eventId": newFinesse.getId()};
+    var jsonObject = {"eventId": newFinesse.eventId};
     var bodyMap = newFinesse.toMap();
     bodyMap.addAll(jsonObject);
     http.Response response = await postData(UPDATE_URL, bodyMap);

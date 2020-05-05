@@ -89,12 +89,12 @@ void main() {
   test('Adding a new Finesse', () async {
     Finesse newFinesse = await addFinesseHelper('Adding a new Finesse');
     List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
-    expect(finesseList.last.getDescription(), newFinesse.getDescription());
-    expect(finesseList.last.getLocation(), newFinesse.getLocation());
-    expect(finesseList.last.getTitle(), newFinesse.getTitle());
-    expect(finesseList.last.getPostedTime(), newFinesse.getPostedTime());
-    expect(finesseList.last.getEmailId(), newFinesse.getEmailId());
-    expect(finesseList.last.getDuration(), newFinesse.getDuration());
+    expect(finesseList.last.description, newFinesse.description);
+    expect(finesseList.last.location, newFinesse.location);
+    expect(finesseList.last.eventTitle, newFinesse.eventTitle);
+    expect(finesseList.last.postedTime, newFinesse.postedTime);
+    expect(finesseList.last.emailId, newFinesse.emailId);
+    expect(finesseList.last.duration, newFinesse.duration);
     Network.removeFinesse(finesseList.last);
   });
 
@@ -135,7 +135,7 @@ void main() {
         "Food",
         new DateTime.now());
 
-    newFinesse.setId("invalid");
+    newFinesse.eventId = "invalid";
     await expectException(
         Network.removeFinesse(newFinesse), "Error while removing finesse");
   });
@@ -151,7 +151,7 @@ void main() {
         "Food",
         new DateTime.now());
 
-    newFinesse.setId("invalid");
+    newFinesse.eventId = "invalid";
 
     await expectException(
         Network.updateFinesse(newFinesse), "Error while updating finesse");
@@ -167,17 +167,17 @@ void main() {
     String newDescription = "Description:" + now.toString();
 
     Finesse updatedFinesse = finesseList.last;
-    updatedFinesse.setDescription(newDescription);
+    updatedFinesse.description = newDescription;
 
     await Network.updateFinesse(updatedFinesse);
 
     finesseList = await Future.value(Network.fetchFinesses());
-    expect(finesseList.last.getDescription(),
-        isNot(firstNewFinesse.getDescription()));
-    expect(finesseList.last.getDescription(), updatedFinesse.getDescription());
-    expect(finesseList.last.getConvertedImage(),
-        updatedFinesse.getConvertedImage());
-    expect(finesseList.last.getImage(), updatedFinesse.getImage());
+    expect(finesseList.last.description,
+        isNot(firstNewFinesse.description));
+    expect(finesseList.last.description, updatedFinesse.description);
+    expect(finesseList.last.convertedImage,
+        updatedFinesse.convertedImage);
+    expect(finesseList.last.image, updatedFinesse.image);
 
     await Network.removeFinesse(finesseList.last);
   });
@@ -445,8 +445,8 @@ Future testChangingNotifications(bool toggle) async {
 Future<List<Finesse>> getAndRemove(Finesse expectedFinesse) async {
   List<Finesse> finesseList = await Future.value(Network.fetchFinesses());
 
-  expect(finesseList.last.getDescription(),
-      expectedFinesse.getDescription()); // Check that it was added
+  expect(finesseList.last.description,
+      expectedFinesse.description); // Check that it was added
 
   await Network.removeFinesse(finesseList.last); // Remove the first Finesse
   return finesseList;

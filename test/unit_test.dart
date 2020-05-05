@@ -29,9 +29,9 @@ void main() {
         "60 hours",
         "Food",
         new DateTime.now());
-    expect(newFinesse.getId(), null);
-    newFinesse.setId("12323413512341234");
-    expect(newFinesse.getId(), "12323413512341234");
+    expect(newFinesse.eventId, null);
+    newFinesse.eventId = "12323413512341234";
+    expect(newFinesse.eventId, "12323413512341234");
   });
 
   ///Basic setter test for active in finesse
@@ -44,10 +44,10 @@ void main() {
         "60 hours",
         "Food",
         new DateTime.now());
-    expect(newFinesse.getActive(), null);
+    expect(newFinesse.isActive, null);
     List activeList = ["person1", "person2"];
-    newFinesse.setActive(activeList);
-    expect(newFinesse.getActive(), activeList);
+    newFinesse.isActive = activeList;
+    expect(newFinesse.isActive, activeList);
   });
 
   ///Passing invalid timestamp returns now
