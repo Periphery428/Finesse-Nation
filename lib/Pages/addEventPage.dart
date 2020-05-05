@@ -49,7 +49,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   File _image;
   double width = 600;
   double height = 240;
-  dynamic _pickImageError;
 
   @override
   void dispose() {
@@ -70,7 +69,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           imageQuality: null);
       setState(() {});
     } catch (e) {
-      _pickImageError = e;
+      print(e.toString());
     }
   }
 
