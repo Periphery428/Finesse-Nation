@@ -8,6 +8,7 @@ import 'package:finesse_nation/.env.dart';
 import 'package:finesse_nation/login/flutter_login.dart';
 import 'package:finesse_nation/Comment.dart';
 
+/// Contains functions used to interact with the API.
 class Network {
   /// The root domain for the Finesse Nation API.
   static const DOMAIN = 'https://finesse-nation.herokuapp.com/api/';
@@ -112,10 +113,9 @@ class Network {
 
     if (activeFilter == false) {
       filteredFinesses.removeWhere((fin) => fin.isActive.length > 2);
-      filteredFinesses.removeWhere(
-          (fin) => fin.isActive.contains(User.currentUser.email));
       filteredFinesses
-          .removeWhere((fin) => fin.isActive.contains(fin.emailId));
+          .removeWhere((fin) => fin.isActive.contains(User.currentUser.email));
+      filteredFinesses.removeWhere((fin) => fin.isActive.contains(fin.emailId));
     }
     if (typeFilter == false) {
       filteredFinesses.removeWhere((value) => value.category == "Other");

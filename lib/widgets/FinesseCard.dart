@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:finesse_nation/Util.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Returns a [Card] displaying the [Finesse] details.
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
     color: Styles.darkGrey,

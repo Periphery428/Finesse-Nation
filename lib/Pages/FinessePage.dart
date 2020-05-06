@@ -15,6 +15,7 @@ bool _commentIsEmpty;
 int voteAmount;
 List<Comment> mainComments;
 
+/// Displays details about a specific [Finesse].
 class FinessePage extends StatelessWidget {
   final Finesse fin;
 
@@ -44,8 +45,7 @@ class FinessePage extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-          child: FinesseDetails(fin)),
+      body: Container(child: FinesseDetails(fin)),
       backgroundColor: Colors.black,
     );
   }
@@ -170,8 +170,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fin.isActive.length < 3 &&
-                        !fin.isActive.contains(fin.emailId)
+                fin.isActive.length < 3 && !fin.isActive.contains(fin.emailId)
                     ? 'Ongoing'
                     : 'Inactive',
                 style: TextStyle(

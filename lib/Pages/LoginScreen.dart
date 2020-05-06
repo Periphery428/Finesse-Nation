@@ -6,6 +6,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Handles login and registration.
 class LoginScreen extends StatelessWidget {
   changeStatusColor(Color color) async {
     try {
@@ -43,8 +44,7 @@ class LoginScreen extends StatelessWidget {
           cardTheme: CardTheme(color: Styles.brightOrange),
           buttonTheme: LoginButtonTheme(
             splashColor: Colors.grey[800],
-          )
-          ),
+          )),
       emailValidator: /*(_) => null  ,// */ Network.validateEmail,
       passwordValidator: /*(_) => null  ,// */ Network.validatePassword,
       onLogin: /*(_) => null  ,// */ Network.authUser,

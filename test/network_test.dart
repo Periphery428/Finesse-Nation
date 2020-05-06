@@ -172,11 +172,9 @@ void main() {
     await Network.updateFinesse(updatedFinesse);
 
     finesseList = await Future.value(Network.fetchFinesses());
-    expect(finesseList.last.description,
-        isNot(firstNewFinesse.description));
+    expect(finesseList.last.description, isNot(firstNewFinesse.description));
     expect(finesseList.last.description, updatedFinesse.description);
-    expect(finesseList.last.convertedImage,
-        updatedFinesse.convertedImage);
+    expect(finesseList.last.convertedImage, updatedFinesse.convertedImage);
     expect(finesseList.last.image, updatedFinesse.image);
 
     await Network.removeFinesse(finesseList.last);

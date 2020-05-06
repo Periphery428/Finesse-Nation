@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'package:finesse_nation/User.dart';
 
+/// An event involving free food/items.
 class Finesse {
   /// The unique ID for this Finesse.
   String eventId;

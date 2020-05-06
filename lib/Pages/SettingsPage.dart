@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Contains functionality that allows the user to
+/// logout and change their notification preferences.
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class Settings extends StatelessWidget {
 }
 
 ///Class to subscribe and unsubscribe from notifications
-class Notifications{
+class Notifications {
   ///Set the notifications for the current user
   static Future<void> notificationsSet(toggle) async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

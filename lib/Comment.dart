@@ -1,5 +1,6 @@
 import 'package:finesse_nation/User.dart';
 
+/// A message left by a [User] on a [Finesse].
 class Comment {
   /// This comment's content.
   String comment;
@@ -28,10 +29,10 @@ class Comment {
     return Comment(comment, emailId, postedTime);
   }
 
-  /// Returns the time as a DateTime object.
+  /// Returns [postedTime] as a DateTime object.
   DateTime get postedDateTime => DateTime.parse(postedTime);
 
-  /// Returns a map containing this comment's fields.
+  /// Returns a [Map] containing this comment's fields.
   Map toMap() {
     var map = Map<String, String>();
     map['comment'] = comment;

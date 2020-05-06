@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Allows the user to add a new [Finesse].
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,6 @@ class MyCustomFormState extends State<MyCustomForm> {
   double width = 1200;
   double height = 480;
   dynamic _pickImageError;
-
 
   @override
   void dispose() {

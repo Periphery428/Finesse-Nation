@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Pages/addEventPage.dart';
 import 'package:finesse_nation/Pages/SettingsPage.dart';
-import 'package:finesse_nation/widgets/buildFinesseList.dart';
+import 'package:finesse_nation/widgets/FinesseList.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
@@ -13,6 +13,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:finesse_nation/Styles.dart';
 
+/// The entrypoint for the app.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -247,7 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (!_fcmAlreadySetup) {
-      print('setting up fcm');
       _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
@@ -332,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         backgroundColor: Styles.brightOrange,
       ),
-      body: BuildFinesseList(),
+      body: FinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

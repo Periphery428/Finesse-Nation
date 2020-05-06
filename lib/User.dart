@@ -1,3 +1,7 @@
+/// A Finesse Nation User.
+///
+/// Contains fields that are used when updating notification settings,
+/// posting Finesses, and commenting.
 class User {
   /// This user's email.
   String email;
