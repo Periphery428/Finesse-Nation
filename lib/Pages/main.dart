@@ -24,7 +24,7 @@ void main() async {
 // This is the type used by the popup menu below.
 enum DotMenu { settings }
 bool _fcmAlreadySetup = false;
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+GlobalKey<ScaffoldState> _scaffoldKey;
 
 class _MyApp extends StatelessWidget {
 // This widget is the root of your application.
@@ -47,7 +47,10 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() {
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+    return _MyHomePageState();
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {

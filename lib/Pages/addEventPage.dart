@@ -323,7 +323,7 @@ class _MyCustomFormState extends State<_MyCustomForm> {
                           );
                           await Network.addFinesse(newFinesse);
 
-                          FirebaseMessaging()
+                          await FirebaseMessaging()
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
                           await Network.sendToAll(
                               newFinesse.eventTitle, newFinesse.location);
@@ -331,13 +331,20 @@ class _MyCustomFormState extends State<_MyCustomForm> {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);
                           }
-                          Navigator.removeRouteBelow(
-                              context, ModalRoute.of(context));
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      MyHomePage()));
+//                          Navigator.removeRouteBelow(
+//                              context, ModalRoute.of(context));
+//                          await Navigator.pushReplacement(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (BuildContext context) =>
+//                                      MyHomePage()));
+                          await Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MyHomePage()),
+                                (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       child: Text(

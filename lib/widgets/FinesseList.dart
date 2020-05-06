@@ -13,7 +13,7 @@ class FinesseList extends StatefulWidget {
 }
 
 class _FinesseListState extends State<FinesseList> {
-  Future<List<Finesse>> _finesses = Network.fetchFinesses();
+  Future<List<Finesse>> _finesses;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -33,7 +33,7 @@ class _FinesseListState extends State<FinesseList> {
         color: Colors.black,
       ),
       child: FutureBuilder(
-        future: _finesses,
+        future: Network.fetchFinesses(),
         builder: (context, snapshot) {
           return snapshot.data != null
               ? listViewWidget(snapshot.data, context)
