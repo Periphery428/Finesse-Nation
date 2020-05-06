@@ -331,13 +331,6 @@ class _MyCustomFormState extends State<_MyCustomForm> {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);
                           }
-//                          Navigator.removeRouteBelow(
-//                              context, ModalRoute.of(context));
-//                          await Navigator.pushReplacement(
-//                              context,
-//                              MaterialPageRoute(
-//                                  builder: (BuildContext context) =>
-//                                      MyHomePage()));
                           await Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
