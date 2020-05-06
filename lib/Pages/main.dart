@@ -18,7 +18,7 @@ void main() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
   _prefs.getBool('typeFilter') ?? _prefs.setBool('typeFilter', true);
-  runApp(MyApp());
+  runApp(_MyApp());
 }
 
 // This is the type used by the popup menu below.
@@ -26,7 +26,7 @@ enum DotMenu { settings }
 bool _fcmAlreadySetup = false;
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class MyApp extends StatelessWidget {
+class _MyApp extends StatelessWidget {
 // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Displays the [FinesseList].
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 

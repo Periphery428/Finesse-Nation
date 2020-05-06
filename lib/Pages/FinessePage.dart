@@ -33,7 +33,7 @@ class FinessePage extends StatelessWidget {
           PopupMenuButton<DotMenu>(
             key: Key("threeDotButton"),
             onSelected: (DotMenu result) {
-              markAsEnded(fin);
+              _markAsEnded(fin);
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<DotMenu>>[
               const PopupMenuItem<DotMenu>(
@@ -45,33 +45,33 @@ class FinessePage extends StatelessWidget {
           )
         ],
       ),
-      body: Container(child: FinesseDetails(fin)),
+      body: Container(child: _FinesseDetails(fin)),
       backgroundColor: Colors.black,
     );
   }
 }
 
 // Create the details widget.
-class FinesseDetails extends StatefulWidget {
+class _FinesseDetails extends StatefulWidget {
   final Finesse fin;
 
-  FinesseDetails(this.fin);
+  _FinesseDetails(this.fin);
 
   @override
-  FinesseDetailsState createState() {
-    return FinesseDetailsState(fin);
+  _FinesseDetailsState createState() {
+    return _FinesseDetailsState(fin);
   }
 }
 
 // Create a corresponding State class.
-class FinesseDetailsState extends State<FinesseDetails> {
+class _FinesseDetailsState extends State<_FinesseDetails> {
   Finesse fin;
   Future<List<Comment>> comments;
   Future<int> votes;
   Future<int> origVote;
   final TextEditingController _controller = TextEditingController();
 
-  FinesseDetailsState(Finesse fin) {
+  _FinesseDetailsState(Finesse fin) {
     this.fin = fin;
     this.comments = Network.getComments(fin.eventId);
     this.votes = Network.fetchVotes(fin.eventId);
@@ -580,6 +580,7 @@ class FinesseDetailsState extends State<FinesseDetails> {
   }
 }
 
+/// Displays the full image for the [Finesse].
 class FullImage extends StatelessWidget {
   final Finesse fin;
 
@@ -604,7 +605,7 @@ class FullImage extends StatelessWidget {
   }
 }
 
-markAsEnded(Finesse fin) {
+_markAsEnded(Finesse fin) {
   List activeList = fin.isActive;
   if (activeList.contains(User.currentUser.email)) {
     Fluttertoast.showToast(

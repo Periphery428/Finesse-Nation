@@ -23,7 +23,7 @@ class Settings extends StatelessWidget {
   }
 }
 
-///Class to subscribe and unsubscribe from notifications
+/// Class to subscribe and unsubscribe from notifications.
 class Notifications {
   ///Set the notifications for the current user
   static Future<void> notificationsSet(toggle) async {
@@ -41,17 +41,18 @@ class Notifications {
   }
 }
 
+/// Displays settings.
 class SettingsPage extends StatefulWidget {
   @override
-  SettingsPageState createState() => SettingsPageState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage> {
   var initialToggle = User.currentUser.notifications;
   var toggle = User.currentUser.notifications;
 
-  SettingsPageState createState() {
-    return SettingsPageState();
+  _SettingsPageState createState() {
+    return _SettingsPageState();
   }
 
   @override

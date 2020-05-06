@@ -21,7 +21,7 @@ class AddEvent extends StatelessWidget {
         title: Text(appTitle),
       ),
       backgroundColor: Styles.darkGrey,
-      body: MyCustomForm(),
+      body: _MyCustomForm(),
     );
   }
 }
@@ -30,16 +30,16 @@ typedef void OnPickImageCallback(
     double maxWidth, double maxHeight, int quality);
 
 // Create a Form widget.
-class MyCustomForm extends StatefulWidget {
+class _MyCustomForm extends StatefulWidget {
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  _MyCustomFormState createState() {
+    return _MyCustomFormState();
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm> {
+class _MyCustomFormState extends State<_MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
@@ -327,7 +327,6 @@ class MyCustomFormState extends State<MyCustomForm> {
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
                           await Network.sendToAll(
                               newFinesse.eventTitle, newFinesse.location);
-//                          print('sending event id = $id');
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);
