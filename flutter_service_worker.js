@@ -25,7 +25,7 @@ const RESOURCES = {
 "assets/images/bemzo.jpg": "570492a60b67ca635d4c5015d4f8a5b3",
 "assets/images/app_icon.png": "5f5244069ceba8559afa0a04f02321ef",
 "assets/images/baseline_filter_list_black_18dp.png": "926ee1b487c8ba08f579760bb7ea4d9c",
-"main.dart.js": "cf3f8385af3271985cbfd378d0d05bce",
+"main.dart.js": "742a2599046eaf9c208fb0e62518b866",
 "manifest.json": "e635fd6dd182a2cf920db16d047ea5f3"
 };
 
