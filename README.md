@@ -8,6 +8,7 @@ There are free meals and giveaways on campus all the time. Finesse Nation is an 
 
 Developed in Android Studio using the Flutter framework.
 
+[Read the docs](project_documentation.pdf)
 
 ## Contributors
 Robert Beckwith
