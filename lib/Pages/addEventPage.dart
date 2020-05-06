@@ -67,7 +67,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           source: source,
           maxWidth: width,
           maxHeight: height,
-          imageQuality: null);
+          imageQuality: 100);
       setState(() {});
     } catch (e) {
       print(e.toString());
