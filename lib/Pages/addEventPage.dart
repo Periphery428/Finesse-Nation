@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Allows the user to add a new [Finesse].
 class AddEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class AddEvent extends StatelessWidget {
         title: Text(appTitle),
       ),
       backgroundColor: Styles.darkGrey,
-      body: MyCustomForm(),
+      body: _MyCustomForm(),
     );
   }
 }
@@ -29,16 +30,16 @@ typedef void OnPickImageCallback(
     double maxWidth, double maxHeight, int quality);
 
 // Create a Form widget.
-class MyCustomForm extends StatefulWidget {
+class _MyCustomForm extends StatefulWidget {
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  _MyCustomFormState createState() {
+    return _MyCustomFormState();
   }
 }
 
 // Create a corresponding State class.
 // This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm> {
+class _MyCustomFormState extends State<_MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
   final eventNameController = TextEditingController();
   final locationController = TextEditingController();
@@ -47,8 +48,8 @@ class MyCustomFormState extends State<MyCustomForm> {
   String _type = "Food";
 
   File _image;
-  double width = 600;
-  double height = 240;
+  double width = 1200;
+  double height = 480;
 
   @override
   void dispose() {
@@ -66,7 +67,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           source: source,
           maxWidth: width,
           maxHeight: height,
-          imageQuality: null);
+          imageQuality: 100);
       setState(() {});
     } catch (e) {
       print(e.toString());
@@ -251,9 +252,9 @@ class MyCustomFormState extends State<MyCustomForm> {
                   onTap: () {},
                   child: Container(
                     color: Styles.darkGrey,
-//                  height: 150.0,
-//                    alignment: Alignment.center,
-                    child: _image == null ? Container() : Image.file(_image),
+                    child: _image == null
+                        ? Container()
+                        : Image.file(_image, width: 600, height: 240),
                   ),
                 ),
               ),
@@ -325,8 +326,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           FirebaseMessaging()
                               .unsubscribeFromTopic(Network.ALL_TOPIC);
                           await Network.sendToAll(
-                              newFinesse.getTitle(), newFinesse.getLocation());
-//                          print('sending event id = $id');
+                              newFinesse.eventTitle, newFinesse.location);
                           if (User.currentUser.notifications) {
                             FirebaseMessaging()
                                 .subscribeToTopic(Network.ALL_TOPIC);

@@ -1,3 +1,4 @@
+/// @nodoc
 library flutter_login;
 
 import 'dart:math';

@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Pages/addEventPage.dart';
 import 'package:finesse_nation/Pages/SettingsPage.dart';
-import 'package:finesse_nation/widgets/buildFinesseList.dart';
+import 'package:finesse_nation/widgets/FinesseList.dart';
 import 'package:finesse_nation/widgets/PopUpBox.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:finesse_nation/Network.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:finesse_nation/Styles.dart';
 
+/// The entrypoint for the app.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.getBool('activeFilter') ?? _prefs.setBool('activeFilter', true);
   _prefs.getBool('typeFilter') ?? _prefs.setBool('typeFilter', true);
-  runApp(MyApp());
+  runApp(_MyApp());
 }
-
-//User currentUser = User("Test", "Test", "Test");
 
 // This is the type used by the popup menu below.
 enum DotMenu { settings }
 bool _fcmAlreadySetup = false;
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class MyApp extends StatelessWidget {
+class _MyApp extends StatelessWidget {
 // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,6 +42,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Displays the [FinesseList].
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
@@ -249,7 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (!_fcmAlreadySetup) {
-      print('setting up fcm');
       _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
@@ -334,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         backgroundColor: Styles.brightOrange,
       ),
-      body: BuildFinesseList(),
+      body: FinesseList(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

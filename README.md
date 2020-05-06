@@ -8,6 +8,18 @@ There are free meals and giveaways on campus all the time. Finesse Nation is an 
 
 Developed in Android Studio using the Flutter framework.
 
+
+## Contributors
+Robert Beckwith
+
+Aditya Pandey
+
+Shilpa Rani
+
+Krastan Dimitrov
+
+Jeffrey Josol
+
 ## Setup Token
 
 You must set the environment variable ```FINESSE_NATION_TOKEN``` with the secret token.
@@ -35,17 +47,10 @@ Then click the run button in Android studio.
 ### Unit Tests
 Run Unit Tests
 ```
-flutter test
+flutter test --coverage
 ```
 
 ### Integration Tests
-To run the camera integration tests.
-
-Setup ANDROID_SDK_ROOT env variable into your path
-
-ANDROID_SDK_ROOT = "C:/Users/$User/AppData/Local/Android/sdk"
-
-Or wherever your sdk is stored.
 
 Run Integration Tests (You must have the emulator open first for this to work.)
 ```

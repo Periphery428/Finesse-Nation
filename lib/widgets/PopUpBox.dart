@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Displays a [Dialog] containing filtering options.
 class PopUpBox {
   static Future showPopupBox(
       {BuildContext context,

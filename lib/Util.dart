@@ -1,4 +1,13 @@
+/// Utility functions used by multiple files.
 class Util {
+  /// Returns a string containing a more readable/practical
+  /// representation of [timePosted] based on the current time.
+  ///
+  /// ```dart
+  /// DateTime today = DateTime.now();
+  /// DateTime fiftyDaysAgo = today.subtract(Duration(days: 50));
+  /// timeSince(fiftyDaysAgo) == '50 days ago'
+  /// ```
   static String timeSince(DateTime timePosted) {
     DateTime currTime = DateTime.now();
     Duration difference = currTime.difference(timePosted);
