@@ -6,6 +6,7 @@ import 'package:finesse_nation/Network.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Handles login and registration.
 class LoginScreen extends StatelessWidget {
   changeStatusColor(Color color) async {
     try {
@@ -13,13 +14,9 @@ class LoginScreen extends StatelessWidget {
       if (useWhiteForeground(color)) {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
         FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
-//        _useWhiteStatusBarForeground = true;
-//        _useWhiteNavigationBarForeground = true;
       } else {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
         FlutterStatusbarcolor.setNavigationBarWhiteForeground(false);
-//        _useWhiteStatusBarForeground = false;
-//        _useWhiteNavigationBarForeground = false;
       }
     } catch (e) {
       debugPrint('COLORZZ' + e.toString());
@@ -47,10 +44,7 @@ class LoginScreen extends StatelessWidget {
           cardTheme: CardTheme(color: Styles.brightOrange),
           buttonTheme: LoginButtonTheme(
             splashColor: Colors.grey[800],
-          )
-//        pageColorLight: Colors.lightblue,
-//        pageColorDark: Colors.pink,
-          ),
+          )),
       emailValidator: /*(_) => null  ,// */ Network.validateEmail,
       passwordValidator: /*(_) => null  ,// */ Network.validatePassword,
       onLogin: /*(_) => null  ,// */ Network.authUser,

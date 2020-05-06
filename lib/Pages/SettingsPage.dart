@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:finesse_nation/Pages/LoginScreen.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Contains functionality that allows the user to
+/// logout and change their notification preferences.
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,9 @@ class Settings extends StatelessWidget {
   }
 }
 
+/// Class to subscribe and unsubscribe from notifications.
 class Notifications {
+  ///Set the notifications for the current user
   static Future<void> notificationsSet(toggle) async {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
     if (User.currentUser.email.contains('@test.com') ||
@@ -29,25 +33,26 @@ class Notifications {
       return;
     }
     if (toggle) {
-      _firebaseMessaging.subscribeToTopic('all');
+      _firebaseMessaging.subscribeToTopic(Network.ALL_TOPIC);
     } else {
-      _firebaseMessaging.unsubscribeFromTopic('all');
+      _firebaseMessaging.unsubscribeFromTopic(Network.ALL_TOPIC);
     }
     await Network.changeNotifications(toggle);
   }
 }
 
+/// Displays settings.
 class SettingsPage extends StatefulWidget {
   @override
-  SettingsPageState createState() => SettingsPageState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage> {
   var initialToggle = User.currentUser.notifications;
   var toggle = User.currentUser.notifications;
 
-  SettingsPageState createState() {
-    return SettingsPageState();
+  _SettingsPageState createState() {
+    return _SettingsPageState();
   }
 
   @override

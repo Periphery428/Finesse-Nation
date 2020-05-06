@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:finesse_nation/Util.dart';
 import 'package:finesse_nation/Styles.dart';
 
+/// Returns a [Card] displaying the [Finesse] details.
 Card buildFinesseCard(Finesse fin, BuildContext context) {
   return Card(
     color: Styles.darkGrey,
@@ -16,26 +17,25 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
       },
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         Hero(
-          tag: fin.getId(),
-          child: fin.getImage() == ""
+          tag: fin.eventId,
+          child: fin.image == ""
               ? Container()
               : Image.memory(
-                  fin.getConvertedImage(),
+                  fin.convertedImage,
                   width: 600,
                   height: 240,
                   fit: BoxFit.cover,
                 ),
         ),
         ListTile(
-//          isThreeLine: true,
           leading: Icon(
-            fin.getCategory() == "Food" ? Icons.fastfood : Icons.help,
+            fin.category == "Food" ? Icons.fastfood : Icons.help,
             color: Styles.darkOrange,
           ),
-          title: fin.getTitle() == null
+          title: fin.eventTitle == null
               ? Text("Null")
               : Text(
-                  fin.getTitle(),
+                  fin.eventTitle,
                   key: Key("title"),
                   style: TextStyle(
                     fontSize: 16,
@@ -45,17 +45,14 @@ Card buildFinesseCard(Finesse fin, BuildContext context) {
           subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-//                fin.getDescription() == null
-//                    ? Text("Null")
-//                    : Text(fin.getDescription()),
-                fin.getLocation() == null
+                fin.location == null
                     ? Text("")
                     : Text(
-                        fin.getLocation(),
+                        fin.location,
                         style: TextStyle(color: Styles.darkOrange),
                       )
               ]),
-          trailing: fin.getPostedTime() == null
+          trailing: fin.postedTime == null
               ? Text('')
               : Text(
                   Util.timeSince(fin.postedTime),
